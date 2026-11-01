@@ -1,0 +1,21 @@
+{
+  "name": "مدار اليقين | Madar Al-Yaqeen",
+  "short_name": "مدار اليقين",
+  "description": "منصة إسلامية رقمية عالمية فاخرة: المصحف الرقمي، مواقيت الصلاة، أطلس القراء، الختمة الذكية، الأذكار الموثقة، البث المباشر للحرمين",
+  "start_url": "/",
+  "display": "standalone",
+  "dir": "rtl",
+  "lang": "ar",
+  "background_color": "#072A20",
+  "theme_color": "#072A20",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

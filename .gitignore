@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+.vercel/
+.env
+.env.*
+!.env.example
+*.log
+*.pem
+*.key
+*.p12

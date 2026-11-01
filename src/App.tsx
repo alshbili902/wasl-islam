@@ -1,0 +1,83 @@
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import { AppProvider } from './context/AppContext';
+import { AudioProvider } from './context/AudioContext';
+import { Navbar } from './components/layout/Navbar';
+import { Footer } from './components/layout/Footer';
+import { GlobalAudioPlayer } from './components/layout/GlobalAudioPlayer';
+import { HomePage } from './pages/HomePage';
+
+// Lazy-loaded dedicated pages for optimal bundle splitting
+const PrayerPage = lazy(() => import('./pages/PrayerPage').then((m) => ({ default: m.PrayerPage })));
+const QuranPage = lazy(() => import('./pages/QuranPage').then((m) => ({ default: m.QuranPage })));
+const RecitersPage = lazy(() => import('./pages/RecitersPage').then((m) => ({ default: m.RecitersPage })));
+const KhatmahPage = lazy(() => import('./pages/KhatmahPage').then((m) => ({ default: m.KhatmahPage })));
+const AdhkarPage = lazy(() => import('./pages/AdhkarPage').then((m) => ({ default: m.AdhkarPage })));
+const TasbihPage = lazy(() => import('./pages/TasbihPage').then((m) => ({ default: m.TasbihPage })));
+const SleepPage = lazy(() => import('./pages/SleepPage').then((m) => ({ default: m.SleepPage })));
+const CharityPage = lazy(() => import('./pages/CharityPage').then((m) => ({ default: m.CharityPage })));
+const DonationsPage = lazy(() => import('./pages/DonationsPage').then((m) => ({ default: m.DonationsPage })));
+const ChannelsPage = lazy(() => import('./pages/ChannelsPage').then((m) => ({ default: m.ChannelsPage })));
+const RadioPage = lazy(() => import('./pages/RadioPage').then((m) => ({ default: m.RadioPage })));
+const LivePage = lazy(() => import('./pages/LivePage').then((m) => ({ default: m.LivePage })));
+const SettingsPage = lazy(() => import('./pages/SettingsPage').then((m) => ({ default: m.SettingsPage })));
+
+const PageSkeleton: React.FC = () => (
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6 animate-pulse">
+    <div className="h-44 rounded-3xl bg-royal/15 dark:bg-white/5 border border-gold/20" />
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="h-48 rounded-3xl bg-royal/10 dark:bg-white/5 border border-gold/15" />
+      <div className="h-48 rounded-3xl bg-royal/10 dark:bg-white/5 border border-gold/15" />
+      <div className="h-48 rounded-3xl bg-royal/10 dark:bg-white/5 border border-gold/15" />
+    </div>
+  </div>
+);
+
+const AnimatedRoutes: React.FC = () => {
+  const location = useLocation();
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/prayer" element={<PrayerPage />} />
+          <Route path="/quran" element={<QuranPage />} />
+          <Route path="/reciters" element={<RecitersPage />} />
+          <Route path="/khatmah" element={<KhatmahPage />} />
+          <Route path="/adhkar" element={<AdhkarPage />} />
+          <Route path="/tasbih" element={<TasbihPage />} />
+          <Route path="/sleep" element={<SleepPage />} />
+          <Route path="/charity" element={<CharityPage />} />
+          <Route path="/donations" element={<DonationsPage />} />
+          <Route path="/channels" element={<ChannelsPage />} />
+          <Route path="/radio" element={<RadioPage />} />
+          <Route path="/live" element={<LivePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="*" element={<HomePage />} />
+        </Routes>
+      </AnimatePresence>
+    </Suspense>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <AppProvider>
+      <AudioProvider>
+        <BrowserRouter>
+          <div className="min-h-screen flex flex-col bg-[#F8FAF9] dark:bg-[#0B131E] text-slate-900 dark:text-slate-100 transition-colors duration-300 overflow-x-clip">
+            <Navbar />
+            <div className="flex-1 min-w-0">
+              <AnimatedRoutes />
+            </div>
+            <Footer />
+            <GlobalAudioPlayer />
+          </div>
+        </BrowserRouter>
+      </AudioProvider>
+    </AppProvider>
+  );
+};
+
+export default App;

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <rect width="120" height="120" rx="28" fill="#072A20"/>
+  <rect x="6" y="6" width="108" height="108" rx="22" stroke="#C5A059" stroke-width="2" stroke-opacity="0.45"/>
+  <!-- Islamic Rub el Hizb Octagram -->
+  <g transform="translate(60,60)">
+    <rect x="-28" y="-28" width="56" height="56" rx="4" stroke="#C5A059" stroke-width="3" fill="#0D4334" fill-opacity="0.6"/>
+    <rect x="-28" y="-28" width="56" height="56" rx="4" transform="rotate(45)" stroke="#C5A059" stroke-width="3" fill="#072A20" fill-opacity="0.85"/>
+    <circle r="16" stroke="#DFC082" stroke-width="1.8" stroke-dasharray="3 3"/>
+    <!-- Crescent and Star inside -->
+    <path d="M4 -9A10 10 0 1 0 4 9A8 8 0 1 1 4 -9Z" fill="#C5A059"/>
+    <circle cx="-4" cy="0" r="2.5" fill="#DFC082"/>
+  </g>
+</svg>
+
