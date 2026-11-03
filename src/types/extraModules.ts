@@ -207,3 +207,4 @@ export interface ScholarProfile {
   famousQuotes: string[];
   notableBooks: ScholarBookItem[];
 }
+

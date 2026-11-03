@@ -412,3 +412,4 @@ export const SCHOLARS_DATA: ScholarProfile[] = [
     ]
   }
 ];
+

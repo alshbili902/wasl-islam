@@ -293,3 +293,4 @@ export const JanazahGuidePage: React.FC = () => {
     </div>
   );
 };
+

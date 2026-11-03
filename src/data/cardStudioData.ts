@@ -137,3 +137,4 @@ export const CARD_THEMES: CardThemeConfig[] = [
     badgeBg: 'rgba(184, 134, 11, 0.15)'
   }
 ];
+

@@ -260,3 +260,4 @@ export const JANAZAH_FAQS: JanazahFaq[] = [
     source: 'متفق عليه وصحيح البخاري'
   }
 ];
+

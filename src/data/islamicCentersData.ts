@@ -184,3 +184,4 @@ export const ISLAMIC_CENTERS_DATA: IslamicCenterItem[] = [
     workingHours: 'يومياً: 10:00 ص - 6:00 م'
   }
 ];
+

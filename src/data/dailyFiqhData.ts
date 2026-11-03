@@ -176,3 +176,4 @@ export const DAILY_FIQH_DATA: FiqhRulingItem[] = [
     tags: ['مفطرات', 'صيام', 'رمضان', 'إنسولين', 'بخاخ الربو', 'تحليل دم']
   }
 ];
+

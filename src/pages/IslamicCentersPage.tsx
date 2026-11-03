@@ -237,3 +237,4 @@ export const IslamicCentersPage: React.FC = () => {
     </div>
   );
 };
+

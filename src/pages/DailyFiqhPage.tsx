@@ -340,3 +340,4 @@ export const DailyFiqhPage: React.FC = () => {
     </div>
   );
 };
+

@@ -419,3 +419,4 @@ ${item.authenticAlternative ? `\n✅ *البديل الصحيح الثابت*: �
     </div>
   );
 };
+
