@@ -21,6 +21,7 @@ import {
   MapPin,
   Smartphone,
   HandHeart,
+  ScrollText,
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { MobileConnectModal } from './MobileConnectModal';
@@ -38,6 +39,7 @@ export const NAV_ROUTES: NavRouteItem[] = [
   { path: '/', label: 'الرئيسية', shortLabel: 'الرئيسية', description: 'الواجهة الترحيبية ومواقيت اليوم', icon: Home },
   { path: '/prayer', label: 'مواقيت الصلاة والقبلة', shortLabel: 'الصلاة والقبلة', description: 'الحساب الفلكي الدقيق وبوصلة القبلة', icon: Compass },
   { path: '/quran', label: 'القرآن الكريم', shortLabel: 'المصحف', description: 'المصحف العثماني والتفسير والتلاوة', icon: BookOpen },
+  { path: '/prophets', label: 'قصص الأنبياء', shortLabel: 'قصص الأنبياء', description: 'الموسوعة الموثقة لقصص 25 نبياً ورسولاً', icon: ScrollText },
   { path: '/reciters', label: 'أطلس قراء العالم', shortLabel: 'القراء', description: 'قراء القارات الست والمشغل المتتابع', icon: Mic2 },
   { path: '/khatmah', label: 'الختمة القرآنية', shortLabel: 'الختمة', description: 'تخطيط ومتابعة الورد القرآني الذكي', icon: CalendarCheck },
   { path: '/adhkar', label: 'واحة الأذكار', shortLabel: 'الأذكار', description: 'حصن المسلم بالتخريج والعداد التفاعلي', icon: Sparkles },

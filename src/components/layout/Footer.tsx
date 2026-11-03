@@ -42,7 +42,7 @@ export const Footer: React.FC = () => {
               <span>القرآن الكريم والعبادات</span>
             </h3>
             <ul className="space-y-2 text-sm">
-              {NAV_ROUTES.slice(0, 6).map((item) => (
+              {NAV_ROUTES.slice(0, 7).map((item) => (
                 <li key={item.path}>
                   <NavLink
                     to={item.path}
@@ -63,7 +63,7 @@ export const Footer: React.FC = () => {
               <span>الأدوات الذكية والبث المباشر</span>
             </h3>
             <ul className="space-y-2 text-sm">
-              {NAV_ROUTES.slice(6).map((item) => (
+              {NAV_ROUTES.slice(7).map((item) => (
                 <li key={item.path}>
                   <NavLink
                     to={item.path}

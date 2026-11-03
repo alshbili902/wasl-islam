@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   Share2,
   Tv,
+  ScrollText,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { Logo } from '../components/layout/Logo';
@@ -125,6 +126,13 @@ export const HomePage: React.FC = () => {
       subtitle: 'تقسيم الورد اليومي ومتابعة الإنجاز',
       icon: CalendarCheck,
       badge: '604 صفحات',
+    },
+    {
+      path: '/prophets',
+      title: 'قصص الأنبياء عليهم السلام',
+      subtitle: 'موسوعة موثقة لقصص 25 نبياً ورسولاً وعبرهم',
+      icon: ScrollText,
+      badge: '25 نبياً ورسولاً',
     },
     {
       path: '/adhkar',

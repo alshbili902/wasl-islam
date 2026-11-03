@@ -19,6 +19,7 @@ const TasbihPage = lazy(() => import('./pages/TasbihPage').then((m) => ({ defaul
 const SleepPage = lazy(() => import('./pages/SleepPage').then((m) => ({ default: m.SleepPage })));
 const CharityPage = lazy(() => import('./pages/CharityPage').then((m) => ({ default: m.CharityPage })));
 const DonationsPage = lazy(() => import('./pages/DonationsPage').then((m) => ({ default: m.DonationsPage })));
+const ProphetsPage = lazy(() => import('./pages/ProphetsPage').then((m) => ({ default: m.ProphetsPage })));
 const ChannelsPage = lazy(() => import('./pages/ChannelsPage').then((m) => ({ default: m.ChannelsPage })));
 const RadioPage = lazy(() => import('./pages/RadioPage').then((m) => ({ default: m.RadioPage })));
 const LivePage = lazy(() => import('./pages/LivePage').then((m) => ({ default: m.LivePage })));
@@ -53,6 +54,8 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/sleep" element={<SleepPage />} />
           <Route path="/charity" element={<CharityPage />} />
           <Route path="/donations" element={<DonationsPage />} />
+          <Route path="/prophets" element={<ProphetsPage />} />
+          <Route path="/prophets/:prophetId" element={<ProphetsPage />} />
           <Route path="/channels" element={<ChannelsPage />} />
           <Route path="/radio" element={<RadioPage />} />
           <Route path="/live" element={<LivePage />} />
