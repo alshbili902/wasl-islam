@@ -1048,3 +1048,4 @@ export const HAJJ_UMRAH_FAQS: HajjUmrahFaq[] = [
     category: 'ihram'
   }
 ];
+

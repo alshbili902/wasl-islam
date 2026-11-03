@@ -52,3 +52,4 @@ export interface CompanionState {
   memorizationGoalSurah: string;
   adhkarNotificationEnabled: boolean;
 }
+

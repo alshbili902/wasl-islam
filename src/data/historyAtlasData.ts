@@ -626,3 +626,4 @@ export const GEOGRAPHIC_REGIONS = [
   { id: 'central_asia', nameAr: 'آسيا الوسطى وخراسان' },
   { id: 'anatolia', nameAr: 'الأناضول والقسطنطينية' }
 ];
+

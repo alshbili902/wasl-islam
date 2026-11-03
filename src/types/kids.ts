@@ -103,3 +103,4 @@ export interface KidsProgressState {
   wuduStepsCompleted: boolean;
   prayerStepsCompleted: boolean;
 }
+

@@ -766,3 +766,4 @@ export const CompanionPage: React.FC = () => {
     </PageWrapper>
   );
 };
+

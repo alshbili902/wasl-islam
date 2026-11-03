@@ -403,3 +403,4 @@ export const KIDS_BADGES_DATA: KidsBadge[] = [
   { id: 'b_manners', title: 'المسلم المهذب', description: 'تأدبت بآداب النبي ﷺ في الأكل والكلام والوالدين', icon: 'Heart', requirement: 'قراءة آداب المسلم الصغير', unlocked: false },
   { id: 'b_quiz', title: 'نجم الذكاء الإسلامي', description: 'أجبت بنجاح عن أسئلة التحدي وحصلت على النجوم', icon: 'Star', requirement: 'إجابة أسئلة الاختبار', unlocked: false }
 ];
+

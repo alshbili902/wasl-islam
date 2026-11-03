@@ -39,6 +39,15 @@ const HajjUmrahPage = lazy(() => import('./pages/HajjUmrahPage').then((m) => ({ 
 const KidsPage = lazy(() => import('./pages/KidsPage').then((m) => ({ default: m.KidsPage })));
 const HistoryAtlasPage = lazy(() => import('./pages/HistoryAtlasPage').then((m) => ({ default: m.HistoryAtlasPage })));
 
+// 7 New Modules
+const ContentVerifierPage = lazy(() => import('./pages/ContentVerifierPage').then((m) => ({ default: m.ContentVerifierPage })));
+const DailyFiqhPage = lazy(() => import('./pages/DailyFiqhPage').then((m) => ({ default: m.DailyFiqhPage })));
+const JanazahGuidePage = lazy(() => import('./pages/JanazahGuidePage').then((m) => ({ default: m.JanazahGuidePage })));
+const AudioLibraryPage = lazy(() => import('./pages/AudioLibraryPage').then((m) => ({ default: m.AudioLibraryPage })));
+const CardStudioPage = lazy(() => import('./pages/CardStudioPage').then((m) => ({ default: m.CardStudioPage })));
+const IslamicCentersPage = lazy(() => import('./pages/IslamicCentersPage').then((m) => ({ default: m.IslamicCentersPage })));
+const ScholarsPage = lazy(() => import('./pages/ScholarsPage').then((m) => ({ default: m.ScholarsPage })));
+
 const PageSkeleton: React.FC = () => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center justify-center min-h-[50vh] space-y-5">
     <div className="relative">
@@ -89,6 +98,13 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/hajj-umrah" element={<HajjUmrahPage />} />
           <Route path="/kids" element={<KidsPage />} />
           <Route path="/history-atlas" element={<HistoryAtlasPage />} />
+          <Route path="/content-verifier" element={<ContentVerifierPage />} />
+          <Route path="/daily-fiqh" element={<DailyFiqhPage />} />
+          <Route path="/janazah" element={<JanazahGuidePage />} />
+          <Route path="/audio-library" element={<AudioLibraryPage />} />
+          <Route path="/card-studio" element={<CardStudioPage />} />
+          <Route path="/islamic-centers" element={<IslamicCentersPage />} />
+          <Route path="/scholars" element={<ScholarsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>

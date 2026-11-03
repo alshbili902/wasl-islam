@@ -212,3 +212,4 @@ export const ENCOURAGING_WISDOM = [
     source: 'صحيح البخاري'
   }
 ];
+

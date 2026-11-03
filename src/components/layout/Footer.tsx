@@ -47,6 +47,9 @@ export const Footer: React.FC = () => {
                 { path: '/hajj-umrah', label: 'دليل الحج والعمرة التفاعلي' },
                 { path: '/kids', label: 'عالم الأطفال المسلم' },
                 { path: '/history-atlas', label: 'أطلس التاريخ الإسلامي' },
+                { path: '/content-verifier', label: 'تحقق من صحة الحديث' },
+                { path: '/daily-fiqh', label: 'فقه الحياة اليومية' },
+                { path: '/scholars', label: 'موسوعة العلماء والمصنفات' },
                 { path: '/encyclopedia', label: 'بوابة الموسوعة الإسلامية' },
                 { path: '/academy', label: 'أكاديمية مدار اليقين' },
                 { path: '/prophets', label: 'قصص الأنبياء عليهم السلام' },
@@ -79,6 +82,10 @@ export const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2 text-sm">
               {[
+                { path: '/janazah', label: 'دليل الجنائز والتعزية' },
+                { path: '/audio-library', label: 'المكتبة الصوتية الإسلامية' },
+                { path: '/card-studio', label: 'استوديو البطاقات الإسلامية' },
+                { path: '/islamic-centers', label: 'دليل المراكز وحلقات التحفيظ' },
                 { path: '/quran', label: 'المصحف الشريف والتلاوات' },
                 { path: '/prayer', label: 'مواقيت الصلاة والقبلة' },
                 { path: '/khatmah', label: 'الختمة القرآنية الذكية' },

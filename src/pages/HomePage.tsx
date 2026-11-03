@@ -32,6 +32,10 @@ import {
   Tent,
   Crown,
   Landmark,
+  Scale,
+  Headphones,
+  Palette,
+  Building2,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { Logo } from '../components/layout/Logo';
@@ -137,6 +141,55 @@ export const HomePage: React.FC = () => {
       subtitle: 'خريطة تفاعلية كبرى والخط الزمني للحواضر والفتوحات',
       icon: Landmark,
       badge: 'أطلس جغرافي',
+    },
+    {
+      path: '/content-verifier',
+      title: 'تحقق من صحة الحديث',
+      subtitle: 'فحص الأحاديث والرسائل المتداولة وتخريجها المعتمد',
+      icon: ShieldCheck,
+      badge: 'فاحص ذكي',
+    },
+    {
+      path: '/daily-fiqh',
+      title: 'فقه الحياة اليومية المعاصرة',
+      subtitle: 'أحكام النوازل المالية والطبية والتقنية والسفر',
+      icon: Scale,
+      badge: 'فتاوى معاصرة',
+    },
+    {
+      path: '/janazah',
+      title: 'دليل الجنائز والتعزية',
+      subtitle: 'صفة الغسل والتكفين وصلاة الجنازة والدفن والتعزية',
+      icon: HeartHandshake,
+      badge: 'دليل فقهي',
+    },
+    {
+      path: '/audio-library',
+      title: 'المكتبة الصوتية الإسلامية',
+      subtitle: 'تلاوات نادرة ودروس الأئمة والسيرة صوتياً',
+      icon: Headphones,
+      badge: 'صوتيات خاشعة',
+    },
+    {
+      path: '/card-studio',
+      title: 'استوديو البطاقات الإسلامية',
+      subtitle: 'تصميم بطاقات دعوية وتصديرها بدقة عالية فوراً',
+      icon: Palette,
+      badge: 'تصميم ومشاركة',
+    },
+    {
+      path: '/islamic-centers',
+      title: 'دليل المراكز وحلقات التحفيظ',
+      subtitle: 'جمعيات التحفيظ والمقارئ الإلكترونية والجوامع الكبرى',
+      icon: Building2,
+      badge: 'دليل شامل',
+    },
+    {
+      path: '/scholars',
+      title: 'موسوعة العلماء والمصنفات',
+      subtitle: 'سير الأئمة الأربعة والمحدثين وكبار المحققين وأمهات الكتب',
+      icon: GraduationCap,
+      badge: 'أعلام الأمة',
     },
     {
       path: '/encyclopedia',

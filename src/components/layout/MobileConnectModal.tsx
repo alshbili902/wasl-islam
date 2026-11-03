@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Smartphone, QrCode, Copy, Check, Wifi, X, Share2 } from 'lucide-react';
+import { Smartphone, QrCode, Copy, Check, X, Share2, ExternalLink, Download, Sparkles, Globe } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import QRCode from 'qrcode';
+import { SITE_CONFIG } from '../../config/siteConfig';
 
 interface MobileConnectModalProps {
   isOpen: boolean;
@@ -12,23 +14,49 @@ export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({ isOpen, 
   const location = useLocation();
   const [copied, setCopied] = useState(false);
   const [includeCurrentPage, setIncludeCurrentPage] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState<string>('');
 
-  const lanIp = typeof __LAN_IP__ !== 'undefined' ? __LAN_IP__ : '192.168.8.103';
-  const port = window.location.port || '5173';
-  const baseUrl = `http://${lanIp}:${port}`;
-  const fullUrl = includeCurrentPage ? `${baseUrl}${location.pathname}${location.search}` : baseUrl;
+  const baseUrl = SITE_CONFIG.productionUrl;
+  const targetUrl = includeCurrentPage && location.pathname !== '/'
+    ? `${baseUrl}${location.pathname}${location.search}`
+    : baseUrl;
 
-  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&color=072A20&bgcolor=FFFDF7&data=${encodeURIComponent(
-    fullUrl
-  )}`;
+  useEffect(() => {
+    if (!isOpen) return;
+
+    let isMounted = true;
+    QRCode.toDataURL(targetUrl, {
+      width: 480,
+      margin: 2,
+      color: {
+        dark: '#072A20', // Royal emerald green
+        light: '#FFFFFF',
+      },
+      errorCorrectionLevel: 'H',
+    })
+      .then((dataUrl) => {
+        if (isMounted) {
+          setQrDataUrl(dataUrl);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to generate local QR code', err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isOpen, targetUrl]);
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(fullUrl);
+      await navigator.clipboard.writeText(targetUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
-      // ignore
+      // Fallback
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
     }
   };
 
@@ -36,48 +64,65 @@ export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({ isOpen, 
     try {
       if (navigator.share) {
         await navigator.share({
-          title: 'مدار اليقين | Madar Al-Yaqeen',
-          text: 'افتح تطبيق مدار اليقين على الهاتف عبر الشبكة المحلية',
-          url: fullUrl,
+          title: `${SITE_CONFIG.name} | ${SITE_CONFIG.tagline}`,
+          text: `افتح منصة ${SITE_CONFIG.name} الإسلامية على هاتفك المحمول`,
+          url: targetUrl,
         });
       } else {
         handleCopy();
       }
     } catch {
-      // ignore
+      // User cancelled share
     }
+  };
+
+  const handleDownloadQr = () => {
+    if (!qrDataUrl) return;
+    const a = document.createElement('a');
+    a.href = qrDataUrl;
+    a.download = `madar-alyaqeen-qr.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6" role="dialog" aria-modal="true">
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/65 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/70 backdrop-blur-md"
           />
 
+          {/* Modal Container */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.94, y: 15 }}
+            initial={{ opacity: 0, scale: 0.93, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.94, y: 15 }}
-            className="relative z-10 w-full max-w-md rounded-3xl bg-[#F8FAF9] dark:bg-[#0B131E] border-2 border-gold/45 shadow-2xl overflow-hidden"
+            exit={{ opacity: 0, scale: 0.93, y: 20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="relative z-10 w-full max-w-md rounded-3xl bg-[#FCFAF5] dark:bg-[#0B131E] border-2 border-gold/45 shadow-2xl overflow-hidden"
           >
+            {/* Decorative Top Bar */}
+            <div className="h-1.5 w-full gold-gradient" />
+
             {/* Header */}
             <div className="p-5 royal-gradient text-white flex items-center justify-between gap-3 border-b border-gold/30">
-              <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center text-gold">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-gold/20 border border-gold/40 flex items-center justify-center text-gold shadow-sm">
                   <Smartphone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-base sm:text-lg">
-                    فتح التطبيق على الهاتف عبر الشبكة
+                  <h3 className="font-bold text-base sm:text-lg text-gold flex items-center gap-2">
+                    فتح المنصة على الهاتف
+                    <Sparkles className="w-4 h-4 text-gold animate-pulse" />
                   </h3>
-                  <p className="text-[11px] text-gold/90">
-                    متصل على نفس شبكة الواي فاي (Wi-Fi LAN)
+                  <p className="text-[11px] text-white/80">
+                    الوصول المباشر لمنصة {SITE_CONFIG.name} عبر أي هاتف ذكي
                   </p>
                 </div>
               </div>
@@ -85,35 +130,45 @@ export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({ isOpen, 
                 type="button"
                 onClick={onClose}
                 aria-label="إغلاق النافذة"
-                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white"
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Body */}
-            <div className="p-6 space-y-5 text-center">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-extrabold">
-                <Wifi className="w-4 h-4 animate-pulse" />
-                <span>البث الشبكي للهواتف مفعل على العنوان: {lanIp}</span>
+            <div className="p-5 sm:p-6 space-y-4 text-center">
+              {/* Official Verified Domain Pill */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
+                <Globe className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>الرابط الرسمي المعتمد:</span>
+                <span dir="ltr" className="font-mono font-bold text-emerald-700 dark:text-emerald-300">{SITE_CONFIG.canonicalDomain}</span>
               </div>
 
-              {/* QR Code Frame */}
-              <div className="mx-auto w-56 h-56 rounded-3xl p-3 bg-[#FFFDF7] border-2 border-gold/50 shadow-gold-glow flex items-center justify-center">
-                <img
-                  src={qrImageUrl}
-                  alt={`رمز QR لفتح ${fullUrl} على الهاتف`}
-                  className="w-full h-full object-contain rounded-xl"
-                />
-              </div>
-
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                وجّه كاميرا هاتفك نحو رمز <strong className="text-gold">QR Code</strong> أعلاه أو افتح الرابط التالي مباشرة في متصفح الهاتف (Safari أو Chrome):
+              {/* Instruction banner */}
+              <p className="text-sm text-slate-700 dark:text-slate-200 leading-snug">
+                امسح الرمز بكاميرا هاتفك لفتح منصة <strong className="text-gold font-bold">{SITE_CONFIG.name}</strong> مباشرة، أو استخدم الأزرار أدناه:
               </p>
+
+              {/* QR Code Container with Frame */}
+              <div className="relative mx-auto w-56 h-56 rounded-3xl p-3 bg-white border-2 border-gold/50 shadow-gold-glow flex items-center justify-center">
+                {qrDataUrl ? (
+                  <img
+                    src={qrDataUrl}
+                    alt={`رمز QR لفتح منصة مدار اليقين على الهاتف`}
+                    className="w-full h-full object-contain rounded-2xl"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center gap-2 text-royal/60">
+                    <QrCode className="w-10 h-10 animate-spin text-gold" />
+                    <span className="text-xs">جارٍ توليد الرمز...</span>
+                  </div>
+                )}
+              </div>
 
               {/* Toggle Current Page vs Home */}
               {location.pathname !== '/' && (
-                <div className="flex items-center justify-center gap-2 text-xs">
+                <div className="flex items-center justify-center gap-2 text-xs pt-1">
                   <input
                     id="qr-current-page"
                     type="checkbox"
@@ -121,48 +176,76 @@ export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({ isOpen, 
                     onChange={(e) => setIncludeCurrentPage(e.target.checked)}
                     className="accent-[#C5A059] w-4 h-4 rounded cursor-pointer"
                   />
-                  <label htmlFor="qr-current-page" className="font-bold text-royal dark:text-slate-200 cursor-pointer">
+                  <label htmlFor="qr-current-page" className="font-medium text-royal dark:text-slate-200 cursor-pointer">
                     فتح نفس الصفحة الحالية ({location.pathname}) على الهاتف
                   </label>
                 </div>
               )}
 
-              {/* Direct LAN URL Copy Box */}
+              {/* URL Display Box */}
               <div className="p-3 rounded-2xl bg-royal/5 dark:bg-white/5 border border-gold/30 flex items-center justify-between gap-2">
-                <span
+                <a
+                  href={targetUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   dir="ltr"
-                  className="text-xs sm:text-sm font-mono font-black text-royal dark:text-gold truncate select-all"
+                  className="text-xs sm:text-sm font-mono font-bold text-royal dark:text-gold hover:underline truncate select-all flex items-center gap-1.5"
+                  title="فتح الرابط في نافذة جديدة"
                 >
-                  {fullUrl}
-                </span>
+                  <ExternalLink className="w-3.5 h-3.5 text-gold shrink-0" />
+                  <span className="truncate">{targetUrl}</span>
+                </a>
                 <div className="flex items-center gap-1.5 shrink-0">
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="px-3 py-1.5 rounded-xl gold-gradient text-royal text-xs font-extrabold inline-flex items-center gap-1"
+                    className="px-3 py-1.5 rounded-xl gold-gradient text-royal text-xs font-bold inline-flex items-center gap-1 hover:brightness-105 active:scale-95 transition-all shadow-sm"
                   >
                     {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copied ? 'تم النسخ' : 'نسخ'}</span>
+                    <span>{copied ? 'تم النسخ!' : 'نسخ الرابط'}</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleNativeShare}
                     title="مشاركة الرابط"
-                    className="p-1.5 rounded-xl bg-gold/15 text-gold hover:bg-gold/25"
+                    className="p-1.5 rounded-xl bg-gold/15 text-gold hover:bg-gold/25 transition-colors"
                   >
                     <Share2 className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
-              {/* Helpful Tips for Mobile */}
-              <div className="text-right p-3.5 rounded-2xl bg-gold/10 border border-gold/25 text-[11px] space-y-1 text-slate-700 dark:text-slate-200">
-                <p className="font-extrabold text-royal dark:text-gold flex items-center gap-1.5">
-                  <QrCode className="w-3.5 h-3.5" />
-                  <span>مميزات التشغيل على الهاتف:</span>
+              {/* Action Buttons: Open & Download QR */}
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <a
+                  href={targetUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-2.5 px-3 rounded-xl bg-royal text-white text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-royal/90 transition-colors shadow-sm"
+                >
+                  <ExternalLink className="w-4 h-4 text-gold" />
+                  <span>فتح الموقع الآن</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadQr}
+                  disabled={!qrDataUrl}
+                  className="py-2.5 px-3 rounded-xl border border-gold/40 bg-gold/10 hover:bg-gold/20 text-royal dark:text-gold text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <Download className="w-4 h-4 text-gold" />
+                  <span>تحميل رمز QR</span>
+                </button>
+              </div>
+
+              {/* Install PWA Guide */}
+              <div className="text-right p-3 rounded-2xl bg-gold/10 border border-gold/25 text-[11px] space-y-1 text-slate-700 dark:text-slate-300">
+                <p className="font-bold text-royal dark:text-gold flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-gold" />
+                  <span>تثبيت كتطبيق مستقل (PWA) على هاتفك:</span>
                 </p>
-                <p>• تأكد أن الهاتف والكمبيوتر متصلان بنفس شبكة الـ Wi-Fi.</p>
-                <p>• يمكنك اختيار «إضافة إلى الشاشة الرئيسية / Add to Home Screen» لتثبيت مدار اليقين كتطبيق مستقل على هاتفك.</p>
+                <p>• <strong>آيفون (Safari):</strong> اضغط على زر المشاركة ثم اختر «إضافة إلى الشاشة الرئيسية».</p>
+                <p>• <strong>أندرويد (Chrome):</strong> اضغط على القائمة (⋮) ثم اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</p>
               </div>
             </div>
           </motion.div>
@@ -171,4 +254,3 @@ export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({ isOpen, 
     </AnimatePresence>
   );
 };
-

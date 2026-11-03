@@ -20,6 +20,12 @@ import {
 
 const SEARCH_CATEGORIES: { id: SearchResultType | 'all'; label: string }[] = [
   { id: 'all', label: 'جميع الأقسام' },
+  { id: 'verifier', label: 'تحقق الحديث' },
+  { id: 'daily_fiqh', label: 'فقه المعاملات' },
+  { id: 'janazah', label: 'دليل الجنائز' },
+  { id: 'audio_library', label: 'المكتبة الصوتية' },
+  { id: 'islamic_center', label: 'مراكز التحفيظ' },
+  { id: 'scholar', label: 'العلماء والكتب' },
   { id: 'companion_activity', label: 'رفيق المسلم' },
   { id: 'hajj_umrah_step', label: 'الحج والعمرة' },
   { id: 'kids_lesson', label: 'عالم الأطفال' },
@@ -36,6 +42,11 @@ const SEARCH_CATEGORIES: { id: SearchResultType | 'all'; label: string }[] = [
 ];
 
 const POPULAR_SEARCHES = [
+  'حب الوطن من الإيمان',
+  'الشراء بالتقسيط',
+  'صلاة الجنازة',
+  'الشيخ ابن باز',
+  'مكنون الرياض',
   'أبو بكر الصديق',
   'غزوة بدر',
   'آية الكرسي',
@@ -43,8 +54,7 @@ const POPULAR_SEARCHES = [
   'صفة الوضوء',
   'توحيد الألوهية',
   'بخاخ الربو للصائم',
-  'الصحابي خالد بن الوليد',
-  'العفو عند المقدرة'
+  'الصحابي خالد بن الوليد'
 ];
 
 export const SearchPage: React.FC = () => {

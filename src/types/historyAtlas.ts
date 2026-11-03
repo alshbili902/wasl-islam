@@ -81,3 +81,4 @@ export interface HistoricalRoute {
   points: { name: string; lat: number; lng: number }[];
   colorHex: string;
 }
+

@@ -12,6 +12,12 @@ import { DEFAULT_COMPANION_ACTIVITIES } from './companionData';
 import { UMRAH_STEPS, HAJJ_STEPS, MIQAT_LOCATIONS } from './hajjUmrahData';
 import { KIDS_STORIES_DATA, ISLAMIC_PILLARS_KIDS } from './kidsData';
 import { HISTORICAL_CITIES, HISTORICAL_TIMELINE_EVENTS } from './historyAtlasData';
+import { VERIFIER_DATA } from './verifierData';
+import { DAILY_FIQH_DATA } from './dailyFiqhData';
+import { JANAZAH_STEPS } from './janazahData';
+import { AUDIO_LIBRARY_ITEMS } from './audioLibraryData';
+import { ISLAMIC_CENTERS_DATA } from './islamicCentersData';
+import { SCHOLARS_DATA } from './scholarsData';
 
 export type SearchResultType =
   | 'prophet'
@@ -27,7 +33,13 @@ export type SearchResultType =
   | 'companion_activity'
   | 'hajj_umrah_step'
   | 'kids_lesson'
-  | 'history_atlas';
+  | 'history_atlas'
+  | 'verifier'
+  | 'daily_fiqh'
+  | 'janazah'
+  | 'audio_library'
+  | 'islamic_center'
+  | 'scholar';
 
 export interface GlobalSearchResult {
   id: string;
@@ -429,6 +441,148 @@ export function searchAllEncyclopedia(query: string, filterType?: SearchResultTy
           snippet: ev.shortSummary,
           url: '/history-atlas',
           badge: 'حدث تاريخي'
+        });
+      }
+    });
+  }
+
+  // 14. Content Verifier
+  if (!filterType || filterType === 'all' || filterType === 'verifier') {
+    VERIFIER_DATA.forEach((v) => {
+      if (
+        matches(v.queryPhrase) ||
+        matches(v.commonSpreadText) ||
+        matches(v.verdictSummary) ||
+        matches(v.primaryMuhaddith) ||
+        v.tags.some(matches)
+      ) {
+        results.push({
+          id: `verifier-${v.id}`,
+          type: 'verifier',
+          categoryLabel: 'تحقق من صحة الحديث',
+          title: `«${v.queryPhrase}»`,
+          subtitle: `${v.gradeLabelAr} — ${v.primaryMuhaddith}`,
+          snippet: v.verdictSummary,
+          url: '/content-verifier',
+          badge: v.gradeLabelAr
+        });
+      }
+    });
+  }
+
+  // 15. Daily Fiqh
+  if (!filterType || filterType === 'all' || filterType === 'daily_fiqh') {
+    DAILY_FIQH_DATA.forEach((fq) => {
+      if (
+        matches(fq.title) ||
+        matches(fq.question) ||
+        matches(fq.summaryAnswer) ||
+        matches(fq.detailedAnswer) ||
+        fq.tags.some(matches)
+      ) {
+        results.push({
+          id: `fiqh-${fq.id}`,
+          type: 'daily_fiqh',
+          categoryLabel: 'فقه الحياة اليومية المعاصرة',
+          title: fq.title,
+          subtitle: `${fq.categoryLabelAr} — ${fq.rulingLabelAr}`,
+          snippet: fq.summaryAnswer,
+          url: '/daily-fiqh',
+          badge: fq.rulingLabelAr
+        });
+      }
+    });
+  }
+
+  // 16. Janazah Guide
+  if (!filterType || filterType === 'all' || filterType === 'janazah') {
+    JANAZAH_STEPS.forEach((j) => {
+      if (
+        matches(j.title) ||
+        matches(j.subtitle) ||
+        matches(j.description) ||
+        j.rulings.some(matches)
+      ) {
+        results.push({
+          id: `janazah-${j.id}`,
+          type: 'janazah',
+          categoryLabel: 'دليل الجنائز والتعزية',
+          title: j.title,
+          subtitle: j.subtitle,
+          snippet: j.description,
+          url: '/janazah',
+          badge: `المرحلة ${j.order}`
+        });
+      }
+    });
+  }
+
+  // 17. Audio Library
+  if (!filterType || filterType === 'all' || filterType === 'audio_library') {
+    AUDIO_LIBRARY_ITEMS.forEach((a) => {
+      if (
+        matches(a.title) ||
+        matches(a.speakerOrReciter) ||
+        matches(a.description) ||
+        a.tags.some(matches)
+      ) {
+        results.push({
+          id: `audio-${a.id}`,
+          type: 'audio_library',
+          categoryLabel: 'المكتبة الصوتية الإسلامية',
+          title: a.title,
+          subtitle: `${a.speakerOrReciter} (${a.durationLabel})`,
+          snippet: a.description,
+          url: '/audio-library',
+          badge: a.categoryLabelAr
+        });
+      }
+    });
+  }
+
+  // 18. Islamic Centers
+  if (!filterType || filterType === 'all' || filterType === 'islamic_center') {
+    ISLAMIC_CENTERS_DATA.forEach((c) => {
+      if (
+        matches(c.name) ||
+        matches(c.city) ||
+        matches(c.country) ||
+        matches(c.description) ||
+        c.servicesOffered.some(matches)
+      ) {
+        results.push({
+          id: `center-${c.id}`,
+          type: 'islamic_center',
+          categoryLabel: 'دليل المراكز وحلقات التحفيظ',
+          title: c.name,
+          subtitle: `${c.city} — ${c.country}`,
+          snippet: c.description,
+          url: '/islamic-centers',
+          badge: c.typeLabelAr
+        });
+      }
+    });
+  }
+
+  // 19. Scholars Encyclopedia
+  if (!filterType || filterType === 'all' || filterType === 'scholar') {
+    SCHOLARS_DATA.forEach((s) => {
+      if (
+        matches(s.name) ||
+        matches(s.fullName) ||
+        matches(s.titleOrHonorific) ||
+        matches(s.biographySummary) ||
+        s.notableBooks.some((b) => matches(b.title) || matches(b.description))
+      ) {
+        results.push({
+          id: `scholar-${s.id}`,
+          type: 'scholar',
+          categoryLabel: 'موسوعة العلماء والمصنفات',
+          title: s.name,
+          subtitle: `${s.titleOrHonorific} (${s.birthDeathHijri})`,
+          snippet: s.biographySummary,
+          url: '/scholars',
+          badge: s.eraLabelAr
         });
       }
     });
