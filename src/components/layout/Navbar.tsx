@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -22,6 +22,13 @@ import {
   Smartphone,
   HandHeart,
   ScrollText,
+  GraduationCap,
+  Award,
+  ShieldCheck,
+  Layers,
+  Users,
+  Search,
+  Shield,
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { MobileConnectModal } from './MobileConnectModal';
@@ -37,9 +44,19 @@ export interface NavRouteItem {
 
 export const NAV_ROUTES: NavRouteItem[] = [
   { path: '/', label: 'الرئيسية', shortLabel: 'الرئيسية', description: 'الواجهة الترحيبية ومواقيت اليوم', icon: Home },
-  { path: '/prayer', label: 'مواقيت الصلاة والقبلة', shortLabel: 'الصلاة والقبلة', description: 'الحساب الفلكي الدقيق وبوصلة القبلة', icon: Compass },
+  { path: '/encyclopedia', label: 'الموسوعة والأكاديمية', shortLabel: 'الموسوعة', description: 'البوابة الكبرى للموسوعات والأكاديمية التعليمية', icon: Layers },
   { path: '/quran', label: 'القرآن الكريم', shortLabel: 'المصحف', description: 'المصحف العثماني والتفسير والتلاوة', icon: BookOpen },
+  { path: '/tafsir', label: 'تفسير القرآن الكريم', shortLabel: 'التفسير', description: 'التفسير الميسر المعتمد من مجمع الملك فهد', icon: BookOpen },
   { path: '/prophets', label: 'قصص الأنبياء', shortLabel: 'قصص الأنبياء', description: 'الموسوعة الموثقة لقصص 25 نبياً ورسولاً', icon: ScrollText },
+  { path: '/seerah', label: 'السيرة النبوية الشريفة', shortLabel: 'السيرة النبوية', description: 'الخط الزمني الموثق والمعالم النبوية', icon: Compass },
+  { path: '/companions', label: 'موسوعة الصحابة', shortLabel: 'الصحابة', description: 'سير الخلفاء والعشرة وأمهات المؤمنين', icon: Users },
+  { path: '/hadith', label: 'موسوعة الحديث الشريف', shortLabel: 'الحديث الشريف', description: 'الأربعون النووية والصحيحان والشروح', icon: Award },
+  { path: '/academy', label: 'أكاديمية مدار اليقين', shortLabel: 'الأكاديمية', description: '10 مسارات واختبارات وشهادات إتمام', icon: GraduationCap },
+  { path: '/worship', label: 'تعليم العبادات', shortLabel: 'العبادات', description: 'دليل عملي مصور للوضوء والصلاة والصيام والحج', icon: HeartHandshake },
+  { path: '/aqeedah', label: 'العقيدة الإسلامية', shortLabel: 'العقيدة', description: 'التوحيد وأسماء الله وضوابط التكفير', icon: Shield },
+  { path: '/fatwas', label: 'الفتاوى الموثقة', shortLabel: 'الفتاوى', description: 'أحكام وفتاوى هيئة كبار العلماء والرئاسة', icon: ShieldCheck },
+  { path: '/prayer', label: 'مواقيت الصلاة والقبلة', shortLabel: 'الصلاة والقبلة', description: 'الحساب الفلكي الدقيق وبوصلة القبلة', icon: Compass },
+  { path: '/search', label: 'محرك البحث الموحد', shortLabel: 'البحث', description: 'بحث فوري في جميع الموسوعات والأكاديمية', icon: Search },
   { path: '/reciters', label: 'أطلس قراء العالم', shortLabel: 'القراء', description: 'قراء القارات الست والمشغل المتتابع', icon: Mic2 },
   { path: '/khatmah', label: 'الختمة القرآنية', shortLabel: 'الختمة', description: 'تخطيط ومتابعة الورد القرآني الذكي', icon: CalendarCheck },
   { path: '/adhkar', label: 'واحة الأذكار', shortLabel: 'الأذكار', description: 'حصن المسلم بالتخريج والعداد التفاعلي', icon: Sparkles },
@@ -63,8 +80,24 @@ export const Navbar: React.FC = () => {
     setDrawerOpen(false);
   }, [location.pathname]);
 
-  // Top bar primary links on large desktops (all 13 routes remain accessible via drawer & quick links, and top bar fits cleanly without overflow)
-  const topBarRoutes = NAV_ROUTES.filter((r) => r.path !== '/live');
+  // Primary top bar routes for desktop header navigation
+  const topBarRoutes: NavRouteItem[] = useMemo(() => {
+    const primaryPaths = [
+      '/',
+      '/encyclopedia',
+      '/quran',
+      '/prophets',
+      '/seerah',
+      '/hadith',
+      '/academy',
+      '/worship',
+      '/fatwas',
+      '/prayer',
+      '/donations',
+      '/search'
+    ];
+    return NAV_ROUTES.filter((r) => primaryPaths.includes(r.path));
+  }, []);
 
   return (
     <>

@@ -24,6 +24,16 @@ const ChannelsPage = lazy(() => import('./pages/ChannelsPage').then((m) => ({ de
 const RadioPage = lazy(() => import('./pages/RadioPage').then((m) => ({ default: m.RadioPage })));
 const LivePage = lazy(() => import('./pages/LivePage').then((m) => ({ default: m.LivePage })));
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then((m) => ({ default: m.SettingsPage })));
+const SeerahPage = lazy(() => import('./pages/SeerahPage').then((m) => ({ default: m.SeerahPage })));
+const CompanionsPage = lazy(() => import('./pages/CompanionsPage').then((m) => ({ default: m.CompanionsPage })));
+const TafsirPage = lazy(() => import('./pages/TafsirPage').then((m) => ({ default: m.TafsirPage })));
+const HadithPage = lazy(() => import('./pages/HadithPage').then((m) => ({ default: m.HadithPage })));
+const AcademyPage = lazy(() => import('./pages/AcademyPage').then((m) => ({ default: m.AcademyPage })));
+const WorshipPage = lazy(() => import('./pages/WorshipPage').then((m) => ({ default: m.WorshipPage })));
+const AqeedahPage = lazy(() => import('./pages/AqeedahPage').then((m) => ({ default: m.AqeedahPage })));
+const FatwasPage = lazy(() => import('./pages/FatwasPage').then((m) => ({ default: m.FatwasPage })));
+const SearchPage = lazy(() => import('./pages/SearchPage').then((m) => ({ default: m.SearchPage })));
+const EncyclopediaHubPage = lazy(() => import('./pages/EncyclopediaHubPage').then((m) => ({ default: m.EncyclopediaHubPage })));
 
 const PageSkeleton: React.FC = () => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center justify-center min-h-[50vh] space-y-5">
@@ -59,6 +69,18 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/channels" element={<ChannelsPage />} />
           <Route path="/radio" element={<RadioPage />} />
           <Route path="/live" element={<LivePage />} />
+          <Route path="/encyclopedia" element={<EncyclopediaHubPage />} />
+          <Route path="/seerah" element={<SeerahPage />} />
+          <Route path="/companions" element={<CompanionsPage />} />
+          <Route path="/companions/:companionId" element={<CompanionsPage />} />
+          <Route path="/tafsir" element={<TafsirPage />} />
+          <Route path="/hadith" element={<HadithPage />} />
+          <Route path="/academy" element={<AcademyPage />} />
+          <Route path="/academy/:trackId" element={<AcademyPage />} />
+          <Route path="/worship" element={<WorshipPage />} />
+          <Route path="/aqeedah" element={<AqeedahPage />} />
+          <Route path="/fatwas" element={<FatwasPage />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>

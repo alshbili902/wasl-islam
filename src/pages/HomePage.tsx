@@ -21,6 +21,13 @@ import {
   Share2,
   Tv,
   ScrollText,
+  GraduationCap,
+  Award,
+  ShieldCheck,
+  Layers,
+  Users,
+  Search,
+  Shield,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { Logo } from '../components/layout/Logo';
@@ -99,6 +106,76 @@ export const HomePage: React.FC = () => {
   };
 
   const quickServices = [
+    {
+      path: '/encyclopedia',
+      title: 'بوابة الموسوعة الإسلامية',
+      subtitle: 'بوابة العلوم الشرعية والموسوعات المتكاملة',
+      icon: Layers,
+      badge: 'الصرح المعرفي',
+    },
+    {
+      path: '/academy',
+      title: 'أكاديمية مدار اليقين',
+      subtitle: '10 مسارات واختبارات وشهادات إتمام',
+      icon: GraduationCap,
+      badge: 'تعليم تفاعلي',
+    },
+    {
+      path: '/seerah',
+      title: 'السيرة النبوية الشريفة',
+      subtitle: 'الخط الزمني الموثق والمعالم النبوية',
+      icon: Compass,
+      badge: '13 محطة كبرى',
+    },
+    {
+      path: '/companions',
+      title: 'موسوعة الصحابة والصحابيات',
+      subtitle: 'سير الخلفاء والعشرة وأمهات المؤمنين',
+      icon: Users,
+      badge: 'مناقب موثقة',
+    },
+    {
+      path: '/tafsir',
+      title: 'تفسير القرآن الكريم',
+      subtitle: 'التفسير الميسر المعتمد من مجمع الملك فهد',
+      icon: BookOpen,
+      badge: '114 سورة',
+    },
+    {
+      path: '/hadith',
+      title: 'موسوعة الحديث الشريف',
+      subtitle: 'الأربعون النووية والصحيحان والشروح',
+      icon: Award,
+      badge: 'تخريج معتمد',
+    },
+    {
+      path: '/worship',
+      title: 'تعليم العبادات خطوة بخطوة',
+      subtitle: 'دليل عملي مصور للوضوء والصلاة والحج',
+      icon: HeartHandshake,
+      badge: 'فقه عملي',
+    },
+    {
+      path: '/aqeedah',
+      title: 'موسوعة العقيدة الإسلامية',
+      subtitle: 'التوحيد وأركان الإيمان وأسماء الله الحسنى',
+      icon: Shield,
+      badge: 'المنهج الوسطي',
+    },
+    {
+      path: '/fatwas',
+      title: 'الفتاوى الإسلامية الموثقة',
+      subtitle: 'فتاوى هيئة كبار العلماء والرئاسة العامة',
+      icon: ShieldCheck,
+      badge: 'مصادر رسمية',
+    },
+    {
+      path: '/search',
+      title: 'محرك البحث الإسلامي الموحد',
+      subtitle: 'بحث لحظي شامل في آلاف المواد والآيات',
+      icon: Search,
+      badge: 'بحث فوري',
+    },
     {
       path: '/prayer',
       title: 'مواقيت الصلاة والقبلة',
@@ -512,6 +589,49 @@ export const HomePage: React.FC = () => {
                 <span className="text-slate-500 dark:text-slate-400">درجة الصحة:</span>
                 <span className="font-bold text-emerald-600 dark:text-emerald-400">{dailyHadith.grade}</span>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured: Islamic Encyclopedia & Academy Banner */}
+        <section className="relative rounded-3xl p-6 sm:p-10 overflow-hidden bg-gradient-to-br from-[#072A20] via-[#093528] to-[#041a14] border border-gold/30 shadow-2xl text-white">
+          <div className="islamic-pattern absolute inset-0 opacity-15 pointer-events-none" />
+          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="space-y-3 max-w-2xl text-right">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/15 text-gold border border-gold/30 text-xs font-bold">
+                <Sparkles className="w-4 h-4" />
+                <span>جديد: الموسوعة والأكاديمية الإسلامية المتكاملة</span>
+              </div>
+              <h2 className="font-quran text-2xl sm:text-3xl text-gold font-bold">
+                مرجعك الموثق في العلوم الشرعية والتعليم التفاعلي
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                ثمانية أقسام تخصصية موثقة: السيرة النبوية الشريفة، موسوعة الصحابة، تفسير القرآن الميسر، أصح الأحاديث، فقه العبادات المصور، العقيدة والأسماء الحسنى، الفتاوى المعتمدة من هيئة كبار العلماء، و10 مسارات أكاديمية تفاعلية بشهادات إتمام.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <Link
+                to="/encyclopedia"
+                className="px-5 py-3 rounded-2xl royal-gradient bg-gold text-royal font-bold text-xs sm:text-sm shadow-xl hover:opacity-95 transition-all inline-flex items-center gap-2"
+              >
+                <Layers className="w-4 h-4" />
+                <span>دخول بوابة الموسوعة</span>
+              </Link>
+              <Link
+                to="/academy"
+                className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-gold/30 text-gold font-bold text-xs sm:text-sm backdrop-blur-md transition-all inline-flex items-center gap-2"
+              >
+                <GraduationCap className="w-4 h-4" />
+                <span>أكاديمية مدار اليقين</span>
+              </Link>
+              <Link
+                to="/search"
+                className="px-4 py-3 rounded-2xl bg-black/40 hover:bg-black/60 border border-white/15 text-slate-200 text-xs sm:text-sm transition-all inline-flex items-center gap-1.5"
+              >
+                <Search className="w-3.5 h-3.5 text-gold" />
+                <span>البحث الموحد</span>
+              </Link>
             </div>
           </div>
         </section>

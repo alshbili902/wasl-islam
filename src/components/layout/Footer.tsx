@@ -35,14 +35,25 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Column 2: Quick Navigation 1 */}
+          {/* Column 2: Encyclopedias and Academy */}
           <div className="space-y-3 min-w-0">
             <h3 className="text-base font-bold text-gold flex items-center gap-2">
               <BookOpenCheck className="w-4 h-4" />
-              <span>القرآن الكريم والعبادات</span>
+              <span>الموسوعات والأكاديمية</span>
             </h3>
             <ul className="space-y-2 text-sm">
-              {NAV_ROUTES.slice(0, 7).map((item) => (
+              {[
+                { path: '/encyclopedia', label: 'بوابة الموسوعة الإسلامية' },
+                { path: '/academy', label: 'أكاديمية مدار اليقين' },
+                { path: '/prophets', label: 'قصص الأنبياء عليهم السلام' },
+                { path: '/seerah', label: 'السيرة النبوية الشريفة' },
+                { path: '/companions', label: 'موسوعة الصحابة والصحابيات' },
+                { path: '/tafsir', label: 'تفسير القرآن الكريم' },
+                { path: '/hadith', label: 'موسوعة الحديث الشريف' },
+                { path: '/worship', label: 'تعليم العبادات خطوة بخطوة' },
+                { path: '/aqeedah', label: 'العقيدة وأسماء الله الحسنى' },
+                { path: '/fatwas', label: 'الفتاوى الإسلامية الموثقة' },
+              ].map((item) => (
                 <li key={item.path}>
                   <NavLink
                     to={item.path}
@@ -56,14 +67,25 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Column 3: Quick Navigation 2 */}
+          {/* Column 3: Smart Tools & Services */}
           <div className="space-y-3 min-w-0">
             <h3 className="text-base font-bold text-gold flex items-center gap-2">
               <Compass className="w-4 h-4" />
-              <span>الأدوات الذكية والبث المباشر</span>
+              <span>الخدمات والعبادات الذكية</span>
             </h3>
             <ul className="space-y-2 text-sm">
-              {NAV_ROUTES.slice(7).map((item) => (
+              {[
+                { path: '/quran', label: 'المصحف الشريف والتلاوات' },
+                { path: '/prayer', label: 'مواقيت الصلاة والقبلة' },
+                { path: '/khatmah', label: 'الختمة القرآنية الذكية' },
+                { path: '/adhkar', label: 'واحة الأذكار وحصن المسلم' },
+                { path: '/tasbih', label: 'المسبحة الإلكترونية' },
+                { path: '/sleep', label: 'حاسبة النوم والقيام' },
+                { path: '/charity', label: 'حاسبة الزكاة الشرعية' },
+                { path: '/donations', label: 'بوابة التبرعات الرسمية' },
+                { path: '/search', label: 'محرك البحث الإسلامي الموحد' },
+                { path: '/channels', label: 'القنوات والإذاعات المباشرة' },
+              ].map((item) => (
                 <li key={item.path}>
                   <NavLink
                     to={item.path}
@@ -84,10 +106,10 @@ export const Footer: React.FC = () => {
               <span>المصادر الشرعية المعتمدة</span>
             </h3>
             <ul className="space-y-2 text-xs text-slate-300 leading-relaxed">
-              <li>• المصحف الشريف: رواية حفص بالرسم العثماني والتفسير الميسر.</li>
-              <li>• الأذكار والأدعية: كتاب حصن المسلم من أذكار الكتاب والسنة مع التخريج.</li>
-              <li>• مواقيت الصلاة: الحساب الفلكي المعتمد (تقويم أم القرى ورابطة العالم الإسلامي).</li>
-              <li>• الزكاة والصدقات: معيار الذهب الشرعي (85 جراماً عيار 24) ومنصة إحسان الوطنية.</li>
+              <li>• مجمع الملك فهد لطباعة المصحف الشريف والتفسير الميسر.</li>
+              <li>• الرئاسة العامة للبحوث العلمية والإفتاء وهيئة كبار العلماء بالمملكة.</li>
+              <li>• صحيحا البخاري ومسلم ومتن الأربعين النووية ورياض الصالحين.</li>
+              <li>• تقويم أم القرى ومنصة إحسان الوطنية للعمل الخيري.</li>
             </ul>
           </div>
         </div>
