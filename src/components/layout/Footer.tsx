@@ -19,9 +19,13 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-gold/20">
           {/* Column 1: Brand Identity */}
           <div className="space-y-4 min-w-0">
-            <div className="bg-white/5 w-fit p-2.5 rounded-2xl border border-gold/20">
+            <NavLink
+              to="/"
+              className="inline-block focus:outline-none transition-transform hover:scale-105"
+              aria-label="مدار اليقين - العودة إلى الرئيسية"
+            >
               <Logo size="md" />
-            </div>
+            </NavLink>
             <p className="text-sm text-slate-300 leading-relaxed">
               منصة إسلامية رقمية عالمية تجمع بين الفخامة المعمارية الإسلامية والتقنيات الحديثة، مع الالتزام التام بموثوقية المصادر الشرعية المعتمدة.
             </p>

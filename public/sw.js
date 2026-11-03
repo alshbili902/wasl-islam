@@ -1,5 +1,12 @@
-const CACHE_NAME = 'madar-al-yaqeen-v1';
-const ASSETS = ['/', '/index.html', '/manifest.json', '/favicon.svg'];
+const CACHE_NAME = 'madar-al-yaqeen-v3';
+const ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/favicon.png',
+  '/images/madar-al-yaqeen-logo.png',
+  '/images/madar-al-yaqeen-logo-horizontal.png',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

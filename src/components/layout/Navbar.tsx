@@ -69,19 +69,23 @@ export const Navbar: React.FC = () => {
       <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-[#F8FAF9]/90 dark:bg-[#0B131E]/90 border-b border-gold/20 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2">
           {/* Right: Logo + Drawer Menu Trigger */}
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <NavLink
+              to="/"
+              className="focus:outline-none min-w-0 shrink-0 inline-flex items-center transition-transform hover:scale-[1.02]"
+              aria-label="مدار اليقين - الصفحة الرئيسية"
+            >
+              <Logo size="sm" />
+            </NavLink>
             <button
               type="button"
               onClick={() => setDrawerOpen(true)}
               aria-label="فتح قائمة جميع الأقسام"
               title="قائمة جميع الأقسام"
-              className="p-2.5 rounded-xl bg-royal/5 dark:bg-white/5 text-royal dark:text-gold hover:bg-gold/15 transition-colors shrink-0"
+              className="p-2 sm:p-2.5 rounded-xl bg-royal/5 dark:bg-white/5 text-royal dark:text-gold hover:bg-gold/15 transition-colors shrink-0"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <NavLink to="/" className="focus:outline-none min-w-0">
-              <Logo size="sm" />
-            </NavLink>
           </div>
 
           {/* Center: Desktop Navigation Links (xl and above) */}
@@ -178,10 +182,17 @@ export const Navbar: React.FC = () => {
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
               className="fixed top-0 right-0 bottom-0 z-50 w-[85vw] max-w-sm bg-[#F8FAF9] dark:bg-[#0B131E] border-l border-gold/25 shadow-2xl flex flex-col overflow-hidden"
             >
-              <div className="p-5 border-b border-gold/20 flex items-center justify-between royal-gradient text-white">
+              <div className="p-4 sm:p-5 border-b border-gold/20 flex items-center justify-between royal-gradient text-white">
                 <div className="flex items-center gap-3 min-w-0">
-                  <Logo size="sm" showSubtitle={false} />
-                  <span className="text-xs text-gold/90 font-semibold">بوابة الأقسام ({NAV_ROUTES.length})</span>
+                  <NavLink
+                    to="/"
+                    onClick={() => setDrawerOpen(false)}
+                    aria-label="مدار اليقين - الصفحة الرئيسية"
+                    className="focus:outline-none shrink-0"
+                  >
+                    <Logo size="sm" />
+                  </NavLink>
+                  <span className="hidden xs:inline text-xs text-gold/90 font-semibold truncate">بوابة الأقسام ({NAV_ROUTES.length})</span>
                 </div>
                 <button
                   type="button"

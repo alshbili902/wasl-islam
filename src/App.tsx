@@ -6,6 +6,7 @@ import { AudioProvider } from './context/AudioContext';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { GlobalAudioPlayer } from './components/layout/GlobalAudioPlayer';
+import { Logo } from './components/layout/Logo';
 import { HomePage } from './pages/HomePage';
 
 // Lazy-loaded dedicated pages for optimal bundle splitting
@@ -24,12 +25,14 @@ const LivePage = lazy(() => import('./pages/LivePage').then((m) => ({ default: m
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then((m) => ({ default: m.SettingsPage })));
 
 const PageSkeleton: React.FC = () => (
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6 animate-pulse">
-    <div className="h-44 rounded-3xl bg-royal/15 dark:bg-white/5 border border-gold/20" />
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-      <div className="h-48 rounded-3xl bg-royal/10 dark:bg-white/5 border border-gold/15" />
-      <div className="h-48 rounded-3xl bg-royal/10 dark:bg-white/5 border border-gold/15" />
-      <div className="h-48 rounded-3xl bg-royal/10 dark:bg-white/5 border border-gold/15" />
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center justify-center min-h-[50vh] space-y-5">
+    <div className="relative">
+      <div className="absolute inset-0 rounded-full bg-gold/20 blur-2xl animate-pulse" />
+      <Logo size="lg" className="animate-pulse relative z-10" />
+    </div>
+    <div className="flex items-center gap-2 text-xs font-bold text-gold/80">
+      <span className="w-2 h-2 rounded-full bg-gold animate-ping" />
+      <span>جاري تحميل الصفحة المباركة...</span>
     </div>
   </div>
 );
