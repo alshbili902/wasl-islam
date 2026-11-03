@@ -16,7 +16,11 @@ import {
   HeartHandshake,
   CheckCircle2,
   Layers,
-  BookMarked
+  BookMarked,
+  Tent,
+  Crown,
+  Landmark,
+  CheckSquare
 } from 'lucide-react';
 
 interface EncyclopediaModuleCard {
@@ -32,6 +36,50 @@ interface EncyclopediaModuleCard {
 }
 
 const ENCYCLOPEDIA_MODULES: EncyclopediaModuleCard[] = [
+  {
+    id: 'companion',
+    path: '/companion',
+    title: 'رفيق المسلم اليومي',
+    subtitle: 'لوحة متابعة الطاعات والسنن والورد القرآني',
+    description: 'مساحتك الشخصية لتنظيم صلواتك، وردك القرآني اليومي، أذكار الصباح والمساء، وصيام التطوع مع إحصائيات أسبوعية.',
+    icon: CheckSquare,
+    tag: 'رفيق يومي',
+    stats: 'متابعة تفاعلية وإحصائيات',
+    colorGradient: 'from-emerald-950 via-[#072A20] to-[#0A3D2E]',
+  },
+  {
+    id: 'hajj-umrah',
+    path: '/hajj-umrah',
+    title: 'دليل الحج والعمرة التفاعلي',
+    subtitle: 'دليل المناسك التفاعلي والمشاعر والمواقيت المعتمدة',
+    description: 'رحلة تفاعلية خطوة بخطوة للعمرة والحج مع الأدعية المأثورة، خريطة المشاعر التفاعلية، المواقيت الخمسة، وقائمة التجهيز.',
+    icon: Tent,
+    tag: 'مناسك الحرمين',
+    stats: 'العمرة والحج والمواقيت',
+    colorGradient: 'from-[#072A20] via-teal-950 to-[#0A3D2E]',
+  },
+  {
+    id: 'kids',
+    path: '/kids',
+    title: 'عالم الأطفال المسلم',
+    subtitle: 'بيئة تفاعلية لتعليم القرآن والأركان والقصص والألعاب',
+    description: 'عالم تعليمي آمن يضم الحروف القرآنية، قصار السور، تعليم الوضوء والصلاة، ألعاب الذكاء، وقصص الأنبياء بدون تجسيد.',
+    icon: Crown,
+    tag: 'للنشء الصغير',
+    stats: 'ألعاب وقصص وأوسمة',
+    colorGradient: 'from-amber-950 via-[#072A20] to-emerald-950',
+  },
+  {
+    id: 'history-atlas',
+    path: '/history-atlas',
+    title: 'أطلس التاريخ الإسلامي',
+    subtitle: 'خريطة تفاعلية كبرى والخط الزمني للحواضر والفتوحات',
+    description: 'خريطة جغرافية كبرى وخط زمني من العصر النبوي وحتى العصر الحديث، توثق الحواضر والعلماء والمعارك الفاصلة.',
+    icon: Landmark,
+    tag: 'أطلس جغرافي',
+    stats: '30+ حاضرة و 50+ حدثاً',
+    colorGradient: 'from-[#072A20] via-emerald-950 to-slate-950',
+  },
   {
     id: 'prophets',
     path: '/prophets',

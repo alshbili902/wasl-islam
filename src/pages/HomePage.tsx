@@ -28,6 +28,10 @@ import {
   Users,
   Search,
   Shield,
+  CheckSquare,
+  Tent,
+  Crown,
+  Landmark,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { Logo } from '../components/layout/Logo';
@@ -106,6 +110,34 @@ export const HomePage: React.FC = () => {
   };
 
   const quickServices = [
+    {
+      path: '/companion',
+      title: 'رفيق المسلم اليومي',
+      subtitle: 'لوحة متابعة الطاعات والسنن والورد القرآني',
+      icon: CheckSquare,
+      badge: 'جديد وتفاعلي',
+    },
+    {
+      path: '/hajj-umrah',
+      title: 'دليل الحج والعمرة التفاعلي',
+      subtitle: 'دليل المناسك التفاعلي والمشاعر والمواقيت المعتمدة',
+      icon: Tent,
+      badge: 'دليل شامل',
+    },
+    {
+      path: '/kids',
+      title: 'عالم الأطفال المسلم',
+      subtitle: 'بيئة تفاعلية لتعليم القرآن والأركان والقصص والألعاب',
+      icon: Crown,
+      badge: 'للنشء الصغير',
+    },
+    {
+      path: '/history-atlas',
+      title: 'أطلس التاريخ الإسلامي',
+      subtitle: 'خريطة تفاعلية كبرى والخط الزمني للحواضر والفتوحات',
+      icon: Landmark,
+      badge: 'أطلس جغرافي',
+    },
     {
       path: '/encyclopedia',
       title: 'بوابة الموسوعة الإسلامية',

@@ -8,6 +8,10 @@ import { ACADEMY_TRACKS } from './academyData';
 import { WORSHIP_GUIDES } from './worshipData';
 import { ASMA_ALLAH_LIST, AQEEDAH_ARTICLES, AQEEDAH_QA_LIST } from './aqeedahData';
 import { VERIFIED_FATWAS } from './fatwasData';
+import { DEFAULT_COMPANION_ACTIVITIES } from './companionData';
+import { UMRAH_STEPS, HAJJ_STEPS, MIQAT_LOCATIONS } from './hajjUmrahData';
+import { KIDS_STORIES_DATA, ISLAMIC_PILLARS_KIDS } from './kidsData';
+import { HISTORICAL_CITIES, HISTORICAL_TIMELINE_EVENTS } from './historyAtlasData';
 
 export type SearchResultType =
   | 'prophet'
@@ -19,7 +23,11 @@ export type SearchResultType =
   | 'worship_guide'
   | 'asma_allah'
   | 'aqeedah_article'
-  | 'fatwa';
+  | 'fatwa'
+  | 'companion_activity'
+  | 'hajj_umrah_step'
+  | 'kids_lesson'
+  | 'history_atlas';
 
 export interface GlobalSearchResult {
   id: string;
@@ -285,6 +293,142 @@ export function searchAllEncyclopedia(query: string, filterType?: SearchResultTy
           snippet: f.question,
           url: `/fatwas?fatwaId=${f.id}`,
           badge: f.categoryNameAr
+        });
+      }
+    });
+  }
+
+  // 10. Daily Companion Activities
+  if (!filterType || filterType === 'all' || filterType === 'companion_activity') {
+    DEFAULT_COMPANION_ACTIVITIES.forEach((act) => {
+      if (matches(act.title) || matches(act.description) || matches(act.referenceEvidence)) {
+        results.push({
+          id: `companion-${act.id}`,
+          type: 'companion_activity',
+          categoryLabel: 'رفيق المسلم اليومي',
+          title: act.title,
+          subtitle: act.isObligatory ? 'فرض مكتوب' : 'سنة مستحبة',
+          snippet: act.description,
+          url: '/companion',
+          badge: act.isObligatory ? 'فرض' : 'سنة'
+        });
+      }
+    });
+  }
+
+  // 11. Hajj & Umrah Guide Steps & Miqats
+  if (!filterType || filterType === 'all' || filterType === 'hajj_umrah_step') {
+    [...UMRAH_STEPS, ...HAJJ_STEPS].forEach((step) => {
+      if (
+        matches(step.title) ||
+        matches(step.summary) ||
+        matches(step.locationName) ||
+        step.detailedInstructions.some(matches) ||
+        step.supplications.some((s) => matches(s.title) || matches(s.arabicText))
+      ) {
+        results.push({
+          id: `hajj-umrah-${step.id}`,
+          type: 'hajj_umrah_step',
+          categoryLabel: step.journey === 'umrah' ? 'مناسك العمرة' : 'مناسك الحج',
+          title: step.title,
+          subtitle: `${step.arabicStageTitle} — ${step.locationName}`,
+          snippet: step.summary,
+          url: '/hajj-umrah',
+          badge: step.rulingLabel
+        });
+      }
+    });
+
+    MIQAT_LOCATIONS.forEach((miqat) => {
+      if (matches(miqat.nameAr) || matches(miqat.modernName) || matches(miqat.servingRegions)) {
+        results.push({
+          id: `miqat-${miqat.id}`,
+          type: 'hajj_umrah_step',
+          categoryLabel: 'المواقيت المكانية',
+          title: `ميقات ${miqat.nameAr} (${miqat.modernName})`,
+          subtitle: `${miqat.distanceFromMakkahKm} كم عن مكة المكرمة`,
+          snippet: miqat.servingRegions,
+          url: '/hajj-umrah',
+          badge: 'ميقات شرعي'
+        });
+      }
+    });
+  }
+
+  // 12. Kids Learning World
+  if (!filterType || filterType === 'all' || filterType === 'kids_lesson') {
+    KIDS_STORIES_DATA.forEach((st) => {
+      if (matches(st.title) || matches(st.heroName) || matches(st.moralLesson) || st.paragraphs.some(matches)) {
+        results.push({
+          id: `kids-story-${st.id}`,
+          type: 'kids_lesson',
+          categoryLabel: 'عالم الأطفال المسلم',
+          title: st.title,
+          subtitle: st.heroName,
+          snippet: st.moralLesson,
+          url: '/kids',
+          badge: 'قصص الأطفال'
+        });
+      }
+    });
+
+    ISLAMIC_PILLARS_KIDS.forEach((pillar) => {
+      if (matches(pillar.title) || matches(pillar.summary) || matches(pillar.childExample)) {
+        results.push({
+          id: `kids-pillar-${pillar.id}`,
+          type: 'kids_lesson',
+          categoryLabel: 'عالم الأطفال المسلم',
+          title: pillar.title,
+          subtitle: pillar.subtitle,
+          snippet: pillar.summary,
+          url: '/kids',
+          badge: 'أركان الإسلام'
+        });
+      }
+    });
+  }
+
+  // 13. Islamic History Atlas
+  if (!filterType || filterType === 'all' || filterType === 'history_atlas') {
+    HISTORICAL_CITIES.forEach((c) => {
+      if (
+        matches(c.nameAr) ||
+        matches(c.nameEn) ||
+        matches(c.modernCountry) ||
+        matches(c.roleSummary) ||
+        c.monuments.some(matches) ||
+        c.famousScholars.some(matches)
+      ) {
+        results.push({
+          id: `history-city-${c.id}`,
+          type: 'history_atlas',
+          categoryLabel: 'أطلس التاريخ الإسلامي',
+          title: `حاضرة ${c.nameAr} (${c.modernCountry})`,
+          subtitle: `تأسيس أو فتح: ${c.establishedDate}`,
+          snippet: c.roleSummary,
+          url: '/history-atlas',
+          badge: 'حاضرة تاريخية'
+        });
+      }
+    });
+
+    HISTORICAL_TIMELINE_EVENTS.forEach((ev) => {
+      if (
+        matches(ev.title) ||
+        matches(ev.cityName) ||
+        matches(ev.shortSummary) ||
+        matches(ev.detailedNarrative) ||
+        ev.keyFigures.some(matches)
+      ) {
+        results.push({
+          id: `history-event-${ev.id}`,
+          type: 'history_atlas',
+          categoryLabel: 'أطلس التاريخ الإسلامي',
+          title: ev.title,
+          subtitle: `${ev.hijriYear} هـ (${ev.gregorianYear} م) — ${ev.cityName}`,
+          snippet: ev.shortSummary,
+          url: '/history-atlas',
+          badge: 'حدث تاريخي'
         });
       }
     });

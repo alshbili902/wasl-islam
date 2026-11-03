@@ -20,6 +20,10 @@ import {
 
 const SEARCH_CATEGORIES: { id: SearchResultType | 'all'; label: string }[] = [
   { id: 'all', label: 'جميع الأقسام' },
+  { id: 'companion_activity', label: 'رفيق المسلم' },
+  { id: 'hajj_umrah_step', label: 'الحج والعمرة' },
+  { id: 'kids_lesson', label: 'عالم الأطفال' },
+  { id: 'history_atlas', label: 'أطلس التاريخ' },
   { id: 'prophet', label: 'قصص الأنبياء' },
   { id: 'seerah', label: 'السيرة النبوية' },
   { id: 'companion', label: 'سير الصحابة' },

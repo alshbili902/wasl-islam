@@ -34,6 +34,10 @@ const AqeedahPage = lazy(() => import('./pages/AqeedahPage').then((m) => ({ defa
 const FatwasPage = lazy(() => import('./pages/FatwasPage').then((m) => ({ default: m.FatwasPage })));
 const SearchPage = lazy(() => import('./pages/SearchPage').then((m) => ({ default: m.SearchPage })));
 const EncyclopediaHubPage = lazy(() => import('./pages/EncyclopediaHubPage').then((m) => ({ default: m.EncyclopediaHubPage })));
+const CompanionPage = lazy(() => import('./pages/CompanionPage').then((m) => ({ default: m.CompanionPage })));
+const HajjUmrahPage = lazy(() => import('./pages/HajjUmrahPage').then((m) => ({ default: m.HajjUmrahPage })));
+const KidsPage = lazy(() => import('./pages/KidsPage').then((m) => ({ default: m.KidsPage })));
+const HistoryAtlasPage = lazy(() => import('./pages/HistoryAtlasPage').then((m) => ({ default: m.HistoryAtlasPage })));
 
 const PageSkeleton: React.FC = () => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center justify-center min-h-[50vh] space-y-5">
@@ -81,6 +85,10 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/aqeedah" element={<AqeedahPage />} />
           <Route path="/fatwas" element={<FatwasPage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/companion" element={<CompanionPage />} />
+          <Route path="/hajj-umrah" element={<HajjUmrahPage />} />
+          <Route path="/kids" element={<KidsPage />} />
+          <Route path="/history-atlas" element={<HistoryAtlasPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>

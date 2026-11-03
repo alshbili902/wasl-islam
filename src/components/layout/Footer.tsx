@@ -43,6 +43,10 @@ export const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2 text-sm">
               {[
+                { path: '/companion', label: 'رفيق المسلم اليومي' },
+                { path: '/hajj-umrah', label: 'دليل الحج والعمرة التفاعلي' },
+                { path: '/kids', label: 'عالم الأطفال المسلم' },
+                { path: '/history-atlas', label: 'أطلس التاريخ الإسلامي' },
                 { path: '/encyclopedia', label: 'بوابة الموسوعة الإسلامية' },
                 { path: '/academy', label: 'أكاديمية مدار اليقين' },
                 { path: '/prophets', label: 'قصص الأنبياء عليهم السلام' },

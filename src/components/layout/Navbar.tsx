@@ -29,6 +29,10 @@ import {
   Users,
   Search,
   Shield,
+  CheckSquare,
+  Tent,
+  Crown,
+  Landmark,
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { MobileConnectModal } from './MobileConnectModal';
@@ -44,6 +48,10 @@ export interface NavRouteItem {
 
 export const NAV_ROUTES: NavRouteItem[] = [
   { path: '/', label: 'الرئيسية', shortLabel: 'الرئيسية', description: 'الواجهة الترحيبية ومواقيت اليوم', icon: Home },
+  { path: '/companion', label: 'رفيق المسلم اليومي', shortLabel: 'رفيق المسلم', description: 'لوحة متابعة الطاعات والسنن والورد القرآني', icon: CheckSquare },
+  { path: '/hajj-umrah', label: 'دليل الحج والعمرة التفاعلي', shortLabel: 'الحج والعمرة', description: 'دليل المناسك التفاعلي والمشاعر والمواقيت المعتمدة', icon: Tent },
+  { path: '/kids', label: 'عالم الأطفال المسلم', shortLabel: 'عالم الأطفال', description: 'بيئة تفاعلية لتعليم القرآن والأركان والقصص والألعاب', icon: Crown },
+  { path: '/history-atlas', label: 'أطلس التاريخ الإسلامي', shortLabel: 'أطلس التاريخ', description: 'خريطة تفاعلية كبرى والخط الزمني للحواضر والفتوحات', icon: Landmark },
   { path: '/encyclopedia', label: 'الموسوعة والأكاديمية', shortLabel: 'الموسوعة', description: 'البوابة الكبرى للموسوعات والأكاديمية التعليمية', icon: Layers },
   { path: '/quran', label: 'القرآن الكريم', shortLabel: 'المصحف', description: 'المصحف العثماني والتفسير والتلاوة', icon: BookOpen },
   { path: '/tafsir', label: 'تفسير القرآن الكريم', shortLabel: 'التفسير', description: 'التفسير الميسر المعتمد من مجمع الملك فهد', icon: BookOpen },
@@ -84,6 +92,10 @@ export const Navbar: React.FC = () => {
   const topBarRoutes: NavRouteItem[] = useMemo(() => {
     const primaryPaths = [
       '/',
+      '/companion',
+      '/hajj-umrah',
+      '/kids',
+      '/history-atlas',
       '/encyclopedia',
       '/quran',
       '/prophets',
