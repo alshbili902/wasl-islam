@@ -48,6 +48,12 @@ const CardStudioPage = lazy(() => import('./pages/CardStudioPage').then((m) => (
 const IslamicCentersPage = lazy(() => import('./pages/IslamicCentersPage').then((m) => ({ default: m.IslamicCentersPage })));
 const ScholarsPage = lazy(() => import('./pages/ScholarsPage').then((m) => ({ default: m.ScholarsPage })));
 
+// 4 Advanced Quran Learning & Accessibility Modules
+const QuranCoachPage = lazy(() => import('./pages/QuranCoachPage').then((m) => ({ default: m.QuranCoachPage })));
+const TajweedLabPage = lazy(() => import('./pages/TajweedLabPage').then((m) => ({ default: m.TajweedLabPage })));
+const QuranicArabicPage = lazy(() => import('./pages/QuranicArabicPage').then((m) => ({ default: m.QuranicArabicPage })));
+const SignLanguagePage = lazy(() => import('./pages/SignLanguagePage').then((m) => ({ default: m.SignLanguagePage })));
+
 const PageSkeleton: React.FC = () => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center justify-center min-h-[50vh] space-y-5">
     <div className="relative">
@@ -105,6 +111,10 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/card-studio" element={<CardStudioPage />} />
           <Route path="/islamic-centers" element={<IslamicCentersPage />} />
           <Route path="/scholars" element={<ScholarsPage />} />
+          <Route path="/quran-coach" element={<QuranCoachPage />} />
+          <Route path="/tajweed-lab" element={<TajweedLabPage />} />
+          <Route path="/quranic-arabic" element={<QuranicArabicPage />} />
+          <Route path="/sign-language" element={<SignLanguagePage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>

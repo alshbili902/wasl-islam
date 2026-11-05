@@ -37,6 +37,7 @@ import {
   Headphones,
   Palette,
   Building2,
+  Languages,
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { MobileConnectModal } from './MobileConnectModal';
@@ -63,6 +64,10 @@ export const NAV_ROUTES: NavRouteItem[] = [
   { path: '/card-studio', label: 'استوديو البطاقات الإسلامية', shortLabel: 'استوديو البطاقات', description: 'تصميم بطاقات دعوية وآيات وأحاديث وتصديرها بدقة عالية', icon: Palette },
   { path: '/islamic-centers', label: 'دليل المراكز وحلقات التحفيظ', shortLabel: 'مراكز التحفيظ', description: 'جمعيات التحفيظ والمقارئ الإلكترونية والجوامع الكبرى', icon: Building2 },
   { path: '/scholars', label: 'موسوعة العلماء والمصنفات', shortLabel: 'العلماء والكتب', description: 'سير الأئمة الأربعة والمحدثين وكبار المحققين وأمهات الكتب', icon: GraduationCap },
+  { path: '/quran-coach', label: 'مدرّب حفظ القرآن ومراجعته', shortLabel: 'مدرّب الحفظ', description: 'جدول الحفظ والتكرار الذكي والتسميع الصوتي والمراجعة التراكمية', icon: Award },
+  { path: '/tajweed-lab', label: 'معمل النطق والتجويد التفاعلي', shortLabel: 'معمل التجويد', description: 'مخارج الحروف وصفاتها والمدود والغنة ومختبر التسجيل الصوتي', icon: Mic2 },
+  { path: '/quranic-arabic', label: 'أكاديمية لغة القرآن والمفردات', shortLabel: 'لغة القرآن', description: 'إعراب وبلاغة الآيات وجذور الكلمات القرآنية وترجمتها متعددة اللغات', icon: Languages },
+  { path: '/sign-language', label: 'مركز التعليم الإسلامي بلغة الإشارة', shortLabel: 'لغة الإشارة', description: 'فيديوهات وشروح إشارية معتمدة لأركان الإسلام والوضوء والصلاة والأذكار', icon: HeartHandshake },
   { path: '/encyclopedia', label: 'الموسوعة والأكاديمية', shortLabel: 'الموسوعة', description: 'البوابة الكبرى للموسوعات والأكاديمية التعليمية', icon: Layers },
   { path: '/quran', label: 'القرآن الكريم', shortLabel: 'المصحف', description: 'المصحف العثماني والتفسير والتلاوة', icon: BookOpen },
   { path: '/tafsir', label: 'تفسير القرآن الكريم', shortLabel: 'التفسير', description: 'التفسير الميسر المعتمد من مجمع الملك فهد', icon: BookOpen },

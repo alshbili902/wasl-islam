@@ -36,6 +36,7 @@ import {
   Headphones,
   Palette,
   Building2,
+  Languages,
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { Logo } from '../components/layout/Logo';
@@ -190,6 +191,34 @@ export const HomePage: React.FC = () => {
       subtitle: 'سير الأئمة الأربعة والمحدثين وكبار المحققين وأمهات الكتب',
       icon: GraduationCap,
       badge: 'أعلام الأمة',
+    },
+    {
+      path: '/quran-coach',
+      title: 'مدرّب حفظ القرآن ومراجعته',
+      subtitle: 'جدول الحفظ والتكرار الذكي والتسميع الصوتي والمراجعة التراكمية',
+      icon: Award,
+      badge: 'مدرّب تفاعلي',
+    },
+    {
+      path: '/tajweed-lab',
+      title: 'معمل النطق والتجويد التفاعلي',
+      subtitle: 'مخارج الحروف وصفاتها والمدود ومختبر التسجيل الصوتي والمقارنة',
+      icon: Mic2,
+      badge: 'معمل صوتي',
+    },
+    {
+      path: '/quranic-arabic',
+      title: 'أكاديمية لغة القرآن والمفردات',
+      subtitle: 'إعراب وبلاغة الآيات وجذور الكلمات وترجمتها لـ 7 لغات عالمية',
+      icon: Languages,
+      badge: 'أكاديمية لغوية',
+    },
+    {
+      path: '/sign-language',
+      title: 'مركز التعليم الإسلامي بلغة الإشارة',
+      subtitle: 'فيديوهات وشروح إشارية معتمدة للصم وضعاف السمع بدقة شرعية',
+      icon: HeartHandshake,
+      badge: 'للصم وضعاف السمع',
     },
     {
       path: '/encyclopedia',

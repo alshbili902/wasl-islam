@@ -20,7 +20,9 @@ import {
   Tent,
   Crown,
   Landmark,
-  CheckSquare
+  CheckSquare,
+  Languages,
+  Mic2
 } from 'lucide-react';
 
 interface EncyclopediaModuleCard {
@@ -178,6 +180,50 @@ const ENCYCLOPEDIA_MODULES: EncyclopediaModuleCard[] = [
     tag: 'فتاوى رسمية',
     stats: 'روابط التحقق الرسمية',
     colorGradient: 'from-teal-950 via-[#072A20] to-emerald-950',
+  },
+  {
+    id: 'quran-coach',
+    path: '/quran-coach',
+    title: 'مدرّب حفظ القرآن ومراجعته',
+    subtitle: 'مدرّب التكرار الذكي والتسميع والمراجعة التراكمية',
+    description: 'خطط حفظ مخصصة وجداول زمنية ومولد اختبارات وتسميع صوتي تفاعلي مع التكرار لترسيخ الآيات.',
+    icon: Award,
+    tag: 'تحفيظ تفاعلي',
+    stats: 'تكرار واختبارات وتسميع',
+    colorGradient: 'from-emerald-950 via-[#072A20] to-teal-950',
+  },
+  {
+    id: 'tajweed-lab',
+    path: '/tajweed-lab',
+    title: 'معمل النطق والتجويد التفاعلي',
+    subtitle: 'مخارج الحروف وصفاتها والمدود والغنة ومختبر التسجيل',
+    description: 'دليل تشريحي وتطبيقي لأحكام التجويد ومخارج الحروف الـ 28 مع أمثلة صوتية وتسجيل ومقارنة الأداء.',
+    icon: Mic2,
+    tag: 'معمل صوتي',
+    stats: '28 حرفاً وأحكام التجويد',
+    colorGradient: 'from-[#072A20] via-teal-950 to-emerald-900',
+  },
+  {
+    id: 'quranic-arabic',
+    path: '/quranic-arabic',
+    title: 'أكاديمية لغة القرآن والمفردات',
+    subtitle: 'إعراب وبلاغة الآيات وجذور الكلمات بـ 7 لغات',
+    description: 'دراسة تحليلية لكلمات القرآن وجذورها وصرفها وإعرابها مع بطاقات استذكار فلاش كاردز وترجمة عالمية.',
+    icon: Languages,
+    tag: 'لغة القرآن',
+    stats: '5 مستويات و 7 لغات',
+    colorGradient: 'from-[#072A20] via-emerald-950 to-amber-950',
+  },
+  {
+    id: 'sign-language',
+    path: '/sign-language',
+    title: 'مركز التعليم الإسلامي بلغة الإشارة',
+    subtitle: 'دروس مرئية معتمدة للصم وضعاف السمع',
+    description: 'شروح عملية مصورة بلغة الإشارة السعودية المعتمدة لأركان الإسلام، صفة الوضوء، الصلاة، وتفسير قصار السور.',
+    icon: HeartHandshake,
+    tag: 'للصم وضعاف السمع',
+    stats: 'إشارات معتمدة وموثقة',
+    colorGradient: 'from-[#072A20] via-teal-950 to-[#0A3D2E]',
   },
 ];
 

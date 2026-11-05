@@ -18,6 +18,10 @@ import { JANAZAH_STEPS } from './janazahData';
 import { AUDIO_LIBRARY_ITEMS } from './audioLibraryData';
 import { ISLAMIC_CENTERS_DATA } from './islamicCentersData';
 import { SCHOLARS_DATA } from './scholarsData';
+import { POPULAR_MEMORIZATION_TRACKS } from './quranCoachData';
+import { TAJWEED_RULES, MAKHAREJ_AREAS } from './tajweedData';
+import { QURANIC_ARABIC_LEVELS, CORE_VOCABULARY_CARDS } from './quranicArabicData';
+import { SIGN_LANGUAGE_LESSONS } from './signLanguageData';
 
 export type SearchResultType =
   | 'prophet'
@@ -39,7 +43,11 @@ export type SearchResultType =
   | 'janazah'
   | 'audio_library'
   | 'islamic_center'
-  | 'scholar';
+  | 'scholar'
+  | 'quran_coach'
+  | 'tajweed'
+  | 'quranic_arabic'
+  | 'sign_language';
 
 export interface GlobalSearchResult {
   id: string;
@@ -583,6 +591,132 @@ export function searchAllEncyclopedia(query: string, filterType?: SearchResultTy
           snippet: s.biographySummary,
           url: '/scholars',
           badge: s.eraLabelAr
+        });
+      }
+    });
+  }
+
+  // 20. Quran Coach
+  if (!filterType || filterType === 'all' || filterType === 'quran_coach') {
+    POPULAR_MEMORIZATION_TRACKS.forEach((t, idx) => {
+      if (
+        matches(t.title) ||
+        matches(t.notes) ||
+        matches(t.targetCompletionDate) ||
+        matches(t.preferredDailyTime)
+      ) {
+        results.push({
+          id: `coach-${idx}`,
+          type: 'quran_coach',
+          categoryLabel: 'مدرّب حفظ القرآن ومراجعته',
+          title: t.title,
+          subtitle: `الهدف: ${t.targetCompletionDate || 'متابعة يومية'} (${t.dailyAyahsCount} آيات/يوم)`,
+          snippet: t.notes || 'خطة منهجية للحفظ والمراجعة التراكمية والتكرار الذكي.',
+          url: '/quran-coach',
+          badge: t.revisionFrequency === 'daily' ? 'مراجعة يومية' : 'مراجعة ذكية'
+        });
+      }
+    });
+  }
+
+  // 21. Tajweed Lab
+  if (!filterType || filterType === 'all' || filterType === 'tajweed') {
+    TAJWEED_RULES.forEach((r) => {
+      if (
+        matches(r.titleAr) ||
+        matches(r.categoryLabelAr) ||
+        matches(r.ruleExplanation) ||
+        matches(r.howToPronounce) ||
+        r.quranicExamples.some((ex) => matches(ex.verseSnippet) || matches(ex.explanation))
+      ) {
+        results.push({
+          id: `tajweed-${r.id}`,
+          type: 'tajweed',
+          categoryLabel: 'معمل النطق والتجويد',
+          title: r.titleAr,
+          subtitle: `قسم: ${r.categoryLabelAr}`,
+          snippet: r.ruleExplanation,
+          url: '/tajweed-lab',
+          badge: r.categoryLabelAr
+        });
+      }
+    });
+    MAKHAREJ_AREAS.forEach((m) => {
+      if (matches(m.nameAr) || matches(m.anatomicalDescription) || m.letters.some(matches)) {
+        results.push({
+          id: `makhraj-${m.id}`,
+          type: 'tajweed',
+          categoryLabel: 'مخارج الحروف',
+          title: m.nameAr,
+          subtitle: `حروف المخرج: ${m.letters.join('، ')}`,
+          snippet: m.anatomicalDescription,
+          url: '/tajweed-lab',
+          badge: m.areaLabelAr
+        });
+      }
+    });
+  }
+
+  // 22. Quranic Arabic Academy
+  if (!filterType || filterType === 'all' || filterType === 'quranic_arabic') {
+    QURANIC_ARABIC_LEVELS.forEach((lvl) => {
+      if (
+        matches(lvl.titleAr) ||
+        matches(lvl.titleEn) ||
+        matches(lvl.descriptionAr) ||
+        lvl.modulesList.some((mod) => matches(mod.titleAr) || mod.topics.some(matches))
+      ) {
+        results.push({
+          id: `arabic-lvl-${lvl.levelNumber}`,
+          type: 'quranic_arabic',
+          categoryLabel: 'أكاديمية لغة القرآن',
+          title: lvl.titleAr,
+          subtitle: `المستوى ${lvl.levelNumber}: ${lvl.titleEn}`,
+          snippet: lvl.descriptionAr,
+          url: '/quranic-arabic',
+          badge: `المستوى ${lvl.levelNumber}`
+        });
+      }
+    });
+    CORE_VOCABULARY_CARDS.forEach((v) => {
+      if (
+        matches(v.wordArabic) ||
+        matches(v.rootArabic) ||
+        matches(v.meanings.en) ||
+        matches(v.exampleAyah.text)
+      ) {
+        results.push({
+          id: `vocab-${v.id}`,
+          type: 'quranic_arabic',
+          categoryLabel: 'مفردات القرآن الكريم',
+          title: `مفردة: ${v.wordArabic}`,
+          subtitle: `الجذر: [ ${v.rootArabic} ] — النوع: ${v.grammaticalType}`,
+          snippet: `سياق الآية: ${v.exampleAyah.text} (${v.exampleAyah.surahName})`,
+          url: '/quranic-arabic',
+          badge: `تكررت ${v.frequencyInQuran} مرة`
+        });
+      }
+    });
+  }
+
+  // 23. Sign Language Learning
+  if (!filterType || filterType === 'all' || filterType === 'sign_language') {
+    SIGN_LANGUAGE_LESSONS.forEach((lesson) => {
+      if (
+        matches(lesson.titleAr) ||
+        matches(lesson.subtitleAr) ||
+        matches(lesson.descriptionAr) ||
+        lesson.keySignsExplained.some((k) => matches(k.signTitle) || matches(k.movementGuide))
+      ) {
+        results.push({
+          id: `sign-${lesson.id}`,
+          type: 'sign_language',
+          categoryLabel: 'مركز التعليم الإسلامي بلغة الإشارة',
+          title: lesson.titleAr,
+          subtitle: `${lesson.subtitleAr} (${lesson.durationLabel})`,
+          snippet: lesson.descriptionAr,
+          url: '/sign-language',
+          badge: lesson.signLanguageVariant
         });
       }
     });

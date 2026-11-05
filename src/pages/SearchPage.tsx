@@ -20,6 +20,10 @@ import {
 
 const SEARCH_CATEGORIES: { id: SearchResultType | 'all'; label: string }[] = [
   { id: 'all', label: 'جميع الأقسام' },
+  { id: 'quran_coach', label: 'مدرّب الحفظ' },
+  { id: 'tajweed', label: 'معمل التجويد' },
+  { id: 'quranic_arabic', label: 'لغة القرآن' },
+  { id: 'sign_language', label: 'لغة الإشارة' },
   { id: 'verifier', label: 'تحقق الحديث' },
   { id: 'daily_fiqh', label: 'فقه المعاملات' },
   { id: 'janazah', label: 'دليل الجنائز' },
@@ -42,6 +46,10 @@ const SEARCH_CATEGORIES: { id: SearchResultType | 'all'; label: string }[] = [
 ];
 
 const POPULAR_SEARCHES = [
+  'تكرار الآيات وحفظ جزء عم',
+  'مخارج الحروف وصفاتها',
+  'إعراب وبلاغة الفاتحة',
+  'لغة الإشارة للوضوء والصلاة',
   'حب الوطن من الإيمان',
   'الشراء بالتقسيط',
   'صلاة الجنازة',
@@ -52,9 +60,7 @@ const POPULAR_SEARCHES = [
   'آية الكرسي',
   'الأربعون النووية',
   'صفة الوضوء',
-  'توحيد الألوهية',
-  'بخاخ الربو للصائم',
-  'الصحابي خالد بن الوليد'
+  'توحيد الألوهية'
 ];
 
 export const SearchPage: React.FC = () => {
