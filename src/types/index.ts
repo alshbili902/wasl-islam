@@ -90,12 +90,28 @@ export interface KhatmahPlan {
 }
 
 export type AdhkarCategoryId =
-  | 'morning'
-  | 'evening'
-  | 'sleep'
-  | 'wakeup'
-  | 'prayer'
-  | 'general';
+  | 'morning'             // أذكار الصباح
+  | 'evening'             // أذكار المساء
+  | 'prayer'              // أذكار بعد الصلاة المفروضة
+  | 'sleep'               // أذكار النوم
+  | 'wakeup'              // أذكار الاستيقاظ
+  | 'wudu_purification'   // أذكار الوضوء والطهارة
+  | 'mosque'              // أذكار المسجد والأذان
+  | 'prayer_actions'      // أذكار داخل الصلاة (الاستفتاح، الركوع، السجود، التشهد)
+  | 'quranic_remembrance' // الأذكار من القرآن الكريم
+  | 'daily_remembrance'   // أذكار التسبيح والتهليل والتحميد والاستغفار
+  | 'home'                // أذكار المنزل
+  | 'food_drink'          // أذكار الطعام والشراب والضيافة
+  | 'travel'              // أذكار السفر والتنقل
+  | 'weather_nature'      // أذكار الأحوال الجوية والمطر والرياح والرعد
+  | 'distress_relief'     // أذكار الكرب والهم والشدائد
+  | 'illness_ruqyah'      // أذكار المرض والرقية الشرعية وعيادة المريض
+  | 'hajj_umrah'          // أذكار الحج والعمرة والمشاعر
+  | 'friday'              // أذكار يوم الجمعة وساعة الإجابة
+  | 'ramadan_fasting'     // أذكار الصيام وشهر رمضان
+  | 'protection_wellbeing'// أذكار الحفظ والتحصين ودفع الشرور
+  | 'specialized_events'  // أذكار المناسبات والأحداث الخاصة
+  | 'general';            // أذكار متنوعة جامعة
 
 export interface DhikrItem {
   id: string;
@@ -106,6 +122,23 @@ export interface DhikrItem {
   source: string;
   grade: string;
   virtue: string;
+  // Enriched structured metadata
+  subCategory?: string;
+  timing?: string;
+  occasion?: string;
+  repetitionEvidence?: string;
+  isPrescribedCount?: boolean;
+  transliteration?: string;
+  translationEn?: string;
+  explanation?: string;
+  hadithBook?: string;
+  hadithNumber?: string;
+  narrator?: string;
+  scholarGrading?: string;
+  sourceUrl?: string;
+  audioUrl?: string;
+  tags?: string[];
+  referenceQuran?: { surahName: string; surahNumber: number; ayahNumber: number };
 }
 
 export interface TasbihPreset {

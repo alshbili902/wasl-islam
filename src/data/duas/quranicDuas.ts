@@ -721,3 +721,4 @@ export const QURANIC_DUAS: DuaItem[] = [
     externalSourceUrl: 'https://qurancomplex.gov.sa/'
   }
 ];
+

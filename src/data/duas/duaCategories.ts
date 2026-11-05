@@ -81,3 +81,4 @@ export const DUA_SOURCE_TABS = [
   { id: 'prophetic', labelAr: 'الأدعية النبوية الصحيحة', descriptionAr: 'الأدعية الثابتة عن خير البرية ﷺ في أصح كتب السنة' },
   { id: 'general', labelAr: 'أدعية جامعة مأثورة', descriptionAr: 'صيغ دعاء مباحة ومأثورة شرعاً لا تنسب لسنة راتبة محددة' }
 ];
+

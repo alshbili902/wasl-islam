@@ -23,6 +23,7 @@ import { TAJWEED_RULES, MAKHAREJ_AREAS } from './tajweedData';
 import { QURANIC_ARABIC_LEVELS, CORE_VOCABULARY_CARDS } from './quranicArabicData';
 import { SIGN_LANGUAGE_LESSONS } from './signLanguageData';
 import { ALL_DUAS } from './duas';
+import { ADHKAR_DATA } from './adhkar';
 
 export type SearchResultType =
   | 'prophet'
@@ -49,7 +50,8 @@ export type SearchResultType =
   | 'tajweed'
   | 'quranic_arabic'
   | 'sign_language'
-  | 'dua';
+  | 'dua'
+  | 'adhkar';
 
 export interface GlobalSearchResult {
   id: string;
@@ -745,6 +747,32 @@ export function searchAllEncyclopedia(query: string, filterType?: SearchResultTy
           snippet: dua.arabicText,
           url: `/duas?id=${dua.id}`,
           badge: dua.sourceType === 'quranic' ? 'قرآني' : dua.sourceType === 'prophetic' ? 'نبوي' : 'مأثور'
+        });
+      }
+    });
+  }
+
+  // 25. Islamic Adhkar Library
+  if (!filterType || filterType === 'all' || filterType === 'adhkar') {
+    ADHKAR_DATA.forEach((dhikr) => {
+      if (
+        matches(dhikr.title) ||
+        matches(dhikr.text) ||
+        matches(dhikr.virtue) ||
+        matches(dhikr.source) ||
+        matches(dhikr.explanation) ||
+        matches(dhikr.subCategory) ||
+        (dhikr.tags && dhikr.tags.some(matches))
+      ) {
+        results.push({
+          id: `dhikr-${dhikr.id}`,
+          type: 'adhkar',
+          categoryLabel: 'واحة الأذكار',
+          title: dhikr.title,
+          subtitle: `${dhikr.subCategory || 'أذكار موثقة'} — التكرار: ${dhikr.count} ${dhikr.count === 1 ? 'مرة' : 'مرات'}`,
+          snippet: dhikr.text,
+          url: `/adhkar`,
+          badge: dhikr.grade ? dhikr.grade.split('(')[0].trim() : 'موثق'
         });
       }
     });
