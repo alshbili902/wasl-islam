@@ -19,6 +19,7 @@ import {
   VerifiedFatwaItem,
   FatwaCategoryId
 } from '../data/fatwasData';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const FatwasPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -52,7 +53,17 @@ export const FatwasPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <PageWrapper
+      title="دليل الفتاوى الشرعية والقرارات الفقهية الرسمية المعتمدة"
+      description="مرجع رسمي موثق لأحكام وفتاوى اللجنة الدائمة للبحوث العلمية والإفتاء، وهيئة كبار العلماء، وسماحة الشيخ ابن باز والشيخ ابن عثيمين رحمهما الله."
+      canonicalPath="/fatwas"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'الفتاوى الشرعية', url: '/fatwas' },
+      ]}
+      schemaType="CollectionPage"
+    >
+      <div className="py-2 max-w-7xl mx-auto">
       {/* Hero Header */}
       <div className="relative rounded-3xl p-8 sm:p-12 mb-8 overflow-hidden bg-gradient-to-br from-[#072A20] via-[#093528] to-[#041a14] border border-gold/30 shadow-2xl text-white">
         <div className="islamic-pattern absolute inset-0 opacity-15 pointer-events-none" />
@@ -239,6 +250,7 @@ export const FatwasPage: React.FC = () => {
         )}
       </div>
     </div>
+    </PageWrapper>
   );
 };
 

@@ -19,6 +19,7 @@ import { AUDIO_LIBRARY_ITEMS } from '../data/audioLibraryData';
 import { AudioCategoryType, LibraryAudioItem } from '../types/extraModules';
 import { useAudio } from '../context/AudioContext';
 import { AudioTrack } from '../types';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const AudioLibraryPage: React.FC = () => {
   const { currentTrack, isPlaying, playTrack, togglePlay } = useAudio();
@@ -74,8 +75,17 @@ export const AudioLibraryPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] dark:bg-[#070D14] text-slate-800 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <PageWrapper
+      title="المكتبة الصوتية الإسلامية والتلاوات الخاشعة"
+      description="تسجيلات صوتية إسلامية نقية، تشمل تلاوات خاشعة نادرة، دروس العقيدة والفقه، وسلاسل السيرة النبوية بأعلى جودة للاستماع والتحميل."
+      canonicalPath="/audio-library"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'المكتبة الصوتية', url: '/audio-library' },
+      ]}
+      schemaType="CollectionPage"
+    >
+      <div className="pb-12 min-w-0 space-y-8">
 
         {/* Hero Section */}
         <div className="relative overflow-hidden rounded-3xl royal-gradient p-6 sm:p-10 text-white shadow-xl border-2 border-gold/40">
@@ -233,7 +243,7 @@ export const AudioLibraryPage: React.FC = () => {
         </div>
 
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

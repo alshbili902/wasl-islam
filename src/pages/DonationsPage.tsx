@@ -125,6 +125,12 @@ export const DonationsPage: React.FC = () => {
     <PageWrapper
       title="بوابة التبرعات الرسمية | Donations Hub"
       description="دليل منصات التبرع الرسمية في المملكة العربية السعودية: منصة إحسان، منصة ساهم، جود الإسكان، منصة شفاء، والمركز الوطني لتنمية القطاع غير الربحي."
+      canonicalPath="/donations"
+      schemaType="collection"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'بوابة التبرعات الرسمية', path: '/donations' }
+      ]}
     >
       <div className="space-y-10">
         {/* 1. Majestic Hero Section with Title, Motivational Phrase & Authentic Quranic Verse */}

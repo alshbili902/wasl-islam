@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { PageWrapper } from '../components/layout/PageWrapper';
 import {
   BookOpen,
   GraduationCap,
@@ -242,7 +243,17 @@ export const EncyclopediaHubPage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+    <PageWrapper
+      title="بوابة الموسوعة والأكاديمية والعلوم الشرعية الجامعة"
+      description="الصرح المعرفي الشامل لمدار اليقين؛ يربط موسوعات القرآن، التفسير، الحديث، السيرة، الفقه، والتاريخ في واجهة علمية متكاملة وسهلة التصفح والبحث."
+      canonicalPath="/encyclopedia"
+      schemaType="collection"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'بوابة الموسوعة', path: '/encyclopedia' },
+      ]}
+    >
+      <div className="py-2 max-w-7xl mx-auto space-y-12">
       {/* Hero Header */}
       <div className="relative rounded-3xl p-8 sm:p-14 overflow-hidden bg-gradient-to-br from-[#072A20] via-[#093528] to-[#041a14] border border-gold/30 shadow-2xl text-white text-center">
         <div className="islamic-pattern absolute inset-0 opacity-15 pointer-events-none" />
@@ -389,6 +400,7 @@ export const EncyclopediaHubPage: React.FC = () => {
         })}
       </div>
     </div>
+    </PageWrapper>
   );
 };
 

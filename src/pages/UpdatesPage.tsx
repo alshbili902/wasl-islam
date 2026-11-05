@@ -145,10 +145,27 @@ export const UpdatesPage: React.FC = () => {
     { id: 'announcement', label: 'إعلانات هامة' }
   ];
 
+  const pageTitle = selectedDetailUpdate
+    ? `${selectedDetailUpdate.title} | تحديثات مدار اليقين`
+    : `سجل التحديثات والإصدارات — ${latestVersion}`;
+  const pageDescription = selectedDetailUpdate
+    ? selectedDetailUpdate.shortDescription
+    : 'سجل شامل وموثق لجميع التحديثات والميزات والتحسينات الصادرة في منصة مدار اليقين الإسلامية.';
+  const canonicalPath = selectedDetailUpdate
+    ? `/updates?id=${selectedDetailUpdate.id}`
+    : '/updates';
+
   return (
     <PageWrapper
-      title={`سجل التحديثات والإصدارات — ${latestVersion}`}
-      description="سجل شامل وموثق لجميع التحديثات والميزات والتحسينات الصادرة في منصة مدار اليقين الإسلامية."
+      title={pageTitle}
+      description={pageDescription}
+      canonicalPath={canonicalPath}
+      schemaType={selectedDetailUpdate ? 'article' : 'collection'}
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'سجل التحديثات', path: '/updates' },
+        ...(selectedDetailUpdate ? [{ label: selectedDetailUpdate.title, path: `/updates?id=${selectedDetailUpdate.id}` }] : [])
+      ]}
     >
       <div className="space-y-8">
         {/* Hero Section */}

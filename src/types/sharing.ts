@@ -86,3 +86,4 @@ export interface SocialShareLink {
   color: string;
   getUrl: (text: string, url: string, title: string) => string;
 }
+

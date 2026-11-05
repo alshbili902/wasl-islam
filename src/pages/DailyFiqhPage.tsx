@@ -19,6 +19,7 @@ import { DAILY_FIQH_DATA } from '../data/dailyFiqhData';
 import { FiqhCategory, FiqhRulingItem, FiqhRulingType } from '../types/extraModules';
 import { useShare } from '../context/ShareContext';
 import { SITE_CONFIG } from '../config/siteConfig';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const DailyFiqhPage: React.FC = () => {
   const { openShare } = useShare();
@@ -127,8 +128,17 @@ export const DailyFiqhPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] dark:bg-[#070D14] text-slate-800 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-5xl mx-auto space-y-8">
+    <PageWrapper
+      title="فقه الحياة اليومية المعاصرة والنوازل الشرعية"
+      description="دليلك الشرعي الميسر لأحكام المعاملات المالية الحديثة، التقنية والذكاء الاصطناعي، الفقه الطبي، والسفر وفق قرارات هيئة كبار العلماء ومجمع الفقه الإسلامي الدولي."
+      canonicalPath="/daily-fiqh"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'فقه الحياة اليومية', url: '/daily-fiqh' },
+      ]}
+      schemaType="CollectionPage"
+    >
+      <div className="pb-12 min-w-0 space-y-8">
 
         {/* Hero Section */}
         <div className="relative overflow-hidden rounded-3xl royal-gradient p-6 sm:p-10 text-white shadow-xl border-2 border-gold/40">
@@ -327,7 +337,7 @@ export const DailyFiqhPage: React.FC = () => {
         </div>
 
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

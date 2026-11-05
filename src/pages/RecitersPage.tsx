@@ -76,6 +76,12 @@ export const RecitersPage: React.FC = () => {
     <PageWrapper
       title="أطلس قراء العالم"
       description="موسوعة قراء القرآن الكريم عبر القارات الست مع التصفية حسب القارة والدولة والرواية والتشغيل المتتابع للسور."
+      canonicalPath="/reciters"
+      schemaType="collection"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'أطلس القراء', path: '/reciters' }
+      ]}
     >
       <div className="space-y-8">
         {/* Hero Header */}

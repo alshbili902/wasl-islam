@@ -21,6 +21,7 @@ import {
   CORE_VOCABULARY_CARDS 
 } from '../data/quranicArabicData';
 import { SupportedLanguageCode } from '../types/quranLearning';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const QuranicArabicPage: React.FC = () => {
   const [selectedLang, setSelectedLang] = useState<SupportedLanguageCode>('en');
@@ -63,8 +64,17 @@ export const QuranicArabicPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] dark:bg-[#070D14] text-slate-800 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <PageWrapper
+      title="أكاديمية تعلم لغة القرآن الكريم والمفردات القرآنية"
+      description="تعلّم العربية القرآنية خطوة بخطوة عبر تحليل الآيات كلمة بكلمة، والتعرف على الجذور اللغوية، وبطاقات المفردات الأكثر تكراراً المترجمة لـ 7 لغات عالمية."
+      canonicalPath="/quranic-arabic"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'أكاديمية لغة القرآن', url: '/quranic-arabic' },
+      ]}
+      schemaType="LearningResource"
+    >
+      <div className="pb-12 min-w-0 space-y-8">
 
         {/* Hero Section */}
         <div className="relative overflow-hidden rounded-3xl royal-gradient p-6 sm:p-10 text-white shadow-xl border-2 border-gold/40">
@@ -376,7 +386,7 @@ export const QuranicArabicPage: React.FC = () => {
         )}
 
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

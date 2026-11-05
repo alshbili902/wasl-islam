@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { SCHOLARS_DATA } from '../data/scholarsData';
 import { ScholarEra, ScholarProfile } from '../types/extraModules';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const ScholarsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -47,8 +48,18 @@ export const ScholarsPage: React.FC = () => {
   }, [searchQuery, selectedEra]);
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] dark:bg-[#070D14] text-slate-800 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <PageWrapper
+      title={selectedScholar ? `ترجمة الإمام ${selectedScholar.name} | موسوعة العلماء والمصنفات` : 'موسوعة علماء الأمة الإسلامية والمؤلفات المعتمدة'}
+      description={selectedScholar ? `${selectedScholar.fullName} - ${selectedScholar.biographySummary.substring(0, 150)}...` : 'سير وتراجم أئمة أهل السنة والجماعة، الأئمة الأربعة، أعلام الحديث والتفسير، وكبار المحققين مع استعراض أمهات كتبهم ومصنفاتهم.'}
+      canonicalPath="/scholars"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'موسوعة العلماء', url: '/scholars' },
+        ...(selectedScholar ? [{ name: selectedScholar.name, url: '/scholars' }] : []),
+      ]}
+      schemaType="CollectionPage"
+    >
+      <div className="pb-12 min-w-0 space-y-8">
 
         {/* Hero Section */}
         <div className="relative overflow-hidden rounded-3xl royal-gradient p-6 sm:p-10 text-white shadow-xl border-2 border-gold/40">
@@ -319,7 +330,7 @@ export const ScholarsPage: React.FC = () => {
         </AnimatePresence>
 
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

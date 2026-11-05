@@ -19,6 +19,7 @@ import { CARD_PRESETS, CARD_THEMES, CardThemeConfig } from '../data/cardStudioDa
 import { CardOrientation } from '../types/extraModules';
 import { SITE_CONFIG } from '../config/siteConfig';
 import { useShare } from '../context/ShareContext';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const CardStudioPage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -228,8 +229,17 @@ export const CardStudioPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] dark:bg-[#070D14] text-slate-800 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <PageWrapper
+      title="استوديو تصميم وتصدير البطاقات الإسلامية المذهبة"
+      description="صمم وحمّل بطاقات إسلامية مذهبة فاخرة للآيات القرآنية والأحاديث النبوية وأدعية اليوم بجودة عالية متوافقة مع منشورات وسائل التواصل وقصص إنستغرام وواتساب."
+      canonicalPath="/card-studio"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'استوديو البطاقات', url: '/card-studio' },
+      ]}
+      schemaType="CollectionPage"
+    >
+      <div className="pb-12 min-w-0 space-y-8">
 
         {/* Hero Section */}
         <div className="relative overflow-hidden rounded-3xl royal-gradient p-6 sm:p-10 text-white shadow-xl border-2 border-gold/40">
@@ -467,7 +477,7 @@ export const CardStudioPage: React.FC = () => {
         </div>
 
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

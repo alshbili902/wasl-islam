@@ -20,6 +20,7 @@ import {
   WorshipTopicGuide,
   WorshipPillarId
 } from '../data/worshipData';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const WorshipPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -58,7 +59,18 @@ export const WorshipPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <PageWrapper
+      title={activeGuide ? `${activeGuide.title} | موسوعة تعليم العبادات الإسلامية` : 'فقه العبادات الإسلامية وأحكام الطهارة والصلاة والصيام'}
+      description={activeGuide ? `${activeGuide.title} - ${activeGuide.summary}` : 'دليل فقهي عملي خطوة بخطوة لأركان الإسلام والعبادات؛ صفة الوضوء، الصلاة، أحكام الصيام، زكاة المال، والحج والعمرة.'}
+      canonicalPath="/worship"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'فقه العبادات', url: '/worship' },
+        ...(activeGuide ? [{ name: activeGuide.title, url: '/worship' }] : []),
+      ]}
+      schemaType="Article"
+    >
+      <div className="py-2 max-w-7xl mx-auto">
       {/* Hero Header */}
       <div className="relative rounded-3xl p-8 sm:p-12 mb-10 overflow-hidden bg-gradient-to-br from-[#072A20] via-[#093528] to-[#041a14] border border-gold/30 shadow-2xl text-white">
         <div className="islamic-pattern absolute inset-0 opacity-15 pointer-events-none" />
@@ -317,6 +329,7 @@ export const WorshipPage: React.FC = () => {
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 };
 

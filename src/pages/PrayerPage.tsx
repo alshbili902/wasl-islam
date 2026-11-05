@@ -169,6 +169,11 @@ export const PrayerPage: React.FC = () => {
     <PageWrapper
       title="مواقيت الصلاة واتجاه القبلة"
       description="حساب فلكي دقيق لمواقيت الصلوات الخمس والشروق، عداد الصلاة القادمة، التقويم الهجري والميلادي، وبوصلة اتجاه القبلة التفاعلية."
+      canonicalPath="/prayer"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'مواقيت الصلاة والقبلة', path: '/prayer' }
+      ]}
     >
       <div className="space-y-8">
         {/* Header Banner */}

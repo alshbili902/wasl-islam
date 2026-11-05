@@ -27,6 +27,7 @@ import {
   LessonItem,
   QuizQuestion
 } from '../data/academyData';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 interface UserAcademyProgress {
   studentName: string;
@@ -173,7 +174,18 @@ export const AcademyPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <PageWrapper
+      title={activeTrack ? `مسار ${activeTrack.title} | أكاديمية مدار اليقين الشرعية` : 'أكاديمية مدار اليقين للعلوم الشرعية والتعليم التفاعلي'}
+      description={activeTrack ? `${activeTrack.description} - المستوى: ${activeTrack.level}، الدروس: ${activeTrack.totalLessons}.` : 'مسارات تعليمية تفاعلية متدرجة في العقيدة، الفقه، التجويد، الحديث، والسيرة مع اختبارات فهم وشهادات إتمام إلكترونية.'}
+      canonicalPath={activeTrack ? `/academy/${activeTrack.id}` : '/academy'}
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'الأكاديمية الإسلامية', url: '/academy' },
+        ...(activeTrack ? [{ name: activeTrack.title, url: `/academy/${activeTrack.id}` }] : []),
+      ]}
+      schemaType="LearningResource"
+    >
+      <div className="py-2 max-w-7xl mx-auto">
       {/* Top Banner */}
       <div className="relative rounded-3xl p-8 sm:p-12 mb-10 overflow-hidden bg-gradient-to-br from-[#072A20] via-[#093528] to-[#041a14] border border-gold/30 shadow-2xl text-white">
         <div className="islamic-pattern absolute inset-0 opacity-15 pointer-events-none" />
@@ -667,6 +679,7 @@ export const AcademyPage: React.FC = () => {
         </div>
       )}
     </div>
+    </PageWrapper>
   );
 };
 

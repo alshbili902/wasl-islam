@@ -245,6 +245,11 @@ export const ChannelsPage: React.FC = () => {
     <PageWrapper
       title={`القنوات الدينية المباشرة — ${selectedChannel.nameAr}`}
       description="مشاهدة البث المباشر لقناة القرآن الكريم، قناة السنة النبوية، قناة الرسالة، وقناة إقرأ بجودة عالية عبر مشغل HLS متطور."
+      canonicalPath="/channels"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'القنوات الدينية المباشرة', path: '/channels' }
+      ]}
     >
       <div className="space-y-8">
         {/* 1. Architectural Hero Header (No images) */}

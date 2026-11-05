@@ -1,0 +1,60 @@
+# Robots.txt for Madar Al-Yaqeen (مدار اليقين)
+# Production Domain: https://wasl-islam.fun
+# Description: Rules for search engine crawlers and indexing bots
+
+User-agent: *
+Allow: /
+Allow: /quran
+Allow: /tafsir
+Allow: /hadith
+Allow: /adhkar
+Allow: /duas
+Allow: /prophets
+Allow: /companions
+Allow: /seerah
+Allow: /academy
+Allow: /prayer
+Allow: /daily-fiqh
+Allow: /content-verifier
+Allow: /audio-library
+Allow: /card-studio
+Allow: /islamic-centers
+Allow: /scholars
+Allow: /quran-coach
+Allow: /tajweed-lab
+Allow: /quranic-arabic
+Allow: /sign-language
+Allow: /janazah
+Allow: /hajj-umrah
+Allow: /companion
+Allow: /kids
+Allow: /history-atlas
+Allow: /worship
+Allow: /aqeedah
+Allow: /fatwas
+Allow: /reciters
+Allow: /khatmah
+Allow: /tasbih
+Allow: /sleep
+Allow: /charity
+Allow: /donations
+Allow: /channels
+Allow: /radio
+Allow: /live
+Allow: /updates
+Allow: /encyclopedia
+Disallow: /settings
+Disallow: /search
+Disallow: /search?*
+
+User-agent: Googlebot
+Allow: /
+Disallow: /settings
+Disallow: /search
+Disallow: /search?*
+
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /icons/
+
+Sitemap: https://wasl-islam.fun/sitemap.xml

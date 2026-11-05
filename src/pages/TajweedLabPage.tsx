@@ -24,6 +24,7 @@ import {
   TAJWEED_QUIZZES 
 } from '../data/tajweedData';
 import { LetterProfile, TajweedRuleItem, GeneralMakhrajArea } from '../types/quranLearning';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const TajweedLabPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'letters' | 'rules' | 'quizzes' | 'recorder'>('letters');
@@ -91,8 +92,17 @@ export const TajweedLabPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] dark:bg-[#070D14] text-slate-800 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <PageWrapper
+      title="معمل النطق والتجويد القرآني ومخارج الحروف وصفاتها"
+      description="تعلّم المخارج الـ 17 للحروف العربية وصفاتها، وتدرّب على أحكام النون والميم والمدود بالأمثلة الصوتية الموثقة والاختبارات التفاعلية."
+      canonicalPath="/tajweed-lab"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'معمل التجويد', url: '/tajweed-lab' },
+      ]}
+      schemaType="LearningResource"
+    >
+      <div className="pb-12 min-w-0 space-y-8">
 
         {/* Hero Banner */}
         <div className="relative overflow-hidden rounded-3xl royal-gradient p-6 sm:p-10 text-white shadow-xl border-2 border-gold/40">
@@ -539,7 +549,7 @@ export const TajweedLabPage: React.FC = () => {
         )}
 
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

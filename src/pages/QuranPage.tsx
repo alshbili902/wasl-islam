@@ -221,10 +221,19 @@ export const QuranPage: React.FC = () => {
   const activeTafsirAyah =
     ayahs.find((a) => a.numberInSurah === selectedAyahForTafsir) || ayahs[0];
 
+  const surahTypeAr = currentSurahMeta.revelationType === 'Meccan' ? 'مكية' : 'مدنية';
+
   return (
     <PageWrapper
-      title={`المصحف الرقمي — سورة ${currentSurahMeta.name}`}
-      description="القرآن الكريم كاملاً بالرسم العثماني مع التفسير الميسر وتفسير الجلالين والاستماع للتلاوات وحفظ موضع القراءة."
+      title={`سورة ${currentSurahMeta.name} مكتوبة بالرسم العثماني (${currentSurahMeta.englishName}) | المصحف الشريف`}
+      description={`قراءة سورة ${currentSurahMeta.name} بالرسم العثماني المعتمد (${surahTypeAr}، ${currentSurahMeta.numberOfAyahs} آية، الجزء ${currentSurahMeta.juz}) مع التلاوة المرتلة والتفسير الميسر.`}
+      canonicalPath={`/quran?surah=${currentSurahMeta.number}`}
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'المصحف الشريف', url: '/quran' },
+        { name: `سورة ${currentSurahMeta.name}`, url: `/quran?surah=${currentSurahMeta.number}` },
+      ]}
+      schemaType="CollectionPage"
     >
       <div className="space-y-6">
         {/* Top Mushaf Control Header */}

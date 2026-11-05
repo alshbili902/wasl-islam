@@ -41,6 +41,7 @@ import {
 import { useAudio } from '../context/AudioContext';
 import { useShare } from '../context/ShareContext';
 import { SITE_CONFIG } from '../config/siteConfig';
+import { PageWrapper } from '../components/layout/PageWrapper';
 import {
   ALL_DUAS,
   DUA_SITUATION_CATEGORIES,
@@ -403,7 +404,18 @@ export const DuasPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pb-24 bg-[#F8FAF9] dark:bg-[#0B131E] text-slate-800 dark:text-slate-100 transition-colors duration-300">
+    <PageWrapper
+      title={selectedDua ? `${selectedDua.title} | موسوعة الأدعية القرآنية والنبوية` : 'موسوعة الأدعية القرآنية والنبوية الجامعة'}
+      description={selectedDua ? `${selectedDua.arabicText.substring(0, 150)}... - ${selectedDua.title} موثق من المصادر الشرعية المعتمدة.` : 'موسوعة شاملة لأدعية القرآن الكريم وصحيح السنة المطهرة؛ مصنفة حسب المناسبات والأحوال مع التخريج والبيان الصوتي.'}
+      canonicalPath={selectedDua ? `/duas?id=${selectedDua.id}` : '/duas'}
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'موسوعة الأدعية', url: '/duas' },
+        ...(selectedDua ? [{ name: selectedDua.title, url: `/duas?id=${selectedDua.id}` }] : []),
+      ]}
+      schemaType="CollectionPage"
+    >
+      <div className="pb-12 min-w-0">
       
       {/* 1. Hero Header Banner */}
       <div className="relative overflow-hidden bg-gradient-to-b from-[#072A20] via-[#0D382B] to-[#072A20] text-white py-12 md:py-16 border-b border-gold/25">
@@ -1428,7 +1440,8 @@ export const DuasPage: React.FC = () => {
         )}
       </AnimatePresence>
 
-    </div>
+      </div>
+    </PageWrapper>
   );
 };
 

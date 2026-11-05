@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { ISLAMIC_CENTERS_DATA } from '../data/islamicCentersData';
 import { CenterType, IslamicCenterItem } from '../types/extraModules';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const IslamicCentersPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,8 +54,17 @@ export const IslamicCentersPage: React.FC = () => {
   }, [searchQuery, selectedType, selectedCity]);
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] dark:bg-[#070D14] text-slate-800 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <PageWrapper
+      title="دليل المراكز والمجمعات الإسلامية وحلقات تحفيظ القرآن"
+      description="دليل توثيقي يربطك بأكبر جمعيات تحفيظ القرآن الكريم (مكنون، خيركم، فرقان)، والمقارئ الإلكترونية المجانية بالسند المتصل، والمراكز الإسلامية الكبرى."
+      canonicalPath="/islamic-centers"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'المراكز الإسلامية', url: '/islamic-centers' },
+      ]}
+      schemaType="CollectionPage"
+    >
+      <div className="pb-12 min-w-0 space-y-8">
 
         {/* Hero Section */}
         <div className="relative overflow-hidden rounded-3xl royal-gradient p-6 sm:p-10 text-white shadow-xl border-2 border-gold/40">
@@ -234,7 +244,7 @@ export const IslamicCentersPage: React.FC = () => {
         </div>
 
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

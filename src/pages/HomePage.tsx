@@ -397,7 +397,11 @@ export const HomePage: React.FC = () => {
   return (
     <PageWrapper
       title="الرئيسية"
-      description="مدار اليقين | Madar Al-Yaqeen — الواجهة الرئيسية لمواقيت الصلاة، آية اليوم، اتجاه القبلة، المصحف العثماني، والبث المباشر للحرمين الشريفين."
+      description="مدار اليقين | Madar Al-Yaqeen — المنصة الإسلامية الرقمية الشاملة: القرآن الكريم، التفسير الميسر، مواقيت الصلاة، الأذكار، الأدعية، والبث المباشر للحرمين الشريفين."
+      canonicalPath="/"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' }
+      ]}
     >
       <div className="space-y-10">
         {/* 1. Majestic Hero Section */}

@@ -301,6 +301,12 @@ export const AdhkarPage: React.FC = () => {
     <PageWrapper
       title={`واحة الأذكار — ${activeCategoryMeta.title}`}
       description="الموسوعة الشاملة للأذكار والتحصينات النبوية الموثقة من الكتاب والسنة مع عداد تفاعلي، ومصادر الحديث وتخريجها، وتتبع الإنجاز اليومي."
+      canonicalPath="/adhkar"
+      schemaType="collection"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'واحة الأذكار', path: '/adhkar' }
+      ]}
     >
       <div className="space-y-8">
         {/* Hero Header */}

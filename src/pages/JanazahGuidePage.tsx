@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { JANAZAH_STEPS, JANAZAH_FAQS } from '../data/janazahData';
 import { JanazahStepId } from '../types/extraModules';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const JanazahGuidePage: React.FC = () => {
   const [activeStepIndex, setActiveStepIndex] = useState<number>(0);
@@ -34,8 +35,17 @@ export const JanazahGuidePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] dark:bg-[#070D14] text-slate-800 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-5xl mx-auto space-y-8">
+    <PageWrapper
+      title="دليل الجنائز والتعزية وأحكام التكفين وصلاة الجنازة"
+      description="دليل فقهي وتطبيقي شامل وفق الهدي النبوي الشريف؛ صفة الغسل، أحكام التكفين، كيفية صلاة الجنازة وأدعيتها، أحكام الدفن، وسنن التعزية المأثورة."
+      canonicalPath="/janazah"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'دليل الجنائز', url: '/janazah' },
+      ]}
+      schemaType="Article"
+    >
+      <div className="pb-12 min-w-0 space-y-8">
 
         {/* Hero Banner */}
         <div className="relative overflow-hidden rounded-3xl royal-gradient p-6 sm:p-10 text-white shadow-xl border-2 border-gold/40">
@@ -290,7 +300,7 @@ export const JanazahGuidePage: React.FC = () => {
         </div>
 
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

@@ -137,8 +137,22 @@ export const ProphetsPage: React.FC = () => {
 
   return (
     <PageWrapper
-      title={activeProphet ? activeProphet.name : 'قصص الأنبياء عليهم السلام'}
-      description="موسوعة قصص الأنبياء والمرسلين الخمسة والعشرين في القرآن الكريم، موثقة بالكامل من مجمع الملك فهد لطباعة المصحف الشريف، التفسير الميسر، والصحيحين."
+      title={activeProphet ? `قصة ${activeProphet.name} عليه السلام | قصص الأنبياء` : 'قصص الأنبياء والمرسلين والدروس الإيمانية'}
+      description={activeProphet ? (activeProphet.summary || `سيرة نبي الله ${activeProphet.name} عليه السلام ودعوته لقومه ومواضع ذكره في القرآن الكريم والعبر المستفادة.`) : 'موسوعة قصص الأنبياء والمرسلين الخمسة والعشرين في القرآن الكريم، موثقة بالكامل من مجمع الملك فهد لطباعة المصحف الشريف، التفسير الميسر، والصحيحين.'}
+      canonicalPath={activeProphet ? `/prophets/${activeProphet.id}` : '/prophets'}
+      breadcrumbs={
+        activeProphet
+          ? [
+              { name: 'الرئيسية', url: '/' },
+              { name: 'قصص الأنبياء', url: '/prophets' },
+              { name: activeProphet.name, url: `/prophets/${activeProphet.id}` },
+            ]
+          : [
+              { name: 'الرئيسية', url: '/' },
+              { name: 'قصص الأنبياء', url: '/prophets' },
+            ]
+      }
+      schemaType={activeProphet ? 'Article' : 'CollectionPage'}
     >
       <div className="space-y-8">
         {activeProphet ? (

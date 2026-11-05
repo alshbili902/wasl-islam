@@ -164,6 +164,12 @@ export const KidsPage: React.FC = () => {
     <PageWrapper
       title="عالم الأطفال المسلم"
       description="عالم تفاعلي تعليمي ممتع وآمن للأطفال: تعلم القرآن الكريم، أركان الإسلام، الوضوء والصلاة، ألعاب الذكاء، وقصص الأنبياء الملهمة."
+      canonicalPath="/kids"
+      schemaType="learning"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'عالم الأطفال', path: '/kids' }
+      ]}
     >
       <div className="space-y-8">
         {/* 1. Cheerful Kid-Friendly Header */}

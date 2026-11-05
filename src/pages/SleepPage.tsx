@@ -152,6 +152,11 @@ export const SleepPage: React.FC = () => {
     <PageWrapper
       title="حاسبة النوم والقيام الذكية"
       description="حاسبة دورات النوم التقديرية (90 دقيقة) للاستيقاظ لصلاة الفجر وقيام الليل مع منبه مدمج داخل المتصفح."
+      canonicalPath="/sleep"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'حاسبة النوم والقيام', path: '/sleep' }
+      ]}
     >
       <div className="space-y-8">
         {/* Hero Banner */}

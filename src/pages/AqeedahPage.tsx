@@ -24,6 +24,7 @@ import {
   AqeedahArticle,
   AqeedahQA
 } from '../data/aqeedahData';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const AqeedahPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -74,7 +75,17 @@ export const AqeedahPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <PageWrapper
+      title="موسوعة العقيدة الإسلامية وأصول الإيمان وأسماء الله الحسنى"
+      description="تأصيل علمي محكم لأقسام التوحيد الثلاثة، وأركان الإيمان الستة، والأسماء الحسنى ومعانيها وفق منهج أهل السنة والجماعة وهيئة كبار العلماء."
+      canonicalPath="/aqeedah"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'أصول العقيدة', url: '/aqeedah' },
+      ]}
+      schemaType="CollectionPage"
+    >
+      <div className="py-2 max-w-7xl mx-auto">
       {/* Hero Header */}
       <div className="relative rounded-3xl p-8 sm:p-12 mb-10 overflow-hidden bg-gradient-to-br from-[#072A20] via-[#093528] to-[#041a14] border border-gold/30 shadow-2xl text-white">
         <div className="islamic-pattern absolute inset-0 opacity-15 pointer-events-none" />
@@ -394,6 +405,7 @@ export const AqeedahPage: React.FC = () => {
         </div>
       )}
     </div>
+    </PageWrapper>
   );
 };
 

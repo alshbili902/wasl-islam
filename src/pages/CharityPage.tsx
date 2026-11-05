@@ -147,6 +147,11 @@ export const CharityPage: React.FC = () => {
     <PageWrapper
       title="بوابة الخير وحاسبة الزكاة الشرعية"
       description="حاسبة نصاب الزكاة الشرعية للأموال والذهب وعروض التجارة بنسبة 2.5% مع بوابة الصدقات والجهات الخيرية الرسمية المعتمدة."
+      canonicalPath="/charity"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'حاسبة الزكاة وبوابة الخير', path: '/charity' }
+      ]}
     >
       <div className="space-y-10">
         {/* Hero Header */}

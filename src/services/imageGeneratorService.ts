@@ -676,3 +676,4 @@ export function downloadCanvasImage(
   link.click();
   document.body.removeChild(link);
 }
+

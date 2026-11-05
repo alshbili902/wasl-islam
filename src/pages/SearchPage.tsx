@@ -12,6 +12,7 @@ import {
   Clock,
   Layers
 } from 'lucide-react';
+import { PageWrapper } from '../components/layout/PageWrapper';
 import {
   searchAllEncyclopedia,
   GlobalSearchResult,
@@ -104,7 +105,17 @@ export const SearchPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <PageWrapper
+      title="البحث الإسلامي الشامل | مدار اليقين"
+      description="محرك البحث الإسلامي الموحد للبحث في القرآن الكريم، التفسير، الحديث النبوي، الأذكار، الأدعية، الفتاوى، وسير الأنبياء والصحابة."
+      canonicalPath="/search"
+      noindex={true}
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'البحث الشامل', path: '/search' }
+      ]}
+    >
+      <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Hero Search Box */}
       <div className="relative rounded-3xl p-8 sm:p-12 mb-10 overflow-hidden bg-gradient-to-br from-[#072A20] via-[#093528] to-[#041a14] border border-gold/30 shadow-2xl text-white text-center">
         <div className="islamic-pattern absolute inset-0 opacity-15 pointer-events-none" />
@@ -240,6 +251,7 @@ export const SearchPage: React.FC = () => {
         </div>
       )}
     </div>
+    </PageWrapper>
   );
 };
 

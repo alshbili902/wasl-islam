@@ -38,6 +38,7 @@ import {
   MemorizationCoachStorage,
   MemorizationTestQuestion
 } from '../types/quranLearning';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 const STORAGE_KEY = 'madar_quran_coach_v1';
 
@@ -256,8 +257,17 @@ export const QuranCoachPage: React.FC = () => {
   }, [coachData.ayahRecords]);
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] dark:bg-[#070D14] text-slate-800 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <PageWrapper
+      title="مدرّب حفظ القرآن الكريم والمراجعة الذكية التفاعلية"
+      description="منظومة تفاعلية لإتقان حفظ كتاب الله تعتمد التكرار الصوتي الممنهج، التسميع الذاتي، جداول المراجعة التراكمية، واختبارات قياس المتشابهات."
+      canonicalPath="/quran-coach"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'مدرب حفظ القرآن', url: '/quran-coach' },
+      ]}
+      schemaType="LearningResource"
+    >
+      <div className="pb-12 min-w-0 space-y-8">
 
         {/* Hero Section */}
         <div className="relative overflow-hidden rounded-3xl royal-gradient p-6 sm:p-10 text-white shadow-xl border-2 border-gold/40">
@@ -786,7 +796,7 @@ export const QuranCoachPage: React.FC = () => {
         )}
 
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

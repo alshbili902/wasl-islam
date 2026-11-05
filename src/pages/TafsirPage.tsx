@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { SURAHS_META } from '../data/surahsMeta';
 import { TAFSIR_SURAH_OVERVIEWS, AyahTafsirItem, SurahTafsirOverview } from '../data/tafsirData';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const TafsirPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -66,8 +67,21 @@ export const TafsirPage: React.FC = () => {
     xlarge: 'text-xl sm:text-2xl',
   };
 
+  const surahTypeAr = currentSurahMeta.revelationType === 'Meccan' ? 'مكية' : 'مدنية';
+
   return (
-    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <PageWrapper
+      title={`تفسير سورة ${currentSurahMeta.name} كاملاً | التفسير الميسر المعتمد`}
+      description={`تفسير وبيان معاني آيات سورة ${currentSurahMeta.name} (${surahTypeAr}، ${currentSurahMeta.numberOfAyahs} آية) وفق التفسير الميسر المعتمد لمجمع الملك فهد.`}
+      canonicalPath={`/tafsir?surah=${currentSurahMeta.number}`}
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'تفسير القرآن', url: '/tafsir' },
+        { name: `تفسير سورة ${currentSurahMeta.name}`, url: `/tafsir?surah=${currentSurahMeta.number}` },
+      ]}
+      schemaType="Article"
+    >
+      <div className="py-2 max-w-7xl mx-auto">
       {/* Hero Header */}
       <div className="relative rounded-3xl p-8 sm:p-12 mb-10 overflow-hidden bg-gradient-to-br from-[#072A20] via-[#093528] to-[#041a14] border border-gold/30 shadow-2xl text-white">
         <div className="islamic-pattern absolute inset-0 opacity-15 pointer-events-none" />
@@ -364,6 +378,7 @@ export const TafsirPage: React.FC = () => {
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 };
 

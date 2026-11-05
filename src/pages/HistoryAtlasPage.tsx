@@ -129,6 +129,12 @@ export const HistoryAtlasPage: React.FC = () => {
     <PageWrapper
       title="أطلس التاريخ الإسلامي"
       description="خريطة تفاعلية كبرى وخط زمني شامل لأحداث وحواضر ومعالم التاريخ الإسلامي من العصر النبوي الشريف وحتى العصر الحديث."
+      canonicalPath="/history-atlas"
+      schemaType="learning"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'أطلس التاريخ الإسلامي', path: '/history-atlas' }
+      ]}
     >
       <div className="space-y-8">
         {/* 1. Header Banner */}

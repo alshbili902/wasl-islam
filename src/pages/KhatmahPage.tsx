@@ -167,6 +167,11 @@ export const KhatmahPage: React.FC = () => {
     <PageWrapper
       title="الختمة القرآنية الذكية"
       description="إدارة خطط ختم القرآن الكريم، حساب الورد اليومي بالصفحات والأجزاء تلقائياً، ومتابعة نسبة الإنجاز."
+      canonicalPath="/khatmah"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'الختمة القرآنية', path: '/khatmah' }
+      ]}
     >
       <div className="space-y-8">
         {/* Hero Banner */}

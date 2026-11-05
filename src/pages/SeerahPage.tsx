@@ -23,6 +23,7 @@ import {
   SEERAH_PHASES,
   SeerahMilestone
 } from '../data/seerahData';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const SeerahPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -72,7 +73,18 @@ export const SeerahPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <PageWrapper
+      title={activeMilestone ? `${activeMilestone.title} | السيرة النبوية الشريفة` : 'السيرة النبوية الشريفة والخط الزمني الموثق'}
+      description={activeMilestone ? `${activeMilestone.title} (${activeMilestone.period}) - ${activeMilestone.narrative[0]?.substring(0, 150)}...` : 'رحلة موثقة في سيرة النبي محمد ﷺ؛ محطات العهد المكي والمدني، الغزوات والعهود، والأخلاق والشمائل النبوية الشريفة.'}
+      canonicalPath="/seerah"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'السيرة النبوية', url: '/seerah' },
+        ...(activeMilestone ? [{ name: activeMilestone.title, url: '/seerah' }] : []),
+      ]}
+      schemaType="Article"
+    >
+      <div className="py-2 max-w-7xl mx-auto">
       {/* Hero Header */}
       <div className="relative rounded-3xl p-8 sm:p-12 mb-10 overflow-hidden bg-gradient-to-br from-[#072A20] via-[#093528] to-[#041a14] border border-gold/30 shadow-2xl text-white">
         <div className="islamic-pattern absolute inset-0 opacity-15 pointer-events-none" />
@@ -360,6 +372,7 @@ export const SeerahPage: React.FC = () => {
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 };
 

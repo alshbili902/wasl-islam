@@ -105,6 +105,12 @@ export const RadioPage: React.FC = () => {
     <PageWrapper
       title="مكتبة الإذاعات الإسلامية العالمية"
       description="بث مباشر لإذاعة القرآن الكريم السعودية، إذاعة نداء الإسلام، إذاعات الحرمين الشريفين، التفسير، الحديث، الفقه، والسيرة النبوية."
+      canonicalPath="/radio"
+      schemaType="collection"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'الإذاعات الإسلامية', path: '/radio' }
+      ]}
     >
       <div className="space-y-8">
         {/* 1. Architectural Hero Header (No Images) */}

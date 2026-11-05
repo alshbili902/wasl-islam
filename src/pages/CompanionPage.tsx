@@ -227,6 +227,12 @@ export const CompanionPage: React.FC = () => {
     <PageWrapper
       title="رفيق المسلم اليومي"
       description="لوحة متابعة إيمانية شخصية لتنظيم العبادات اليومية، الورد القرآني، الأذكار النبوية، والسنن الرواتب."
+      canonicalPath="/companion"
+      schemaType="learning"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'رفيق المسلم', path: '/companion' }
+      ]}
     >
       <div className="space-y-8">
         {/* 1. Header Banner */}

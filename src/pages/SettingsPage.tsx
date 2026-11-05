@@ -69,6 +69,12 @@ export const SettingsPage: React.FC = () => {
     <PageWrapper
       title="الإعدادات والتخصيص"
       description="تخصيص الهوية البصرية، الوضع النهاري والليلي، إعدادات المصحف الرقمي، وطرق حساب مواقيت الصلاة في مدار اليقين."
+      canonicalPath="/settings"
+      noindex={true}
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'الإعدادات', path: '/settings' }
+      ]}
     >
       <div className="space-y-8">
         {/* Hero Header */}

@@ -166,6 +166,12 @@ export const HajjUmrahPage: React.FC = () => {
     <PageWrapper
       title="دليل الحج والعمرة التفاعلي"
       description="مرجع تفاعلي متكامل لمناسك الحج والعمرة خطوة بخطوة، مع الأدعية المأثورة، خريطة المشاعر، والمواقيت الشرعية المعتمدة."
+      canonicalPath="/hajj-umrah"
+      schemaType="learning"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'دليل الحج والعمرة', path: '/hajj-umrah' }
+      ]}
     >
       <div className="space-y-8">
         {/* 1. Header Banner */}

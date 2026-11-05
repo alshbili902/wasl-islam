@@ -19,6 +19,7 @@ import { VERIFIER_DATA, VERIFIED_HADITH_SOURCES } from '../data/verifierData';
 import { VerifierCategory, AuthenticityGrade, VerifierItem } from '../types/extraModules';
 import { useShare } from '../context/ShareContext';
 import { SITE_CONFIG } from '../config/siteConfig';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const ContentVerifierPage: React.FC = () => {
   const { openShare } = useShare();
@@ -123,8 +124,17 @@ ${item.authenticAlternative ? `\n✅ *البديل الصحيح الثابت*: �
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F4] dark:bg-[#070D14] text-slate-800 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <PageWrapper
+      title="مدقق صحة الأحاديث والروايات والرسائل المتداولة"
+      description="محرك بحث وتحقيق لصحة الأحاديث النبوية والرسائل الشائعة في وسائل التواصل الاجتماعي، مع بيان درجة صحتها والبديل الشرعي الثابت الصحيح."
+      canonicalPath="/content-verifier"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'تحقيق صحة الحديث', url: '/content-verifier' },
+      ]}
+      schemaType="CollectionPage"
+    >
+      <div className="pb-12 min-w-0 space-y-8">
         
         {/* Hero Section */}
         <div className="relative overflow-hidden rounded-3xl royal-gradient p-6 sm:p-10 text-white shadow-xl border-2 border-gold/40">
@@ -433,7 +443,7 @@ ${item.authenticAlternative ? `\n✅ *البديل الصحيح الثابت*: �
         </div>
 
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

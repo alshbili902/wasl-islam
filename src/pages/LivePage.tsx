@@ -137,6 +137,11 @@ export const LivePage: React.FC = () => {
     <PageWrapper
       title="البث المباشر للحرمين وإذاعات القرآن"
       description="مشاهدة البث المباشر للمسجد الحرام والمسجد النبوي الشريف على مدار الساعة والاستماع لإذاعات القرآن الكريم الموثوقة."
+      canonicalPath="/live"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'البث المباشر للحرمين', path: '/live' }
+      ]}
     >
       <div className="space-y-10">
         {/* Hero Banner */}

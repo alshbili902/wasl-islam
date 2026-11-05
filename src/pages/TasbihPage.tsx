@@ -113,6 +113,11 @@ export const TasbihPage: React.FC = () => {
     <PageWrapper
       title="المسبحة الإلكترونية الفاخرة"
       description="مسبحة إلكترونية بتصميم دائري إسلامي فاخر مع عداد الجلسة، الهدف اليومي، الاهتزاز التفاعلي، وحفظ إحصائيات التسبيح."
+      canonicalPath="/tasbih"
+      breadcrumbs={[
+        { label: 'الرئيسية', path: '/' },
+        { label: 'المسبحة الإلكترونية', path: '/tasbih' }
+      ]}
     >
       <div className="space-y-8">
         {/* Hero Banner */}

@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { SIGN_LANGUAGE_CATEGORIES, SIGN_LANGUAGE_LESSONS } from '../data/signLanguageData';
 import { SignLanguageLesson } from '../types/quranLearning';
+import { PageWrapper } from '../components/layout/PageWrapper';
 
 const STORAGE_KEY = 'madar_sign_language_progress';
 
@@ -91,11 +92,21 @@ export const SignLanguagePage: React.FC = () => {
   const progressPercentage = Math.round((completedLessons.length / SIGN_LANGUAGE_LESSONS.length) * 100);
 
   return (
-    <div className={`min-h-screen pb-20 transition-colors duration-300 ${
-      highContrast 
-        ? 'bg-black text-amber-300 select-auto' 
-        : 'bg-[#F8FAF9] dark:bg-[#0B131E] text-slate-800 dark:text-slate-100'
-    }`}>
+    <PageWrapper
+      title="مركز التعليم الإسلامي بلغة الإشارة للصم وضعاف السمع"
+      description="منصة مرئية متكاملة لتعليم أصول الدين وأحكام الطهارة والصلاة ومعاني قصار السور بلغة الإشارة المعتمدة للصم وضعاف السمع مع أدوات سهولة الوصول."
+      canonicalPath="/sign-language"
+      breadcrumbs={[
+        { name: 'الرئيسية', url: '/' },
+        { name: 'لغة الإشارة الإسلامية', url: '/sign-language' },
+      ]}
+      schemaType="LearningResource"
+    >
+      <div className={`min-h-screen pb-12 transition-colors duration-300 ${
+        highContrast 
+          ? 'bg-black text-amber-300 select-auto' 
+          : 'bg-[#F8FAF9] dark:bg-[#0B131E] text-slate-800 dark:text-slate-100'
+      }`}>
       
       {/* Header Banner */}
       <div className="relative overflow-hidden bg-gradient-to-b from-[#072A20] via-[#0D382B] to-[#072A20] text-white py-12 md:py-16 border-b border-gold/20">
@@ -564,6 +575,7 @@ export const SignLanguagePage: React.FC = () => {
 
       </div>
     </div>
+    </PageWrapper>
   );
 };
 
