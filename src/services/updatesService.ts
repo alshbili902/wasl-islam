@@ -442,3 +442,4 @@ export function resetUpdatesToDefaults(): void {
   localStorage.removeItem(DYNAMIC_RELEASES_KEY);
   notifyUpdatesChanged();
 }
+

@@ -18,6 +18,7 @@ import QRCode from 'qrcode';
 import { CARD_PRESETS, CARD_THEMES, CardThemeConfig } from '../data/cardStudioData';
 import { CardOrientation } from '../types/extraModules';
 import { SITE_CONFIG } from '../config/siteConfig';
+import { useShare } from '../context/ShareContext';
 
 export const CardStudioPage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -42,6 +43,7 @@ export const CardStudioPage: React.FC = () => {
   const [showLogo, setShowLogo] = useState<boolean>(true);
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [copiedShare, setCopiedShare] = useState<boolean>(false);
+  const { openShare } = useShare();
 
   const selectedTheme = CARD_THEMES.find((t) => t.id === selectedThemeId) || CARD_THEMES[0];
 
@@ -209,30 +211,15 @@ export const CardStudioPage: React.FC = () => {
     }, 200);
   };
 
-  const handleShare = async () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    try {
-      if (navigator.share && canvas.toBlob) {
-        canvas.toBlob(async (blob) => {
-          if (!blob) return;
-          const file = new File([blob], 'madar-alyaqeen-card.png', { type: 'image/png' });
-          await navigator.share({
-            title: 'بطاقة إسلامية من منصة مدار اليقين',
-            text: `${cardText} (${cardSource}) - ${SITE_CONFIG.productionUrl}`,
-            files: [file],
-          });
-        }, 'image/png');
-      } else {
-        await navigator.clipboard.writeText(`${cardText}\n${cardSource}\n${SITE_CONFIG.productionUrl}`);
-        setCopiedShare(true);
-        setTimeout(() => setCopiedShare(false), 2500);
-      }
-    } catch {
-      // Fallback
-      handleDownload();
-    }
+  const handleShare = () => {
+    openShare({
+      type: 'general',
+      title: cardSource || 'بطاقة إسلامية مصممة',
+      text: cardText,
+      source: cardSource,
+      categoryLabel: 'استوديو البطاقات الإسلامية',
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/card-studio?text=${encodeURIComponent(cardText)}&source=${encodeURIComponent(cardSource)}`,
+    });
   };
 
   const handleSelectPreset = (preset: typeof CARD_PRESETS[0]) => {

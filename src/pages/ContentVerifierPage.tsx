@@ -17,8 +17,11 @@ import {
 } from 'lucide-react';
 import { VERIFIER_DATA, VERIFIED_HADITH_SOURCES } from '../data/verifierData';
 import { VerifierCategory, AuthenticityGrade, VerifierItem } from '../types/extraModules';
+import { useShare } from '../context/ShareContext';
+import { SITE_CONFIG } from '../config/siteConfig';
 
 export const ContentVerifierPage: React.FC = () => {
+  const { openShare } = useShare();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<VerifierCategory>('all');
   const [selectedGrade, setSelectedGrade] = useState<'all' | AuthenticityGrade>('all');
@@ -56,6 +59,21 @@ export const ContentVerifierPage: React.FC = () => {
       return matchesSearch && matchesCat && matchesGrade;
     });
   }, [searchQuery, selectedCategory, selectedGrade]);
+
+  const handleShareVerdict = (item: VerifierItem) => {
+    openShare({
+      type: 'verifier',
+      title: `تحقيق حديث: ${item.queryPhrase}`,
+      text: item.queryPhrase,
+      grade: item.gradeLabelAr,
+      explanation: `${item.verdictSummary}\n\nالمحدث والمصدر: ${item.primaryMuhaddith} (${item.referenceBook})${
+        item.authenticAlternative ? `\n\nالبديل الثابت الصحيح: «${item.authenticAlternative.text}» [${item.authenticAlternative.source}]` : ''
+      }`,
+      source: `${item.primaryMuhaddith} — ${item.referenceBook}`,
+      categoryLabel: 'التحقق من صحة الأحاديث والروايات',
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/content-verifier?id=${item.id}`,
+    });
+  };
 
   const handleCopyVerdict = async (item: VerifierItem) => {
     const text = `🔍 *تحقق من صحة الحديث عبر منصة مدار اليقين*:
@@ -267,21 +285,12 @@ ${item.authenticAlternative ? `\n✅ *البديل الصحيح الثابت*: �
 
                     <button
                       type="button"
-                      onClick={() => handleCopyVerdict(item)}
-                      className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-gold/20 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1 transition-colors"
-                      title="نسخ التخريج لنشره وتنبيه الآخرين"
+                      onClick={() => handleShareVerdict(item)}
+                      className="px-3 py-1.5 rounded-xl bg-gold/15 hover:bg-gold/25 text-royal dark:text-gold text-xs font-bold flex items-center gap-1.5 transition-colors border border-gold/30"
+                      title="مشاركة وتصدير بطاقة التحقيق"
                     >
-                      {copiedId === item.id ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-emerald-600">تم النسخ</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>نسخ التخريج</span>
-                        </>
-                      )}
+                      <Share2 className="w-3.5 h-3.5" />
+                      <span>مشاركة التحقيق</span>
                     </button>
                   </div>
                 </motion.div>
@@ -371,11 +380,19 @@ ${item.authenticAlternative ? `\n✅ *البديل الصحيح الثابت*: �
                 <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                   <button
                     type="button"
-                    onClick={() => handleCopyVerdict(selectedItem)}
-                    className="px-4 py-2 rounded-xl gold-gradient text-royal font-bold text-xs flex items-center gap-1.5 shadow-sm"
+                    onClick={() => handleShareVerdict(selectedItem)}
+                    className="px-4 py-2 rounded-xl gold-gradient text-royal font-black text-xs flex items-center gap-1.5 shadow-md shadow-gold/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
-                    {copiedId === selectedItem.id ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedId === selectedItem.id ? 'تم النسخ!' : 'نسخ النص للتوعية'}</span>
+                    <Share2 className="w-3.5 h-3.5" />
+                    <span>مشاركة وتصدير</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyVerdict(selectedItem)}
+                    className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1.5 hover:bg-gold/15 transition-colors"
+                  >
+                    {copiedId === selectedItem.id ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedId === selectedItem.id ? 'تم النسخ!' : 'نسخ النص'}</span>
                   </button>
                   <button
                     type="button"

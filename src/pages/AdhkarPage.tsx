@@ -31,6 +31,8 @@ import {
   Palette
 } from 'lucide-react';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { useShare } from '../context/ShareContext';
+import { SITE_CONFIG } from '../config/siteConfig';
 import {
   ADHKAR_CATEGORIES,
   ADHKAR_DATA,
@@ -42,6 +44,7 @@ import { useApp } from '../context/AppContext';
 
 export const AdhkarPage: React.FC = () => {
   const { settings } = useApp();
+  const { openShare } = useShare();
 
   // State
   const [selectedGroup, setSelectedGroup] = useState<'all' | 'daily' | 'worship' | 'life' | 'seasons'>('daily');
@@ -227,6 +230,21 @@ export const AdhkarPage: React.FC = () => {
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
     }
+  };
+
+  const handleShareDhikr = (item: DhikrItem) => {
+    openShare({
+      type: 'dhikr',
+      title: item.title || activeCategoryMeta.title,
+      text: item.text,
+      repetitionCount: item.count,
+      virtue: item.virtue,
+      grade: item.grade,
+      explanation: item.explanation,
+      source: item.source,
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/adhkar?category=${item.category}`,
+      categoryLabel: activeCategoryMeta.title,
+    });
   };
 
   const handleSpeak = (text: string, id: string) => {
@@ -808,6 +826,14 @@ export const AdhkarPage: React.FC = () => {
                         </button>
                         <button
                           type="button"
+                          onClick={() => handleShareDhikr(item)}
+                          className="p-1.5 rounded-lg hover:bg-gold/15 text-royal dark:text-gold transition-colors"
+                          title="مشاركة الذكر وتصدير بطاقة"
+                        >
+                          <Share2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
                           onClick={() => setModalDhikr(item)}
                           className="p-1.5 rounded-lg hover:bg-gold/15 text-royal dark:text-gold transition-colors"
                           title="عرض التخريج الكامل والشرح"
@@ -995,12 +1021,20 @@ export const AdhkarPage: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleShareDhikr(modalDhikr)}
+                      className="px-4 py-2 rounded-xl gold-gradient text-royal font-black text-xs inline-flex items-center gap-1.5 shadow-md shadow-gold/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    >
+                      <Share2 className="w-4 h-4" />
+                      <span>مشاركة وتصدير</span>
+                    </button>
                     <Link
                       to={`/card-studio?text=${encodeURIComponent(modalDhikr.text)}&source=${encodeURIComponent(modalDhikr.title)}`}
-                      className="px-4 py-2 rounded-xl gold-gradient text-royal font-black text-xs inline-flex items-center gap-1.5"
+                      className="px-3.5 py-2 rounded-xl bg-royal/10 dark:bg-white/10 hover:bg-gold/20 text-royal dark:text-gold font-bold text-xs inline-flex items-center gap-1.5"
                     >
                       <Palette className="w-4 h-4" />
-                      <span>تصميم بطاقة</span>
+                      <span>استوديو البطاقات</span>
                     </Link>
                     <button
                       type="button"

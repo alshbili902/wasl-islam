@@ -39,6 +39,8 @@ import {
   Layers
 } from 'lucide-react';
 import { useAudio } from '../context/AudioContext';
+import { useShare } from '../context/ShareContext';
+import { SITE_CONFIG } from '../config/siteConfig';
 import {
   ALL_DUAS,
   DUA_SITUATION_CATEGORIES,
@@ -65,6 +67,7 @@ export const DuasPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { playTrack, currentTrack, isPlaying, togglePlay } = useAudio();
+  const { openShare } = useShare();
 
   // Search & Filter State
   const [searchQuery, setSearchQuery] = useState<string>(searchParams.get('q') || '');
@@ -285,24 +288,29 @@ export const DuasPage: React.FC = () => {
     setTimeout(() => setCopiedDuaId(null), 2500);
   };
 
-  // Native share or copy fallback
-  const handleShareDua = async (dua: DuaItem, e?: React.MouseEvent) => {
+  // Unified Share Modal for Duas
+  const handleShareDua = (dua: DuaItem, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    const shareData = {
-      title: `${dua.title} - مدار اليقين`,
-      text: `${dua.arabicText}\n\n${dua.title}\nالمصدر: ${dua.authenticityGradeLabelAr}`,
-      url: `https://wasl-islam.fun/duas?id=${dua.id}`
-    };
+    const sourceRef = dua.quranReference
+      ? `القرآن الكريم [سورة ${dua.quranReference.surahName}: الآية ${dua.quranReference.ayahNumber}]`
+      : dua.hadithSource
+      ? `${dua.hadithSource.bookName} (${dua.hadithSource.numberOrRef || ''}) - ${dua.authenticityGradeLabelAr}`
+      : 'أدعية جامعة مأثورة';
 
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-      } else {
-        handleCopyDua(dua);
-      }
-    } catch {
-      handleCopyDua(dua);
-    }
+    openShare({
+      type: 'dua',
+      title: dua.title,
+      text: dua.arabicText,
+      source: sourceRef,
+      sourceBook: dua.hadithSource?.bookName,
+      sourceNumber: dua.hadithSource?.numberOrRef ? String(dua.hadithSource.numberOrRef) : undefined,
+      grade: dua.authenticityGradeLabelAr,
+      explanation: dua.explanationAr,
+      surahName: dua.quranReference?.surahName,
+      ayahNumber: dua.quranReference?.ayahNumber,
+      categoryLabel: 'موسوعة الأدعية المباركة',
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/duas?id=${dua.id}`,
+    });
   };
 
   // Open in Islamic Card Studio
@@ -505,6 +513,15 @@ export const DuasPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleShareDua(dailyDua)}
+                    className="px-3 py-1.5 rounded-xl bg-gold text-[#072A20] font-black flex items-center gap-1.5 transition-all shadow-md shadow-gold/20 hover:scale-[1.02]"
+                  >
+                    <Share2 className="w-3.5 h-3.5" />
+                    <span>مشاركة وتصدير</span>
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => handleCopyDua(dailyDua)}

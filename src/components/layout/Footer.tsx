@@ -12,9 +12,8 @@ export const Footer: React.FC = () => {
 
   return (
     <footer
-      className={`mt-16 border-t border-gold/25 bg-[#072A20] text-slate-200 relative overflow-hidden ${
-        currentTrack ? 'pb-32' : 'pb-10'
-      }`}
+      className={`mt-16 border-t border-gold/25 bg-[#072A20] text-slate-200 relative overflow-hidden ${currentTrack ? 'pb-32' : 'pb-10'
+        }`}
     >
       <div className="islamic-pattern absolute inset-0 opacity-30 pointer-events-none" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 relative z-10">

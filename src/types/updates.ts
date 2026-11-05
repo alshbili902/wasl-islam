@@ -89,3 +89,4 @@ export interface VisitorUpdateState {
   firstVisitAt: number;
   visitCount: number;
 }
+

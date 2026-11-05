@@ -562,3 +562,4 @@ export const UpdatesPage: React.FC = () => {
     </PageWrapper>
   );
 };
+

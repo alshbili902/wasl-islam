@@ -439,3 +439,4 @@ export const WhatsNewModal: React.FC<WhatsNewModalProps> = ({
     </AnimatePresence>
   );
 };
+

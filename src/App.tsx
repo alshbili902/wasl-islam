@@ -62,6 +62,7 @@ const UpdatesPage = lazy(() => import('./pages/UpdatesPage').then((m) => ({ defa
 
 import { WhatsNewModal } from './components/updates/WhatsNewModal';
 import { recordVisitorVisit } from './services/updatesService';
+import { ShareProvider } from './context/ShareContext';
 
 const PageSkeleton: React.FC = () => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center justify-center min-h-[50vh] space-y-5">
@@ -144,15 +145,17 @@ export const App: React.FC = () => {
     <AppProvider>
       <AudioProvider>
         <BrowserRouter>
-          <div className="min-h-screen flex flex-col bg-[#F8FAF9] dark:bg-[#0B131E] text-slate-900 dark:text-slate-100 transition-colors duration-300 overflow-x-clip">
-            <Navbar />
-            <div className="flex-1 min-w-0">
-              <AnimatedRoutes />
+          <ShareProvider>
+            <div className="min-h-screen flex flex-col bg-[#F8FAF9] dark:bg-[#0B131E] text-slate-900 dark:text-slate-100 transition-colors duration-300 overflow-x-clip">
+              <Navbar />
+              <div className="flex-1 min-w-0">
+                <AnimatedRoutes />
+              </div>
+              <Footer />
+              <GlobalAudioPlayer />
+              <WhatsNewModal />
             </div>
-            <Footer />
-            <GlobalAudioPlayer />
-            <WhatsNewModal />
-          </div>
+          </ShareProvider>
         </BrowserRouter>
       </AudioProvider>
     </AppProvider>

@@ -17,8 +17,11 @@ import {
 } from 'lucide-react';
 import { DAILY_FIQH_DATA } from '../data/dailyFiqhData';
 import { FiqhCategory, FiqhRulingItem, FiqhRulingType } from '../types/extraModules';
+import { useShare } from '../context/ShareContext';
+import { SITE_CONFIG } from '../config/siteConfig';
 
 export const DailyFiqhPage: React.FC = () => {
+  const { openShare } = useShare();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<FiqhCategory | 'all'>('all');
   const [expandedId, setExpandedId] = useState<string | null>('fq-1');
@@ -69,21 +72,16 @@ export const DailyFiqhPage: React.FC = () => {
     });
   };
 
-  const handleCopy = async (item: FiqhRulingItem) => {
-    const text = `📖 *فقه الحياة اليومية - مدار اليقين*:
-❓ *المسألة*: ${item.title}
-⚖️ *الحكم*: ${item.rulingLabelAr}
-💡 *الخلاصة*: ${item.summaryAnswer}
-📜 *المرجع الشرعي*: ${item.fatwaReference}
-🔗 https://wasl-islam.fun/daily-fiqh`;
-
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedId(item.id);
-      setTimeout(() => setCopiedId(null), 2500);
-    } catch {
-      // ignore
-    }
+  const handleShareFiqh = (item: FiqhRulingItem) => {
+    openShare({
+      type: 'fiqh',
+      title: item.title,
+      text: item.question || item.title,
+      explanation: `${item.rulingLabelAr}: ${item.summaryAnswer}\n\nالدليل والتفصيل الشرعي: ${item.detailedAnswer}`,
+      source: item.fatwaReference,
+      categoryLabel: 'فقه الحياة اليومية المعاصرة',
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/daily-fiqh?id=${item.id}`,
+    });
   };
 
   const getRulingBadge = (ruling: FiqhRulingType) => {
@@ -311,20 +309,12 @@ export const DailyFiqhPage: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
-                            onClick={() => handleCopy(item)}
-                            className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-gold/20 text-slate-700 dark:text-slate-300 font-bold flex items-center gap-1.5 transition-colors"
+                            onClick={() => handleShareFiqh(item)}
+                            className="px-3.5 py-1.5 rounded-xl gold-gradient text-royal font-black flex items-center gap-1.5 shadow-xs hover:scale-[1.02] active:scale-[0.98] transition-all"
+                            title="مشاركة وتصدير بطاقة الفتوى"
                           >
-                            {copiedId === item.id ? (
-                              <>
-                                <Check className="w-3.5 h-3.5 text-emerald-600" />
-                                <span className="text-emerald-600">تم النسخ</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3.5 h-3.5" />
-                                <span>مشاركة المسألة</span>
-                              </>
-                            )}
+                            <Share2 className="w-3.5 h-3.5" />
+                            <span>مشاركة المسألة</span>
                           </button>
                         </div>
                       </div>

@@ -638,3 +638,4 @@ export const UpdatesAdminModal: React.FC<UpdatesAdminModalProps> = ({
     </>
   );
 };
+

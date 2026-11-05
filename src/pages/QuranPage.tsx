@@ -25,6 +25,8 @@ import { RECITERS_DATA } from '../data/recitersData';
 import { AyahItem } from '../types';
 import { useApp } from '../context/AppContext';
 import { useAudio } from '../context/AudioContext';
+import { useShare } from '../context/ShareContext';
+import { SITE_CONFIG } from '../config/siteConfig';
 
 const TAFSIR_EDITIONS = [
   { id: 'ar.muyassar', nameAr: 'التفسير الميسر — مجمع الملك فهد لطباعة المصحف الشريف' },
@@ -40,6 +42,7 @@ export const QuranPage: React.FC = () => {
     saveQuranBookmark,
   } = useApp();
   const { playReciterSurah, playTrack } = useAudio();
+  const { openShare } = useShare();
 
   const initialSurahNum = Number(searchParams.get('surah')) || 1;
   const [selectedSurahNumber, setSelectedSurahNumber] = useState<number>(
@@ -191,21 +194,19 @@ export const QuranPage: React.FC = () => {
     });
   };
 
-  const handleShareAyah = async (ayah: AyahItem) => {
-    const content = `﴿${ayah.text}﴾ [سورة ${currentSurahMeta.name}: ${ayah.numberInSurah}]\n${
-      ayah.tafsir ? `التفسير: ${ayah.tafsir}\n` : ''
-    }— عبر المصحف الرقمي في مدار اليقين`;
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: `سورة ${currentSurahMeta.name}`, text: content });
-      } else {
-        await navigator.clipboard.writeText(content);
-        setCopiedId(ayah.numberInSurah);
-        setTimeout(() => setCopiedId(null), 2500);
-      }
-    } catch {
-      // ignore
-    }
+  const handleShareAyah = (ayah: AyahItem) => {
+    openShare({
+      type: 'quran',
+      title: `سورة ${currentSurahMeta.name} — الآية ${ayah.numberInSurah}`,
+      text: ayah.text,
+      surahName: currentSurahMeta.name,
+      surahNumber: selectedSurahNumber,
+      ayahNumber: ayah.numberInSurah,
+      explanation: ayah.tafsir ? `التفسير: ${ayah.tafsir}` : undefined,
+      categoryLabel: `سورة ${currentSurahMeta.name} (${ayah.numberInSurah})`,
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/quran?surah=${selectedSurahNumber}&ayah=${ayah.numberInSurah}`,
+      source: `المصحف الشريف — سورة ${currentSurahMeta.name}: الآية ${ayah.numberInSurah}`,
+    });
   };
 
   const handleBookmarkAyah = (ayahNumber: number) => {
@@ -655,16 +656,11 @@ export const QuranPage: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => handleShareAyah(activeTafsirAyah)}
-                              className="px-3 py-1.5 rounded-xl bg-gold/20 hover:bg-gold/30 text-gold text-xs font-bold inline-flex items-center gap-1.5"
+                              className="px-3 py-1.5 rounded-xl bg-gold/20 hover:bg-gold/30 text-gold text-xs font-bold inline-flex items-center gap-1.5 transition-colors"
+                              title="مشاركة الآية وتصدير بطاقة مذهبة"
                             >
-                              {copiedId === activeTafsirAyah.numberInSurah ? (
-                                <Check className="w-3.5 h-3.5" />
-                              ) : (
-                                <Share2 className="w-3.5 h-3.5" />
-                              )}
-                              <span>
-                                {copiedId === activeTafsirAyah.numberInSurah ? 'تم النسخ' : 'مشاركة'}
-                              </span>
+                              <Share2 className="w-3.5 h-3.5" />
+                              <span>مشاركة الآية</span>
                             </button>
                           </div>
                         </div>
