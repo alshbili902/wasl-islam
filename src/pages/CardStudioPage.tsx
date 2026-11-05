@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Palette, 
@@ -21,9 +22,18 @@ import { SITE_CONFIG } from '../config/siteConfig';
 export const CardStudioPage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  const [searchParams] = useSearchParams();
+  const queryText = searchParams.get('text');
+  const querySource = searchParams.get('source');
+
   // Studio State
-  const [cardText, setCardText] = useState<string>('﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾');
-  const [cardSource, setCardSource] = useState<string>('سورة الرعد: الآية 28');
+  const [cardText, setCardText] = useState<string>(queryText || '﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾');
+  const [cardSource, setCardSource] = useState<string>(querySource || 'سورة الرعد: الآية 28');
+
+  useEffect(() => {
+    if (queryText) setCardText(queryText);
+    if (querySource) setCardSource(querySource);
+  }, [queryText, querySource]);
   const [selectedThemeId, setSelectedThemeId] = useState<string>('emerald_gold');
   const [orientation, setOrientation] = useState<CardOrientation>('square_1_1');
   const [fontSize, setFontSize] = useState<number>(44);

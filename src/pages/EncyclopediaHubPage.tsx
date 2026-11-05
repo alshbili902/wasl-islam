@@ -225,6 +225,17 @@ const ENCYCLOPEDIA_MODULES: EncyclopediaModuleCard[] = [
     stats: 'إشارات معتمدة وموثقة',
     colorGradient: 'from-[#072A20] via-teal-950 to-[#0A3D2E]',
   },
+  {
+    id: 'duas',
+    path: '/duas',
+    title: 'موسوعة الأدعية المحققة',
+    subtitle: 'الأدعية القرآنية والنبوية الصحيحة وأدعية تفريج الكروب',
+    description: 'مكتبة جامعة لأدعية القرآن والسنة النبوية الصحيحة مصنفة حسب الأحوال اليومية مع الشرح والتخريج والترجمة الصوتية.',
+    icon: Sparkles,
+    tag: 'موسوعة الأدعية',
+    stats: 'أدعية محققة وتخريج معتمد',
+    colorGradient: 'from-[#072A20] via-emerald-950 to-teal-950',
+  },
 ];
 
 export const EncyclopediaHubPage: React.FC = () => {

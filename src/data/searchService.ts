@@ -22,6 +22,7 @@ import { POPULAR_MEMORIZATION_TRACKS } from './quranCoachData';
 import { TAJWEED_RULES, MAKHAREJ_AREAS } from './tajweedData';
 import { QURANIC_ARABIC_LEVELS, CORE_VOCABULARY_CARDS } from './quranicArabicData';
 import { SIGN_LANGUAGE_LESSONS } from './signLanguageData';
+import { ALL_DUAS } from './duas';
 
 export type SearchResultType =
   | 'prophet'
@@ -47,7 +48,8 @@ export type SearchResultType =
   | 'quran_coach'
   | 'tajweed'
   | 'quranic_arabic'
-  | 'sign_language';
+  | 'sign_language'
+  | 'dua';
 
 export interface GlobalSearchResult {
   id: string;
@@ -717,6 +719,32 @@ export function searchAllEncyclopedia(query: string, filterType?: SearchResultTy
           snippet: lesson.descriptionAr,
           url: '/sign-language',
           badge: lesson.signLanguageVariant
+        });
+      }
+    });
+  }
+
+  // 24. Islamic Duas Encyclopedia
+  if (!filterType || filterType === 'all' || filterType === 'dua') {
+    ALL_DUAS.forEach((dua) => {
+      if (
+        matches(dua.title) ||
+        matches(dua.arabicText) ||
+        matches(dua.explanationAr) ||
+        matches(dua.occasionContextAr) ||
+        matches(dua.subSituationAr) ||
+        matches(dua.situationLabelAr) ||
+        dua.tags.some(matches)
+      ) {
+        results.push({
+          id: `dua-${dua.id}`,
+          type: 'dua',
+          categoryLabel: 'موسوعة الأدعية',
+          title: dua.title,
+          subtitle: `${dua.situationLabelAr} — ${dua.authenticityGradeLabelAr.split('(')[0]}`,
+          snippet: dua.arabicText,
+          url: `/duas?id=${dua.id}`,
+          badge: dua.sourceType === 'quranic' ? 'قرآني' : dua.sourceType === 'prophetic' ? 'نبوي' : 'مأثور'
         });
       }
     });

@@ -20,6 +20,7 @@ import {
 
 const SEARCH_CATEGORIES: { id: SearchResultType | 'all'; label: string }[] = [
   { id: 'all', label: 'جميع الأقسام' },
+  { id: 'dua', label: 'موسوعة الأدعية' },
   { id: 'quran_coach', label: 'مدرّب الحفظ' },
   { id: 'tajweed', label: 'معمل التجويد' },
   { id: 'quranic_arabic', label: 'لغة القرآن' },
@@ -46,6 +47,9 @@ const SEARCH_CATEGORIES: { id: SearchResultType | 'all'; label: string }[] = [
 ];
 
 const POPULAR_SEARCHES = [
+  'سيد الاستغفار',
+  'دعاء تفريج الهم والحزن',
+  'دعاء السفر',
   'تكرار الآيات وحفظ جزء عم',
   'مخارج الحروف وصفاتها',
   'إعراب وبلاغة الفاتحة',

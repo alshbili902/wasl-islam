@@ -93,6 +93,7 @@ export const Footer: React.FC = () => {
                 { path: '/quran', label: 'المصحف الشريف والتلاوات' },
                 { path: '/prayer', label: 'مواقيت الصلاة والقبلة' },
                 { path: '/khatmah', label: 'الختمة القرآنية الذكية' },
+                { path: '/duas', label: 'موسوعة الأدعية المأثورة' },
                 { path: '/adhkar', label: 'واحة الأذكار وحصن المسلم' },
                 { path: '/tasbih', label: 'المسبحة الإلكترونية' },
                 { path: '/sleep', label: 'حاسبة النوم والقيام' },

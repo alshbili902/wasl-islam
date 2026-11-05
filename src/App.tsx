@@ -54,6 +54,9 @@ const TajweedLabPage = lazy(() => import('./pages/TajweedLabPage').then((m) => (
 const QuranicArabicPage = lazy(() => import('./pages/QuranicArabicPage').then((m) => ({ default: m.QuranicArabicPage })));
 const SignLanguagePage = lazy(() => import('./pages/SignLanguagePage').then((m) => ({ default: m.SignLanguagePage })));
 
+// Comprehensive Dua Encyclopedia
+const DuasPage = lazy(() => import('./pages/DuasPage').then((m) => ({ default: m.DuasPage })));
+
 const PageSkeleton: React.FC = () => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center justify-center min-h-[50vh] space-y-5">
     <div className="relative">
@@ -115,6 +118,7 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/tajweed-lab" element={<TajweedLabPage />} />
           <Route path="/quranic-arabic" element={<QuranicArabicPage />} />
           <Route path="/sign-language" element={<SignLanguagePage />} />
+          <Route path="/duas" element={<DuasPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
