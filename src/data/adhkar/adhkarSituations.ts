@@ -793,3 +793,4 @@ export const ADHKAR_SITUATIONS: DhikrItem[] = [
     tags: ['توكل', 'كفاية', 'حسبنا الله', 'دفع الظلم']
   }
 ];
+

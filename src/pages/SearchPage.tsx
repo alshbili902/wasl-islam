@@ -20,6 +20,7 @@ import {
 
 const SEARCH_CATEGORIES: { id: SearchResultType | 'all'; label: string }[] = [
   { id: 'all', label: 'جميع الأقسام' },
+  { id: 'update', label: 'تحديثات الموقع' },
   { id: 'adhkar', label: 'واحة الأذكار' },
   { id: 'dua', label: 'موسوعة الأدعية' },
   { id: 'quran_coach', label: 'مدرّب الحفظ' },

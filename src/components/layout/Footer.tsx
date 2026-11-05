@@ -4,9 +4,11 @@ import { ShieldCheck, BookOpenCheck, Compass, Sparkles } from 'lucide-react';
 import { Logo } from './Logo';
 import { NAV_ROUTES } from './Navbar';
 import { useAudio } from '../../context/AudioContext';
+import { getLatestWebsiteVersion } from '../../services/updatesService';
 
 export const Footer: React.FC = () => {
   const { currentTrack } = useAudio();
+  const latestVersion = getLatestWebsiteVersion();
 
   return (
     <footer
@@ -101,6 +103,7 @@ export const Footer: React.FC = () => {
                 { path: '/donations', label: 'بوابة التبرعات الرسمية' },
                 { path: '/search', label: 'محرك البحث الإسلامي الموحد' },
                 { path: '/channels', label: 'القنوات والإذاعات المباشرة' },
+                { path: '/updates', label: 'سجل التحديثات وما الجديد' },
               ].map((item) => (
                 <li key={item.path}>
                   <NavLink
@@ -131,7 +134,17 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} مدار اليقين | Madar Al-Yaqeen — جميع الحقوق محفوظة.</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <p>© {new Date().getFullYear()} مدار اليقين | Madar Al-Yaqeen — جميع الحقوق محفوظة.</p>
+            <span className="text-gold/40">•</span>
+            <NavLink
+              to="/updates"
+              className="text-gold hover:text-amber-300 font-mono font-bold transition-colors inline-flex items-center gap-1"
+            >
+              <span>{latestVersion}</span>
+              <span className="font-sans text-[11px] font-normal text-slate-300">(سجل التحديثات)</span>
+            </NavLink>
+          </div>
           <p className="font-quran text-sm text-gold">
             ﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾
           </p>

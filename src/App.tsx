@@ -57,6 +57,12 @@ const SignLanguagePage = lazy(() => import('./pages/SignLanguagePage').then((m) 
 // Comprehensive Dua Encyclopedia
 const DuasPage = lazy(() => import('./pages/DuasPage').then((m) => ({ default: m.DuasPage })));
 
+// Smart Updates & What's New System
+const UpdatesPage = lazy(() => import('./pages/UpdatesPage').then((m) => ({ default: m.UpdatesPage })));
+
+import { WhatsNewModal } from './components/updates/WhatsNewModal';
+import { recordVisitorVisit } from './services/updatesService';
+
 const PageSkeleton: React.FC = () => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center justify-center min-h-[50vh] space-y-5">
     <div className="relative">
@@ -119,6 +125,8 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/quranic-arabic" element={<QuranicArabicPage />} />
           <Route path="/sign-language" element={<SignLanguagePage />} />
           <Route path="/duas" element={<DuasPage />} />
+          <Route path="/updates" element={<UpdatesPage />} />
+          <Route path="/updates/:updateId" element={<UpdatesPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
@@ -128,6 +136,10 @@ const AnimatedRoutes: React.FC = () => {
 };
 
 export const App: React.FC = () => {
+  React.useEffect(() => {
+    recordVisitorVisit();
+  }, []);
+
   return (
     <AppProvider>
       <AudioProvider>
@@ -139,6 +151,7 @@ export const App: React.FC = () => {
             </div>
             <Footer />
             <GlobalAudioPlayer />
+            <WhatsNewModal />
           </div>
         </BrowserRouter>
       </AudioProvider>

@@ -24,6 +24,7 @@ import { QURANIC_ARABIC_LEVELS, CORE_VOCABULARY_CARDS } from './quranicArabicDat
 import { SIGN_LANGUAGE_LESSONS } from './signLanguageData';
 import { ALL_DUAS } from './duas';
 import { ADHKAR_DATA } from './adhkar';
+import { getPublishedUpdates } from '../services/updatesService';
 
 export type SearchResultType =
   | 'prophet'
@@ -51,7 +52,8 @@ export type SearchResultType =
   | 'quranic_arabic'
   | 'sign_language'
   | 'dua'
-  | 'adhkar';
+  | 'adhkar'
+  | 'update';
 
 export interface GlobalSearchResult {
   id: string;
@@ -773,6 +775,30 @@ export function searchAllEncyclopedia(query: string, filterType?: SearchResultTy
           snippet: dhikr.text,
           url: `/adhkar`,
           badge: dhikr.grade ? dhikr.grade.split('(')[0].trim() : 'موثق'
+        });
+      }
+    });
+  }
+
+  // 26. Website Updates and Releases
+  if (!filterType || filterType === 'all' || filterType === 'update') {
+    getPublishedUpdates().forEach((up) => {
+      if (
+        matches(up.title) ||
+        matches(up.shortDescription) ||
+        matches(up.fullDescription) ||
+        matches(up.version) ||
+        up.highlights.some(matches)
+      ) {
+        results.push({
+          id: `update-${up.id}`,
+          type: 'update',
+          categoryLabel: 'تحديثات الموقع',
+          title: up.title,
+          subtitle: `الإصدار v${up.version} — ${up.releaseDate}`,
+          snippet: up.shortDescription,
+          url: `/updates?id=${up.id}`,
+          badge: `v${up.version}`
         });
       }
     });

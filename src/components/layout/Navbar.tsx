@@ -42,6 +42,7 @@ import {
 import { Logo } from './Logo';
 import { MobileConnectModal } from './MobileConnectModal';
 import { useApp } from '../../context/AppContext';
+import { getLatestWebsiteVersion, getUnreadPublishedUpdates } from '../../services/updatesService';
 
 export interface NavRouteItem {
   path: string;
@@ -92,6 +93,7 @@ export const NAV_ROUTES: NavRouteItem[] = [
   { path: '/channels', label: 'القنوات الدينية المباشرة', shortLabel: 'القنوات', description: 'بث قنوات القرآن والسنة والرسالة وإقرأ', icon: Tv },
   { path: '/radio', label: 'الإذاعات الإسلامية العالمية', shortLabel: 'الإذاعات', description: 'مكتبة الإذاعات القرآنية والعلمية والدعوية', icon: Radio },
   { path: '/live', label: 'بث الحرمين المباشر', shortLabel: 'بث الحرمين', description: 'البث المشترك للحرمين الشريفين', icon: Radio },
+  { path: '/updates', label: 'سجل التحديثات وما الجديد', shortLabel: 'ما الجديد', description: 'سجل الإصدارات وتاريخ التحديثات والمزايا المنشورة', icon: Sparkles },
   { path: '/settings', label: 'الإعدادات', shortLabel: 'الإعدادات', description: 'تخصيص المظهر وطريقة الحساب والخطوط', icon: Settings },
 ];
 
@@ -99,7 +101,19 @@ export const Navbar: React.FC = () => {
   const { settings, toggleTheme } = useApp();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [mobileModalOpen, setMobileModalOpen] = useState(false);
+  const [unreadUpdatesCount, setUnreadUpdatesCount] = useState<number>(0);
   const location = useLocation();
+
+  const latestVersion = useMemo(() => getLatestWebsiteVersion(), [location.pathname]);
+
+  useEffect(() => {
+    const updateUnread = () => {
+      setUnreadUpdatesCount(getUnreadPublishedUpdates().length);
+    };
+    updateUnread();
+    window.addEventListener('madar_updates_changed', updateUnread);
+    return () => window.removeEventListener('madar_updates_changed', updateUnread);
+  }, []);
 
   useEffect(() => {
     setDrawerOpen(false);
@@ -194,8 +208,26 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Left: City indicator + Connect Phone over LAN button + Theme toggle */}
+          {/* Left: What's New + City indicator + Connect Phone over LAN button + Theme toggle */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <NavLink
+              to="/updates"
+              title={`سجل التحديثات وما الجديد (${latestVersion})`}
+              className="relative px-2.5 py-2 rounded-xl bg-gold/15 hover:bg-gold/25 border border-gold/35 text-royal dark:text-gold text-xs font-black flex items-center gap-1.5 transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-gold" />
+              <span className="hidden sm:inline">ما الجديد</span>
+              <span className="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-royal/10 dark:bg-white/10 text-royal dark:text-amber-200">
+                {latestVersion}
+              </span>
+              {unreadUpdatesCount > 0 && (
+                <span
+                  className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#0B131E] animate-pulse"
+                  title={`${unreadUpdatesCount} تحديثات جديدة غير مقروءة`}
+                />
+              )}
+            </NavLink>
+
             <NavLink
               to="/prayer"
               title="تغيير المدينة أو الموقع الجغرافي"
