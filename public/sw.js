@@ -1,5 +1,5 @@
 // Service Worker for Madar Al-Yaqeen (مدار اليقين)
-// Optimized for PWA & Trusted Web Activity (TWA / Bubblewrap)
+// Optimized for Offline & Fast Web Application Experience
 
 const CACHE_NAME = 'madar-al-yaqeen-v4';
 

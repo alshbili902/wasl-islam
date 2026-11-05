@@ -238,14 +238,14 @@ export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({ isOpen, 
                 </button>
               </div>
 
-              {/* Install PWA Guide */}
-              <div className="text-right p-3 rounded-2xl bg-gold/10 border border-gold/25 text-[11px] space-y-1 text-slate-700 dark:text-slate-300">
+              {/* Web Browser Access Tip */}
+              <div className="text-right p-3.5 rounded-2xl bg-gold/10 border border-gold/25 text-[11px] space-y-1.5 text-slate-700 dark:text-slate-300">
                 <p className="font-bold text-royal dark:text-gold flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-gold" />
-                  <span>تثبيت كتطبيق مستقل (PWA) على هاتفك:</span>
+                  <Globe className="w-3.5 h-3.5 text-gold" />
+                  <span>منصة ويب متكاملة وفورية:</span>
                 </p>
-                <p>• <strong>آيفون (Safari):</strong> اضغط على زر المشاركة ثم اختر «إضافة إلى الشاشة الرئيسية».</p>
-                <p>• <strong>أندرويد (Chrome):</strong> اضغط على القائمة (⋮) ثم اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</p>
+                <p>• تعمل المنصة مباشرة عبر متصفح الويب على الهواتف والأجهزة اللوحية والحواسيب بدون الحاجة لأي تطبيقات خارجية.</p>
+                <p>• يمكنك حفظ الرابط في المفضلة بمتصفحك أو إضافته إلى الشاشة الرئيسية للوصول السريع بلمسة واحدة.</p>
               </div>
             </div>
           </motion.div>
