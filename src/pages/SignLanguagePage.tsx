@@ -568,3 +568,4 @@ export const SignLanguagePage: React.FC = () => {
 };
 
 export default SignLanguagePage;
+

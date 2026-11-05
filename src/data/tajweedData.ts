@@ -422,3 +422,4 @@ export const TAJWEED_QUIZZES: TajweedQuizItem[] = [
     explanation: 'ميم ساكنة بعدها حرف الباء، فحكمها الإخفاء الشفوي بغنة بمقدار حركتين مع تلامس لطيف للشفتين.'
   }
 ];
+

@@ -242,3 +242,4 @@ export interface SignLanguageLesson {
     text: string;
   }[];
 }
+

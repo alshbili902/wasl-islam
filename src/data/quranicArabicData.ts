@@ -524,3 +524,4 @@ export const CORE_VOCABULARY_CARDS: QuranicVocabCard[] = [
     }
   }
 ];
+
