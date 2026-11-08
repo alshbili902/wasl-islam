@@ -87,3 +87,13 @@ export interface SocialShareLink {
   getUrl: (text: string, url: string, title: string) => string;
 }
 
+export type ShareStatus = 'shared' | 'cancelled' | 'unsupported' | 'failed';
+
+export interface NativeShareResult {
+  status: ShareStatus;
+  error?: unknown;
+}
+
+export type ShareTab = 'apps' | 'image_share' | 'image_download' | 'text';
+
+

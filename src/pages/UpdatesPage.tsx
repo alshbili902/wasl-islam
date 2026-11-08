@@ -38,11 +38,14 @@ import { WebsiteUpdate, UpdateCategory, WebsiteRelease } from '../types/updates'
 import { UpdatesAdminModal } from '../components/updates/UpdatesAdminModal';
 import { WhatsNewModal } from '../components/updates/WhatsNewModal';
 import { useApp } from '../context/AppContext';
+import { useShare } from '../context/ShareContext';
+import { SITE_CONFIG } from '../config/siteConfig';
 
 export const UpdatesPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { updateId: paramUpdateId } = useParams<{ updateId?: string }>();
   const { settings } = useApp();
+  const { openShare } = useShare();
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<UpdateCategory | 'all'>('all');
@@ -51,7 +54,7 @@ export const UpdatesPage: React.FC = () => {
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
   const [isWhatsNewOpen, setIsWhatsNewOpen] = useState<boolean>(false);
   const [selectedDetailUpdate, setSelectedDetailUpdate] = useState<WebsiteUpdate | null>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [sharedId, setSharedId] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState<number>(0);
 
   // Listen to update changes across tabs or admin actions
@@ -111,13 +114,20 @@ export const UpdatesPage: React.FC = () => {
     return publishedUpdates.filter((u) => !isUpdateRead(u.id)).length;
   }, [publishedUpdates, refreshKey]);
 
-  const handleShareUpdate = (update: WebsiteUpdate, e: React.MouseEvent) => {
+  const handleShareUpdate = async (update: WebsiteUpdate, e: React.MouseEvent) => {
     e.stopPropagation();
-    const shareUrl = `${window.location.origin}/updates?id=${update.id}`;
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(shareUrl);
-      setCopiedId(update.id);
-      setTimeout(() => setCopiedId(null), 2200);
+    const shareUrl = `${SITE_CONFIG.productionUrl}/updates?id=${update.id}`;
+    const res = await openShare({
+      type: 'update',
+      title: `${update.title} (الإصدار v${update.version})`,
+      text: `${update.shortDescription}\n\n${update.fullDescription}`,
+      source: `تحديثات منصة مدار اليقين — v${update.version}`,
+      categoryLabel: 'سجل التحديثات والإصدارات',
+      canonicalUrl: shareUrl,
+    });
+    if (res.status === 'shared') {
+      setSharedId(update.id);
+      setTimeout(() => setSharedId(null), 2200);
     }
   };
 
@@ -406,9 +416,9 @@ export const UpdatesPage: React.FC = () => {
                           type="button"
                           onClick={(e) => handleShareUpdate(update, e)}
                           className="p-2 rounded-xl bg-royal/5 dark:bg-white/5 hover:bg-gold/20 text-gold transition-colors"
-                          title="نسخ رابط هذا التحديث"
+                          title="مشاركة هذا التحديث"
                         >
-                          {copiedId === update.id ? (
+                          {sharedId === update.id ? (
                             <Check className="w-4 h-4 text-emerald-400" />
                           ) : (
                             <Share2 className="w-4 h-4" />
@@ -532,8 +542,12 @@ export const UpdatesPage: React.FC = () => {
                     onClick={(e) => handleShareUpdate(selectedDetailUpdate, e)}
                     className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-gold inline-flex items-center gap-1.5"
                   >
-                    <Share2 className="w-4 h-4" />
-                    <span>{copiedId === selectedDetailUpdate.id ? 'تم نسخ الرابط' : 'مشاركة التحديث'}</span>
+                    {sharedId === selectedDetailUpdate.id ? (
+                      <Check className="w-4 h-4 text-emerald-400" />
+                    ) : (
+                      <Share2 className="w-4 h-4" />
+                    )}
+                    <span>{sharedId === selectedDetailUpdate.id ? 'تمت المشاركة' : 'مشاركة التحديث'}</span>
                   </button>
 
                   <div className="flex items-center gap-2">

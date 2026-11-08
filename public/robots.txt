@@ -58,3 +58,4 @@ Allow: /images/
 Allow: /icons/
 
 Sitemap: https://wasl-islam.fun/sitemap.xml
+

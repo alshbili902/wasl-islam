@@ -19,14 +19,19 @@ import {
 import { SURAHS_META } from '../data/surahsMeta';
 import { TAFSIR_SURAH_OVERVIEWS, AyahTafsirItem, SurahTafsirOverview } from '../data/tafsirData';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { useShare } from '../context/ShareContext';
+import { copyTextToClipboard } from '../services/shareService';
+import { SITE_CONFIG } from '../config/siteConfig';
 
 export const TafsirPage: React.FC = () => {
+  const { openShare } = useShare();
   const [searchParams, setSearchParams] = useSearchParams();
   const surahParam = Number(searchParams.get('surah')) || 1;
 
   const [selectedSurahNumber, setSelectedSurahNumber] = useState<number>(surahParam);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [copiedAyahNumber, setCopiedAyahNumber] = useState<number | null>(null);
+  const [sharedAyahNumber, setSharedAyahNumber] = useState<number | null>(null);
   const [fontSize, setFontSize] = useState<'normal' | 'large' | 'xlarge'>('normal');
 
   const currentSurahMeta = useMemo(() => {
@@ -43,11 +48,30 @@ export const TafsirPage: React.FC = () => {
     window.scrollTo({ top: 350, behavior: 'smooth' });
   };
 
-  const handleCopyAyahTafsir = (item: AyahTafsirItem) => {
-    const text = `﴿${item.ayahText}﴾ [سورة ${currentSurahMeta.name}: ${item.ayahNumber}]\n\nالتفسير الميسر:\n${item.tafsirMuyassar}\n\n— من موسوعة التفسير بمشروع مدار اليقين`;
-    navigator.clipboard.writeText(text);
-    setCopiedAyahNumber(item.ayahNumber);
-    setTimeout(() => setCopiedAyahNumber(null), 2000);
+  const handleCopyAyahTafsir = async (item: AyahTafsirItem) => {
+    const text = `﴿${item.ayahText}﴾ [سورة ${currentSurahMeta.name}: ${item.ayahNumber}]\n\nالتفسير الميسر:\n${item.tafsirMuyassar}\n\n— من موسوعة التفسير بمشروع مدار اليقين (${SITE_CONFIG.productionUrl}/tafsir?surah=${currentSurahMeta.number})`;
+    const ok = await copyTextToClipboard(text);
+    if (ok) {
+      setCopiedAyahNumber(item.ayahNumber);
+      setTimeout(() => setCopiedAyahNumber(null), 2000);
+    }
+  };
+
+  const handleShareAyahTafsir = async (item: AyahTafsirItem) => {
+    const res = await openShare({
+      type: 'quran',
+      title: `تفسير آية ${item.ayahNumber} من سورة ${currentSurahMeta.name}`,
+      text: item.ayahText,
+      surahName: currentSurahMeta.name,
+      surahNumber: currentSurahMeta.number,
+      ayahNumber: item.ayahNumber,
+      explanation: `التفسير الميسر: ${item.tafsirMuyassar}`,
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/tafsir?surah=${currentSurahMeta.number}`,
+    });
+    if (res.status === 'shared') {
+      setSharedAyahNumber(item.ayahNumber);
+      setTimeout(() => setSharedAyahNumber(null), 2200);
+    }
   };
 
   // Filtered surahs for selector search
@@ -304,23 +328,43 @@ export const TafsirPage: React.FC = () => {
                       {item.ayahNumber}
                     </span>
 
-                    <button
-                      onClick={() => handleCopyAyahTafsir(item)}
-                      className="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-gold/20 text-slate-500 hover:text-gold transition-colors text-xs flex items-center gap-1 shrink-0"
-                      title="نسخ الآية وتفسيرها"
-                    >
-                      {copiedAyahNumber === item.ayahNumber ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-500" />
-                          <span className="text-emerald-500">تم</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>نسخ</span>
-                        </>
-                      )}
-                    </button>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => handleShareAyahTafsir(item)}
+                        className="p-1.5 rounded-xl bg-gold/10 hover:bg-gold/20 text-gold transition-colors text-xs flex items-center gap-1"
+                        title="مشاركة الآية وتفسيرها"
+                      >
+                        {sharedAyahNumber === item.ayahNumber ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-emerald-500" />
+                            <span className="text-emerald-500">تمت المشاركة</span>
+                          </>
+                        ) : (
+                          <>
+                            <Share2 className="w-3.5 h-3.5" />
+                            <span>مشاركة</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        onClick={() => handleCopyAyahTafsir(item)}
+                        className="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-gold/20 text-slate-500 hover:text-gold transition-colors text-xs flex items-center gap-1"
+                        title="نسخ الآية وتفسيرها"
+                      >
+                        {copiedAyahNumber === item.ayahNumber ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-emerald-500" />
+                            <span className="text-emerald-500">تم النسخ</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>نسخ</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   {/* Quranic Text */}

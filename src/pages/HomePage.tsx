@@ -42,6 +42,8 @@ import { PageWrapper } from '../components/layout/PageWrapper';
 import { Logo } from '../components/layout/Logo';
 import { useApp } from '../context/AppContext';
 import { useAudio } from '../context/AudioContext';
+import { useShare } from '../context/ShareContext';
+import { SITE_CONFIG } from '../config/siteConfig';
 import { computePrayerTimesForDate, ComputedPrayerState } from '../utils/prayerUtils';
 import { DAILY_VERSES, DAILY_HADITHS } from '../data/dailyWisdomData';
 import { RADIO_STATIONS, LIVE_TV_STREAMS } from '../data/liveChannelsData';
@@ -50,6 +52,7 @@ import { RECITERS_DATA } from '../data/recitersData';
 export const HomePage: React.FC = () => {
   const { settings, detectGpsLocation, isLocating } = useApp();
   const { playTrack, playReciterSurah, currentTrack, isPlaying } = useAudio();
+  const { openShare } = useShare();
 
   const [prayerState, setPrayerState] = useState<ComputedPrayerState>(() =>
     computePrayerTimesForDate(
@@ -100,18 +103,33 @@ export const HomePage: React.FC = () => {
   };
 
   const handleShareVerse = async () => {
-    const shareText = `﴿${dailyVerse.text}﴾ [${dailyVerse.surahName}: ${dailyVerse.ayahNumber}]\nالتفسير الميسر: ${dailyVerse.tafsir}\n— عبر منصة مدار اليقين`;
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: 'آية اليوم - مدار اليقين', text: shareText });
-      } else {
-        await navigator.clipboard.writeText(shareText);
-        setCopiedMsg('تم نسخ الآية الكريمة مع التفسير');
-        setTimeout(() => setCopiedMsg(null), 3000);
-      }
-    } catch {
-      // ignore
+    const res = await openShare({
+      type: 'quran',
+      title: `آية اليوم — سورة ${dailyVerse.surahName}`,
+      text: dailyVerse.text,
+      surahName: dailyVerse.surahName,
+      surahNumber: dailyVerse.surahNumber,
+      ayahNumber: dailyVerse.ayahNumber,
+      explanation: `${dailyVerse.tafsirSource}: ${dailyVerse.tafsir}`,
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/quran?surah=${dailyVerse.surahNumber}`,
+    });
+    if (res.status === 'shared') {
+      setCopiedMsg('تمت مشاركة الآية');
+      setTimeout(() => setCopiedMsg(null), 2500);
     }
+  };
+
+  const handleShareHadith = async () => {
+    await openShare({
+      type: 'hadith',
+      title: dailyHadith.title,
+      text: dailyHadith.text,
+      narrator: dailyHadith.narrator,
+      source: dailyHadith.source,
+      grade: dailyHadith.grade,
+      explanation: dailyHadith.explanation,
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/hadith`,
+    });
   };
 
   const quickServices = [
@@ -713,6 +731,16 @@ export const HomePage: React.FC = () => {
               <div className="flex items-center justify-between gap-2">
                 <span className="text-slate-500 dark:text-slate-400">درجة الصحة:</span>
                 <span className="font-bold text-emerald-600 dark:text-emerald-400">{dailyHadith.grade}</span>
+              </div>
+              <div className="pt-2 mt-2 border-t border-gold/15 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleShareHadith}
+                  className="px-3 py-1.5 rounded-xl border border-gold/30 text-xs font-bold text-gold hover:bg-gold/10 inline-flex items-center gap-1.5 transition-colors"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>مشاركة الحديث</span>
+                </button>
               </div>
             </div>
           </div>

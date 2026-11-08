@@ -24,8 +24,12 @@ import {
   SeerahMilestone
 } from '../data/seerahData';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { useShare } from '../context/ShareContext';
+import { copyTextToClipboard } from '../services/shareService';
+import { SITE_CONFIG } from '../config/siteConfig';
 
 export const SeerahPage: React.FC = () => {
+  const { openShare } = useShare();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialMilestoneId = searchParams.get('milestone');
 
@@ -35,6 +39,7 @@ export const SeerahPage: React.FC = () => {
     initialMilestoneId || SEERAH_MILESTONES[0].id
   );
   const [copiedText, setCopiedText] = useState<boolean>(false);
+  const [sharedText, setSharedText] = useState<boolean>(false);
 
   // Filtered milestones
   const filteredMilestones = useMemo(() => {
@@ -65,11 +70,28 @@ export const SeerahPage: React.FC = () => {
     window.scrollTo({ top: 380, behavior: 'smooth' });
   };
 
-  const handleCopyNarrative = () => {
-    const text = `${activeMilestone.title}\n${activeMilestone.period} (${activeMilestone.yearApprox})\n\n${activeMilestone.narrative.join('\n\n')}\n\nعبر ودروس:\n${activeMilestone.lessons.map((l) => `• ${l}`).join('\n')}\n\n— من موسوعة السيرة النبوية بمشروع مدار اليقين`;
-    navigator.clipboard.writeText(text);
-    setCopiedText(true);
-    setTimeout(() => setCopiedText(false), 2500);
+  const handleCopyNarrative = async () => {
+    const text = `${activeMilestone.title}\n${activeMilestone.period} (${activeMilestone.yearApprox})\n\n${activeMilestone.narrative.join('\n\n')}\n\nعبر ودروس:\n${activeMilestone.lessons.map((l) => `• ${l}`).join('\n')}\n\n— من موسوعة السيرة النبوية بمشروع مدار اليقين (${SITE_CONFIG.productionUrl}/seerah?milestone=${activeMilestone.id})`;
+    const ok = await copyTextToClipboard(text);
+    if (ok) {
+      setCopiedText(true);
+      setTimeout(() => setCopiedText(false), 2500);
+    }
+  };
+
+  const handleShareNarrative = async () => {
+    const res = await openShare({
+      type: 'article',
+      title: `${activeMilestone.title} — السيرة النبوية الشريفة`,
+      text: `${activeMilestone.summary}\n\n${activeMilestone.narrative[0] || ''}`,
+      source: `المحطة ${activeMilestone.order}: ${activeMilestone.period} (${activeMilestone.yearApprox})`,
+      categoryLabel: 'موسوعة السيرة النبوية الشريفة',
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/seerah?milestone=${activeMilestone.id}`,
+    });
+    if (res.status === 'shared') {
+      setSharedText(true);
+      setTimeout(() => setSharedText(false), 2200);
+    }
   };
 
   return (
@@ -227,6 +249,23 @@ export const SeerahPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleShareNarrative}
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-gold/15 hover:bg-gold/25 text-royal dark:text-gold border border-gold/30 transition-all"
+                    title="مشاركة المحطة"
+                  >
+                    {sharedText ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-500" />
+                        <span className="text-emerald-500">تمت المشاركة</span>
+                      </>
+                    ) : (
+                      <>
+                        <Share2 className="w-3.5 h-3.5 text-gold" />
+                        <span>مشاركة</span>
+                      </>
+                    )}
+                  </button>
                   <button
                     onClick={handleCopyNarrative}
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-royal/5 dark:bg-white/5 hover:bg-gold/20 text-slate-700 dark:text-slate-300 border border-gold/20 transition-all"

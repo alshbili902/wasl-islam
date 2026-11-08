@@ -19,10 +19,13 @@ import { CARD_PRESETS, CARD_THEMES, CardThemeConfig } from '../data/cardStudioDa
 import { CardOrientation } from '../types/extraModules';
 import { SITE_CONFIG } from '../config/siteConfig';
 import { useShare } from '../context/ShareContext';
+import { exportCanvasToFile } from '../services/imageGeneratorService';
+import { sharePreparedImageFile } from '../services/shareService';
 import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const CardStudioPage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const preparedFileRef = useRef<File | null>(null);
 
   const [searchParams] = useSearchParams();
   const queryText = searchParams.get('text');
@@ -176,6 +179,14 @@ export const CardStudioPage: React.FC = () => {
           ctx.font = 'bold 18px monospace';
           ctx.fillStyle = selectedTheme.accentColor;
           ctx.fillText(SITE_CONFIG.canonicalDomain, qrX - 25, qrY + 75);
+
+          exportCanvasToFile(canvas, 'madar-card')
+            .then((file) => {
+              preparedFileRef.current = file;
+            })
+            .catch(() => {
+              preparedFileRef.current = null;
+            });
         };
         qrImg.src = qrUrl;
       });
@@ -184,6 +195,14 @@ export const CardStudioPage: React.FC = () => {
       ctx.fillStyle = selectedTheme.accentColor;
       ctx.textAlign = 'center';
       ctx.fillText(SITE_CONFIG.productionUrl, width / 2, footerY);
+
+      exportCanvasToFile(canvas, 'madar-card')
+        .then((file) => {
+          preparedFileRef.current = file;
+        })
+        .catch(() => {
+          preparedFileRef.current = null;
+        });
     }
   }, [
     cardText,
@@ -212,15 +231,33 @@ export const CardStudioPage: React.FC = () => {
     }, 200);
   };
 
-  const handleShare = () => {
-    openShare({
-      type: 'general',
+  const handleShare = async () => {
+    const shareContent = {
+      type: 'general' as const,
       title: cardSource || 'بطاقة إسلامية مصممة',
       text: cardText,
       source: cardSource,
       categoryLabel: 'استوديو البطاقات الإسلامية',
       canonicalUrl: `${SITE_CONFIG.productionUrl}/card-studio?text=${encodeURIComponent(cardText)}&source=${encodeURIComponent(cardSource)}`,
-    });
+    };
+
+    if (preparedFileRef.current) {
+      const fileRes = await sharePreparedImageFile(preparedFileRef.current, shareContent);
+      if (fileRes.status === 'shared') {
+        setCopiedShare(true);
+        setTimeout(() => setCopiedShare(false), 2500);
+        return;
+      }
+      if (fileRes.status === 'cancelled') {
+        return;
+      }
+    }
+
+    const res = await openShare(shareContent);
+    if (res.status === 'shared') {
+      setCopiedShare(true);
+      setTimeout(() => setCopiedShare(false), 2500);
+    }
   };
 
   const handleSelectPreset = (preset: typeof CARD_PRESETS[0]) => {
@@ -461,7 +498,7 @@ export const CardStudioPage: React.FC = () => {
                   {copiedShare ? (
                     <>
                       <Check className="w-4 h-4 text-gold" />
-                      <span>تم نسخ الرابط!</span>
+                      <span>تمت المشاركة!</span>
                     </>
                   ) : (
                     <>

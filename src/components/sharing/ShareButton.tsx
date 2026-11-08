@@ -1,5 +1,5 @@
-import React from 'react';
-import { Share2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Share2, Check } from 'lucide-react';
 import { ShareableContent } from '../../types/sharing';
 import { useShare } from '../../context/ShareContext';
 
@@ -11,6 +11,7 @@ export interface ShareButtonProps {
   customLabel?: string;
   className?: string;
   title?: string;
+  forceModal?: boolean;
 }
 
 export const ShareButton: React.FC<ShareButtonProps> = ({
@@ -20,16 +21,34 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
   showLabel = true,
   customLabel,
   className = '',
-  title = 'مشاركة المحتوى والبطاقة',
+  title = 'مشاركة المحتوى',
+  forceModal = false,
 }) => {
   const { openShare } = useShare();
+  const [isSharing, setIsSharing] = useState(false);
+  const [sharedSuccess, setSharedSuccess] = useState(false);
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    openShare(content);
+    if (isSharing) return;
+
+    // Invoke openShare synchronously on the first line so navigator.share()
+    // executes inside the original user gesture with transient user activation intact.
+    const sharePromise = openShare(content, { forceModal });
+    setIsSharing(true);
+
+    try {
+      const result = await sharePromise;
+      if (result.status === 'shared') {
+        setSharedSuccess(true);
+        setTimeout(() => setSharedSuccess(false), 2200);
+      }
+    } finally {
+      setIsSharing(false);
+    }
   };
 
-  const label = customLabel || 'مشاركة';
+  const label = sharedSuccess ? 'تمت المشاركة' : customLabel || 'مشاركة';
 
   // Base sizing
   const sizeClasses = {
@@ -75,11 +94,16 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
       <button
         type="button"
         onClick={handleClick}
-        className={`${variantClass} ${className} flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-gold/50`}
+        disabled={isSharing}
+        className={`${variantClass} ${className} flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-gold/50 disabled:opacity-60`}
         title={title}
         aria-label={title}
       >
-        <Share2 className={iconSizes} />
+        {sharedSuccess ? (
+          <Check className={`${iconSizes} text-emerald-400`} />
+        ) : (
+          <Share2 className={iconSizes} />
+        )}
       </button>
     );
   }
@@ -88,13 +112,17 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
     <button
       type="button"
       onClick={handleClick}
-      className={`inline-flex items-center justify-center rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gold/50 ${sizeClasses} ${variantClass} ${className}`}
+      disabled={isSharing}
+      className={`inline-flex items-center justify-center rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gold/50 disabled:opacity-60 ${sizeClasses} ${variantClass} ${className}`}
       title={title}
       aria-label={title}
     >
-      <Share2 className={iconSizes} />
+      {sharedSuccess ? (
+        <Check className={`${iconSizes} text-emerald-400`} />
+      ) : (
+        <Share2 className={iconSizes} />
+      )}
       {showLabel && <span>{label}</span>}
     </button>
   );
 };
-

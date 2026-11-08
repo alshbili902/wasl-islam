@@ -18,11 +18,14 @@ import {
 import { AUDIO_LIBRARY_ITEMS } from '../data/audioLibraryData';
 import { AudioCategoryType, LibraryAudioItem } from '../types/extraModules';
 import { useAudio } from '../context/AudioContext';
+import { useShare } from '../context/ShareContext';
+import { SITE_CONFIG } from '../config/siteConfig';
 import { AudioTrack } from '../types';
 import { PageWrapper } from '../components/layout/PageWrapper';
 
 export const AudioLibraryPage: React.FC = () => {
   const { currentTrack, isPlaying, playTrack, togglePlay } = useAudio();
+  const { openShare } = useShare();
   const [selectedCategory, setSelectedCategory] = useState<AudioCategoryType | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -224,6 +227,25 @@ export const AudioLibraryPage: React.FC = () => {
                     </button>
 
                     <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openShare({
+                            type: 'article',
+                            title: item.title,
+                            text: `${item.title}\nالقارئ / الشيخ: ${item.speakerOrReciter}\n\n${item.description}`,
+                            source: item.categoryLabelAr,
+                            categoryLabel: 'المكتبة الصوتية الإسلامية',
+                            canonicalUrl: `${SITE_CONFIG.productionUrl}/audio-library`,
+                          })
+                        }
+                        className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-gold/20 text-slate-600 dark:text-slate-300 hover:text-gold transition-colors"
+                        title="مشاركة المقطع الصوتي"
+                        aria-label="مشاركة المقطع الصوتي"
+                      >
+                        <Share2 className="w-4 h-4" />
+                      </button>
+
                       <a
                         href={item.audioUrl}
                         download

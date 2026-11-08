@@ -4,6 +4,8 @@ import { Smartphone, QrCode, Copy, Check, X, Share2, ExternalLink, Download, Spa
 import { useLocation } from 'react-router-dom';
 import QRCode from 'qrcode';
 import { SITE_CONFIG } from '../../config/siteConfig';
+import { copyTextToClipboard } from '../../services/shareService';
+import { useShare } from '../../context/ShareContext';
 
 interface MobileConnectModalProps {
   isOpen: boolean;
@@ -12,7 +14,9 @@ interface MobileConnectModalProps {
 
 export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
+  const { openShare } = useShare();
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
   const [includeCurrentPage, setIncludeCurrentPage] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
 
@@ -49,30 +53,25 @@ export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({ isOpen, 
   }, [isOpen, targetUrl]);
 
   const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(targetUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    } catch {
-      // Fallback
+    const ok = await copyTextToClipboard(targetUrl);
+    if (ok) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     }
   };
 
   const handleNativeShare = async () => {
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title: `${SITE_CONFIG.name} | ${SITE_CONFIG.tagline}`,
-          text: `افتح منصة ${SITE_CONFIG.name} الإسلامية على هاتفك المحمول`,
-          url: targetUrl,
-        });
-      } else {
-        handleCopy();
-      }
-    } catch {
-      // User cancelled share
+    const res = await openShare({
+      type: 'general',
+      title: `${SITE_CONFIG.name} | ${SITE_CONFIG.tagline}`,
+      text: `افتح منصة ${SITE_CONFIG.name} الإسلامية على هاتفك المحمول عبر الرابط الرسمي المعتمد`,
+      canonicalUrl: targetUrl,
+    });
+    if (res.status === 'shared') {
+      setShared(true);
+      setTimeout(() => setShared(false), 2500);
+    } else if (res.status === 'fallback_opened') {
+      onClose();
     }
   };
 
@@ -208,9 +207,10 @@ export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({ isOpen, 
                     type="button"
                     onClick={handleNativeShare}
                     title="مشاركة الرابط"
+                    aria-label="مشاركة الرابط"
                     className="p-1.5 rounded-xl bg-gold/15 text-gold hover:bg-gold/25 transition-colors"
                   >
-                    <Share2 className="w-4 h-4" />
+                    {shared ? <Check className="w-4 h-4 text-emerald-500" /> : <Share2 className="w-4 h-4" />}
                   </button>
                 </div>
               </div>

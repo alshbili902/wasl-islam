@@ -25,6 +25,9 @@ import {
 } from 'lucide-react';
 import { Prophet } from '../../data/prophetsTypes';
 import { getAdjacentProphets, OFFICIAL_SCHOLARLY_RESOURCES } from '../../data/prophetsData';
+import { useShare } from '../../context/ShareContext';
+import { copyTextToClipboard } from '../../services/shareService';
+import { SITE_CONFIG } from '../../config/siteConfig';
 
 interface ProphetReaderProps {
   prophet: Prophet;
@@ -45,10 +48,12 @@ export const ProphetReader: React.FC<ProphetReaderProps> = ({
   onToggleRead,
   onToggleBookmark,
 }) => {
+  const { openShare } = useShare();
   const [fontSize, setFontSize] = useState<'normal' | 'large' | 'xlarge'>('normal');
   const [focusMode, setFocusMode] = useState<boolean>(false);
   const [copiedAyah, setCopiedAyah] = useState<string | null>(null);
   const [copiedStory, setCopiedStory] = useState<boolean>(false);
+  const [sharedStory, setSharedStory] = useState<boolean>(false);
 
   const { prevProphet, nextProphet } = getAdjacentProphets(prophet.id);
 
@@ -58,39 +63,39 @@ export const ProphetReader: React.FC<ProphetReaderProps> = ({
   }, [prophet.id]);
 
   const handleShare = async () => {
-    const shareData = {
-      title: `${prophet.name} | مدار اليقين`,
-      text: `${prophet.title} — ${prophet.summary}`,
-      url: window.location.href,
-    };
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch {
-        // Ignored if cancelled
-      }
-    } else {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopiedStory(true);
-      setTimeout(() => setCopiedStory(false), 2000);
+    const res = await openShare({
+      type: 'article',
+      title: `قصة ${prophet.name} عليه السلام`,
+      text: `${prophet.title}\n\n${prophet.summary}`,
+      source: 'موسوعة قصص الأنبياء — مدار اليقين',
+      categoryLabel: 'موسوعة قصص الأنبياء',
+      canonicalUrl: `${SITE_CONFIG.productionUrl}/prophets/${prophet.id}`,
+    });
+    if (res.status === 'shared') {
+      setSharedStory(true);
+      setTimeout(() => setSharedStory(false), 2200);
     }
   };
 
   const handleCopyStory = async () => {
     const textToCopy = `${prophet.name} - ${prophet.title}\n\n${prophet.summary}\n\n${prophet.chapters
       .map((ch) => `${ch.title}\n${ch.content}`)
-      .join('\n\n')}\n\n- من موسوعة قصص الأنبياء على مدار اليقين`;
+      .join('\n\n')}\n\n- من موسوعة قصص الأنبياء على مدار اليقين (${SITE_CONFIG.productionUrl}/prophets/${prophet.id})`;
 
-    await navigator.clipboard.writeText(textToCopy);
-    setCopiedStory(true);
-    setTimeout(() => setCopiedStory(false), 2500);
+    const ok = await copyTextToClipboard(textToCopy);
+    if (ok) {
+      setCopiedStory(true);
+      setTimeout(() => setCopiedStory(false), 2500);
+    }
   };
 
   const handleCopyAyah = async (text: string, ref: string) => {
     const ayahToCopy = `﴿${text}﴾ [${ref}]`;
-    await navigator.clipboard.writeText(ayahToCopy);
-    setCopiedAyah(ref);
-    setTimeout(() => setCopiedAyah(null), 2000);
+    const ok = await copyTextToClipboard(ayahToCopy);
+    if (ok) {
+      setCopiedAyah(ref);
+      setTimeout(() => setCopiedAyah(null), 2000);
+    }
   };
 
   const handlePrint = () => {
@@ -214,7 +219,7 @@ export const ProphetReader: React.FC<ProphetReaderProps> = ({
             title="مشاركة القصة"
             aria-label="مشاركة القصة"
           >
-            <Share2 className="w-4 h-4" />
+            {sharedStory ? <Check className="w-4 h-4 text-emerald-500" /> : <Share2 className="w-4 h-4" />}
           </button>
 
           {/* Print */}

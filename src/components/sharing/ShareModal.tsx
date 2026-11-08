@@ -11,7 +11,6 @@ import {
   Square,
   Maximize2,
   Type,
-  QrCode,
   Layers,
   CheckCircle2,
   AlertCircle,
@@ -21,26 +20,30 @@ import {
   Twitter,
   Facebook,
   FileText,
-  Sliders
+  Sliders,
+  Image as ImageIcon,
 } from 'lucide-react';
-import { 
-  ShareableContent, 
-  ImageTemplateId, 
-  ImageDimensionId, 
-  ImageExportConfig 
+import {
+  ShareableContent,
+  ShareTab,
+  ImageTemplateId,
+  ImageDimensionId,
+  ImageExportConfig,
 } from '../../types/sharing';
-import { 
-  TEMPLATES_CONFIG, 
-  renderContentToCanvas, 
-  downloadCanvasImage 
+import {
+  TEMPLATES_CONFIG,
+  renderContentToCanvas,
+  downloadCanvasImage,
+  exportCanvasToFile,
 } from '../../services/imageGeneratorService';
-import { 
-  formatContentAsText, 
-  copyFormattedText, 
-  shareCanvasImage, 
-  canShareFiles,
+import {
+  formatContentAsText,
+  copyFormattedText,
+  copyTextToClipboard,
+  shareCanvasImage,
+  handleNativeShare,
   canShareNative,
-  SOCIAL_SHARE_PROVIDERS 
+  SOCIAL_SHARE_PROVIDERS,
 } from '../../services/shareService';
 import { Logo } from '../layout/Logo';
 import { SITE_CONFIG } from '../../config/siteConfig';
@@ -48,13 +51,17 @@ import { SITE_CONFIG } from '../../config/siteConfig';
 interface ShareModalProps {
   content: ShareableContent;
   isOpen: boolean;
+  initialTab?: ShareTab;
   onClose: () => void;
 }
 
-type ShareTab = 'image_share' | 'image_download' | 'apps' | 'text';
-
-export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose }) => {
-  const [activeTab, setActiveTab] = useState<ShareTab>('image_share');
+export const ShareModal: React.FC<ShareModalProps> = ({
+  content,
+  isOpen,
+  initialTab = 'apps',
+  onClose,
+}) => {
+  const [activeTab, setActiveTab] = useState<ShareTab>(initialTab);
 
   // Image Export Configuration
   const [templateId, setTemplateId] = useState<ImageTemplateId>('royal_green');
@@ -67,13 +74,24 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
   // States
   const [isRendering, setIsRendering] = useState<boolean>(false);
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
-  const [feedbackMessage, setFeedbackMessage] = useState<{ text: string; type: 'success' | 'info' | 'error' } | null>(null);
+  const [feedbackMessage, setFeedbackMessage] = useState<{
+    text: string;
+    type: 'success' | 'info' | 'error';
+  } | null>(null);
   const [copiedText, setCopiedText] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
 
-  // Preview Canvas reference
+  // Preview Canvas & Pre-generated File references
   const previewCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const renderedCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const renderedFileRef = useRef<File | null>(null);
+
+  // Sync activeTab when modal opens with a specific initialTab
+  useEffect(() => {
+    if (isOpen && initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [isOpen, initialTab]);
 
   // Auto-dismiss feedback message
   useEffect(() => {
@@ -83,10 +101,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
     }
   }, [feedbackMessage]);
 
-  // Re-render canvas whenever options change
+  // Re-render canvas and pre-generate PNG File whenever options change
+  // Pre-generating the File ensures navigator.share({ files }) is called
+  // synchronously inside the user's tap gesture without losing transient user activation.
   const updateCanvasPreview = useCallback(async () => {
     if (!content) return;
     setIsRendering(true);
+    renderedFileRef.current = null;
 
     try {
       const config: ImageExportConfig = {
@@ -112,6 +133,17 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
           ctx.drawImage(highResCanvas, 0, 0);
         }
       }
+
+      // Pre-encode PNG File so image sharing preserves transient user activation on click
+      try {
+        const preparedFile = await exportCanvasToFile(
+          highResCanvas,
+          `madar-${content.type}`
+        );
+        renderedFileRef.current = preparedFile;
+      } catch {
+        renderedFileRef.current = null;
+      }
     } catch (err) {
       console.error('Error generating card canvas:', err);
     } finally {
@@ -124,7 +156,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
     if (isOpen) {
       updateCanvasPreview();
     }
-  }, [isOpen, updateCanvasPreview]);
+  }, [isOpen, activeTab, updateCanvasPreview]);
 
   // Keyboard navigation (Escape to close)
   useEffect(() => {
@@ -139,15 +171,35 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
 
   // Handlers
   const handleShareImage = async () => {
-    if (!renderedCanvasRef.current) return;
+    if (!renderedCanvasRef.current || isActionLoading) return;
     setIsActionLoading(true);
 
     try {
-      const res = await shareCanvasImage(renderedCanvasRef.current, content);
-      setFeedbackMessage({
-        text: res.message || 'تمت العملية بنجاح',
-        type: 'success',
-      });
+      const res = await shareCanvasImage(
+        renderedCanvasRef.current,
+        content,
+        renderedFileRef.current
+      );
+
+      if (res.status === 'shared') {
+        setFeedbackMessage({
+          text: res.message || 'تمت مشاركة البطاقة بنجاح',
+          type: 'success',
+        });
+      } else if (res.status === 'downloaded') {
+        setFeedbackMessage({
+          text:
+            res.message ||
+            'تم حفظ البطاقة كصورة PNG على جهازك (المتصفح لا يدعم مشاركة ملفات الصور مباشرة)',
+          type: 'info',
+        });
+      } else if (res.status === 'failed') {
+        setFeedbackMessage({
+          text: res.message || 'تعذر مشاركة الصورة مباشرة، يرجى استخدام خيار التنزيل',
+          type: 'error',
+        });
+      }
+      // When res.status === 'cancelled', do not show any message or fake checkmark
     } catch {
       setFeedbackMessage({
         text: 'تعذر مشاركة الصورة مباشرة، يرجى استخدام خيار التنزيل',
@@ -197,17 +249,17 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
 
   const handleCopyLink = async () => {
     const url = content.canonicalUrl || SITE_CONFIG.productionUrl;
-    try {
-      await navigator.clipboard.writeText(url);
+    const success = await copyTextToClipboard(url);
+    if (success) {
       setCopiedLink(true);
       setFeedbackMessage({
         text: 'تم نسخ الرابط المباشر إلى الحافظة',
         type: 'success',
       });
       setTimeout(() => setCopiedLink(false), 2500);
-    } catch {
+    } else {
       setFeedbackMessage({
-        text: 'تعذر نسخ الرابط',
+        text: 'تعذر نسخ الرابط إلى الحافظة',
         type: 'error',
       });
     }
@@ -221,17 +273,17 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
   };
 
   const handleNativeTextShare = async () => {
-    if (!canShareNative()) return;
-    try {
-      await navigator.share({
-        title: content.title || SITE_CONFIG.name,
-        text: formatContentAsText(content),
-        url: content.canonicalUrl || SITE_CONFIG.productionUrl,
+    const res = await handleNativeShare(content);
+    if (res.status === 'shared') {
+      setFeedbackMessage({
+        text: 'تمت المشاركة بنجاح',
+        type: 'success',
       });
-    } catch (err: unknown) {
-      if (err instanceof Error && err.name !== 'AbortError') {
-        handleCopyText();
-      }
+    } else if (res.status === 'unsupported' || res.status === 'failed') {
+      setFeedbackMessage({
+        text: 'متصفحك الحالي لا يدعم نافذة المشاركة الأصلية، يرجى اختيار أحد التطبيقات أدناه أو نسخ الرابط',
+        type: 'info',
+      });
     }
   };
 
@@ -239,7 +291,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
 
   return (
     <AnimatePresence>
-      <div 
+      <div
         className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-black/80 backdrop-blur-md"
         role="dialog"
         aria-modal="true"
@@ -270,13 +322,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
                     ? 'bg-emerald-900/90 text-emerald-200 border-emerald-500/50'
                     : feedbackMessage.type === 'error'
                     ? 'bg-rose-900/90 text-rose-200 border-rose-500/50'
-                    : 'bg-gold/20 text-gold-light border-gold/40'
+                    : 'bg-[#083528]/95 text-gold-light border-gold/50'
                 }`}
               >
                 {feedbackMessage.type === 'success' ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                 ) : (
-                  <AlertCircle className="w-4 h-4 text-rose-400" />
+                  <AlertCircle className="w-4 h-4 text-gold flex-shrink-0" />
                 )}
                 <span>{feedbackMessage.text}</span>
               </motion.div>
@@ -316,6 +368,18 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
           {/* Navigation Tabs */}
           <div className="relative z-10 px-4 sm:px-6 pt-3 pb-2 border-b border-gold/15 bg-[#06241B]/70 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
             <button
+              onClick={() => setActiveTab('apps')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
+                activeTab === 'apps'
+                  ? 'bg-gold text-[#072A20] shadow-md shadow-gold/20'
+                  : 'bg-white/5 text-white/75 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              <Layers className="w-4 h-4" />
+              <span>مشاركة عبر التطبيقات</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('image_share')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
                 activeTab === 'image_share'
@@ -340,18 +404,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
             </button>
 
             <button
-              onClick={() => setActiveTab('apps')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
-                activeTab === 'apps'
-                  ? 'bg-gold text-[#072A20] shadow-md shadow-gold/20'
-                  : 'bg-white/5 text-white/75 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <Layers className="w-4 h-4" />
-              <span>مشاركة عبر التطبيقات</span>
-            </button>
-
-            <button
               onClick={() => setActiveTab('text')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
                 activeTab === 'text'
@@ -366,11 +418,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
 
           {/* Modal Main Body */}
           <div className="relative z-10 p-4 sm:p-6 overflow-y-auto max-h-[calc(92vh-180px)] space-y-6">
-            
             {/* TAB 1: SHARE AS IMAGE & TAB 2: DOWNLOAD AS IMAGE */}
             {(activeTab === 'image_share' || activeTab === 'image_download') && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                
                 {/* Visual Canvas Preview Column (5 cols on lg) */}
                 <div className="lg:col-span-5 flex flex-col items-center justify-center p-3 rounded-2xl bg-black/40 border border-gold/20">
                   <div className="w-full flex items-center justify-between text-xs text-gold/80 mb-2 px-1">
@@ -400,7 +450,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
                   </div>
 
                   {/* Quick Action below preview */}
-                  <div className="w-full mt-3">
+                  <div className="w-full mt-3 space-y-2">
                     {activeTab === 'image_share' ? (
                       <button
                         onClick={handleShareImage}
@@ -425,7 +475,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
 
                 {/* Customization Controls Column (7 cols on lg) */}
                 <div className="lg:col-span-7 space-y-5">
-                  
                   {/* 1. Style / Template Picker */}
                   <div>
                     <label className="block text-xs font-bold text-gold mb-2.5 flex items-center gap-1.5">
@@ -450,17 +499,19 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
                               <span className="text-xs font-bold truncate">
                                 {tmpl.nameAr}
                               </span>
-                              {isSelected && <Check className="w-3.5 h-3.5 text-gold flex-shrink-0" />}
+                              {isSelected && (
+                                <Check className="w-3.5 h-3.5 text-gold flex-shrink-0" />
+                              )}
                             </div>
 
                             <div className="flex items-center gap-1.5">
-                              <span 
-                                className="w-3.5 h-3.5 rounded-full border border-white/20 shadow-xs" 
-                                style={{ background: tmpl.bgGradientStart }} 
+                              <span
+                                className="w-3.5 h-3.5 rounded-full border border-white/20 shadow-xs"
+                                style={{ background: tmpl.bgGradientStart }}
                               />
-                              <span 
-                                className="w-3.5 h-3.5 rounded-full border border-white/20 shadow-xs" 
-                                style={{ background: tmpl.accentGold }} 
+                              <span
+                                className="w-3.5 h-3.5 rounded-full border border-white/20 shadow-xs"
+                                style={{ background: tmpl.accentGold }}
                               />
                               <span className="text-[10px] text-white/50 truncate">
                                 {tmpl.nameEn}
@@ -545,7 +596,11 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
                         حجم الخط:
                       </span>
                       <span className="text-[11px] text-white/70 font-mono">
-                        {fontSizeDelta === 0 ? 'قياسي (0)' : fontSizeDelta > 0 ? `+${fontSizeDelta}` : fontSizeDelta}
+                        {fontSizeDelta === 0
+                          ? 'قياسي (0)'
+                          : fontSizeDelta > 0
+                          ? `+${fontSizeDelta}`
+                          : fontSizeDelta}
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
@@ -609,24 +664,35 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
                       تُولد البطاقات بدقة 1080px أصلية باستخدام محرك الرسم الخالي من لقطات الشاشة، مما يضمن أعلى جودة عند الطباعة أو النشر في منصات التواصل.
                     </span>
                   </div>
-
                 </div>
-
               </div>
             )}
 
             {/* TAB 3: SHARE VIA APPS */}
             {activeTab === 'apps' && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div>
                   <h4 className="text-sm font-bold text-gold mb-1 flex items-center gap-1.5">
                     <Share2 className="w-4 h-4" />
                     نشر ومشاركة عبر شبكات التواصل الاجتماعي:
                   </h4>
                   <p className="text-xs text-white/60">
-                    شارك المحتوى مباشرة بنقرة واحدة عبر تطبيقك المفضل:
+                    اختر التطبيق المفضل لمشاركة المحتوى مع أصدقائك وعائلتك بنقرة واحدة:
                   </p>
                 </div>
+
+                {/* Device native share if supported */}
+                {canShareNative() && (
+                  <div>
+                    <button
+                      onClick={handleNativeTextShare}
+                      className="w-full flex items-center justify-center gap-2.5 py-3.5 px-4 rounded-2xl bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-[#072A20] font-black text-sm shadow-lg shadow-gold/20 transition-all"
+                    >
+                      <Smartphone className="w-5 h-5" />
+                      <span>فتح قائمة مشاركة الجهاز (System Share Sheet)</span>
+                    </button>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {SOCIAL_SHARE_PROVIDERS.map((provider) => (
@@ -636,14 +702,18 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
                       className="flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-gold/30 transition-all group text-right"
                     >
                       <div className="flex items-center gap-3">
-                        <div 
+                        <div
                           className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md"
                           style={{ backgroundColor: provider.color }}
                         >
-                          {provider.id === 'whatsapp' && <MessageCircle className="w-5 h-5" />}
+                          {provider.id === 'whatsapp' && (
+                            <MessageCircle className="w-5 h-5" />
+                          )}
                           {provider.id === 'telegram' && <Send className="w-5 h-5" />}
                           {provider.id === 'x' && <Twitter className="w-5 h-5" />}
-                          {provider.id === 'facebook' && <Facebook className="w-5 h-5" />}
+                          {provider.id === 'facebook' && (
+                            <Facebook className="w-5 h-5" />
+                          )}
                         </div>
                         <div>
                           <div className="font-bold text-sm text-white group-hover:text-gold transition-colors">
@@ -660,36 +730,76 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
                   ))}
                 </div>
 
-                {/* Device native share if supported */}
-                {canShareNative() && (
-                  <div className="pt-2">
+                {/* Direct Link Copy & Formatted Text Copy Row */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-4 rounded-2xl bg-black/40 border border-gold/20 flex items-center justify-between gap-3">
+                    <div className="text-right min-w-0">
+                      <div className="text-xs font-bold text-gold">
+                        الرابط المباشر للمحتوى:
+                      </div>
+                      <div className="text-xs text-white/60 font-mono truncate mt-0.5">
+                        {content.canonicalUrl || SITE_CONFIG.productionUrl}
+                      </div>
+                    </div>
+
                     <button
-                      onClick={handleNativeTextShare}
-                      className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-2xl bg-gold/20 hover:bg-gold/30 border border-gold/40 text-gold-light font-bold text-sm transition-all"
+                      onClick={handleCopyLink}
+                      className="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gold text-[#072A20] font-black text-xs shadow-md shadow-gold/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                     >
-                      <Smartphone className="w-5 h-5" />
-                      <span>مشاركة عبر قائمة تطبيقات النظام (Native Share)</span>
+                      {copiedLink ? (
+                        <Check className="w-4 h-4" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )}
+                      <span>{copiedLink ? 'تم نسخ الرابط' : 'نسخ الرابط'}</span>
                     </button>
                   </div>
-                )}
 
-                {/* Direct Link Copy Card */}
-                <div className="p-4 rounded-2xl bg-black/40 border border-gold/20 flex flex-col sm:flex-row items-center justify-between gap-3">
-                  <div className="text-right w-full sm:w-auto">
-                    <div className="text-xs font-bold text-gold">الرابط المباشر للمحتوى:</div>
-                    <div className="text-xs text-white/60 font-mono truncate max-w-md mt-0.5">
-                      {content.canonicalUrl || SITE_CONFIG.productionUrl}
+                  <div className="p-4 rounded-2xl bg-black/40 border border-gold/20 flex items-center justify-between gap-3">
+                    <div className="text-right min-w-0">
+                      <div className="text-xs font-bold text-gold">
+                        النص الشرعي الموثق:
+                      </div>
+                      <div className="text-xs text-white/60 truncate mt-0.5">
+                        مع التشكيل الكامل والتخريج والمصدر
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={handleCopyText}
+                      className="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-[#072A20] text-gold-light border border-gold/30 font-black text-xs transition-all"
+                    >
+                      {copiedText ? (
+                        <Check className="w-4 h-4" />
+                      ) : (
+                        <FileText className="w-4 h-4" />
+                      )}
+                      <span>{copiedText ? 'تم نسخ النص' : 'نسخ النص'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Switch to Image Card Designer */}
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('image_share')}
+                  className="w-full p-4 rounded-2xl bg-gold/10 hover:bg-gold/15 border border-gold/30 flex items-center justify-between gap-3 transition-all group"
+                >
+                  <div className="flex items-center gap-3 text-right">
+                    <div className="p-2.5 rounded-xl bg-gold/20 text-gold">
+                      <ImageIcon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-gold-light group-hover:text-gold">
+                        تصدير ومشاركة كبطاقة إسلامية مصورة (PNG)
+                      </div>
+                      <div className="text-xs text-white/60">
+                        صمّم بطاقة دعوية فاخرة بـ 7 قوالب إسلامية مع رمز QR
+                      </div>
                     </div>
                   </div>
-
-                  <button
-                    onClick={handleCopyLink}
-                    className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gold text-[#072A20] font-black text-xs shadow-md shadow-gold/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-                  >
-                    {copiedLink ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    <span>{copiedLink ? 'تم النسخ' : 'نسخ الرابط'}</span>
-                  </button>
-                </div>
+                  <Sparkles className="w-4 h-4 text-gold flex-shrink-0" />
+                </button>
               </div>
             )}
 
@@ -711,8 +821,14 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
                     onClick={handleCopyText}
                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gold text-[#072A20] font-black text-xs shadow-md shadow-gold/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
-                    {copiedText ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    <span>{copiedText ? 'تم النسخ إلى الحافظة' : 'نسخ النص بالكامل'}</span>
+                    {copiedText ? (
+                      <Check className="w-4 h-4" />
+                    ) : (
+                      <Copy className="w-4 h-4" />
+                    )}
+                    <span>
+                      {copiedText ? 'تم النسخ إلى الحافظة' : 'نسخ النص بالكامل'}
+                    </span>
                   </button>
                 </div>
 
@@ -727,14 +843,15 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
                 </div>
               </div>
             )}
-
           </div>
 
           {/* Footer Bar */}
           <div className="relative z-10 px-5 sm:px-7 py-3.5 border-t border-gold/20 bg-[#051C15]/90 flex items-center justify-between text-xs text-white/60">
             <div className="flex items-center gap-2">
               <Logo size="sm" />
-              <span className="hidden sm:inline">{SITE_CONFIG.officialOrganization}</span>
+              <span className="hidden sm:inline">
+                {SITE_CONFIG.officialOrganization}
+              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -746,10 +863,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({ content, isOpen, onClose
               </button>
             </div>
           </div>
-
         </motion.div>
       </div>
     </AnimatePresence>
   );
 };
-
